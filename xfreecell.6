@@ -1,0 +1,136 @@
+.TH XFREECELL 6 "1 January 99"
+
+.SH NAME
+xfreecell \- Another implementation of the famous solitaire game
+
+.SH SYNOPSIS
+\fBxfreecell\fP [options]
+
+.SH DESCRIPTION
+\fBxfreecell\fP is an another implementation of the famous solitaire
+game. 
+
+.SS OPTIONS
+.TP
+\fB-a | --no-animation\fP
+Less animation. Toggling 'Anim' in pref has the same effect.
+.TP
+\fB-m | --ms-seed\fP
+MS-seed-number mode. You can play the same game as MS freecell. The
+default is false. Toggling 'MS Seed' in pref has the same effect.
+.TP
+\fB-q | --query-window\fP
+Query window mode. In this mode, query window pops up when both
+single and multiple cards movement is possible. The default is
+false. Toggling 'Query' in pref has the same effect.
+.TP
+\fB-r | --no-round-card\fP
+No round cards. Shape extension is heavy, so this option will speed up
+the game.
+.TP
+\fB-s | --speedup \fIspeed\fR
+Specifiy the speed of card movement. The bigger the faster. Default value
+is 100.
+.TP
+\fB-v | --version\fP
+Display the version.
+
+.SH CONTROL
+.TP
+\fBDouble Click\fP
+Moves the card to freecell. Same as windows.
+.TP
+\fBButton 2\fP
+Same as Double click. Recommended for 3-button mouse owners.
+Eases the load of your finger.
+.TP
+\fBButton 3(card)\fP
+Moves the card to foundation.
+.TP
+\fBButton 3(empty pile)\fP
+Moves multiple cards to the empty pile.
+
+There are two modes to move multiple cards to an empty pile. One
+is to use Button3 stated above. The other is to use query window
+which asks 'Single or Multiple'. The default is Button3 mode. To 
+use query window mode, press pref->toggle query->press Ok. Or 
+start xfreecell with option '-q'.
+
+.SH BUTTONS
+.TP 
+\fBNew\fP
+Begins a new game randomly. Previously played games excluded.
+.TP
+\fBReplay\fP
+Replays last game.
+.TP
+\fBSeed\fP
+Begins a new game which corresponds to the number you typed.
+.TP 
+\fBLost\fP
+Replays a lost game selected randomly.
+.TP
+\fBUndo\fP
+Does undo.
+.TP
+\fBScore\fP
+Pops up score window.
+.TP 
+\fBPref\fP
+Pops up preference window.
+.TP 
+\fBAbout\fP
+Pops up about window.
+.TP 
+\fBExit\fP
+Exits from game.
+
+.SH SCORE
+Winning increases 10 points. Defeat decreases 10 points. Each continuous winning
+increases 1 point. Each continuous defeat decreases 1 point. Undo decreases 1 point.
+
+.SH ABOUT SEED
+From version 1.0.4, you can seed a game. But there is no guarantee 
+about the uniqueness. If you hit upon an algorithm which guarantees
+the uniqueness, please send me. I'm currently using the algorithm
+of Microsoft Freecell (see mshuffle.txt).
+
+Instead of using srand() and rand() in libc, I use NSsrand() and
+NSrand() I implemented to make the seed numbers compatible over
+many Unices. If you want to use srand() and rand(), remove -DBOGUSRANDOM
+from makefile.
+
+The check whether you played or not is not done in different seed-num
+modes. That is, if you played a game in MS-seed-num mode, you may play
+the same game in original-seed-num mode. But the possibility is very
+low because there are too many games and there are only 32000 games in
+MS-seed-num mode.
+
+To play MS-seed-num mode, start xfreecell with option '-m' or toggle 'MS Seed'
+in pref.
+
+.SH FILES
+.TP
+.I ~/.xfreecell/score
+Score file.
+.TP
+.I ~/.xfreecell/prefs
+Saves your preferences.
+.TP
+.I ~/.xfreecell/won
+Won game numbers.
+.TP
+.I ~/.xfreecell/lost
+Lost game numbers.
+.TP
+.I ~/.xfreecell/msWon
+Won game numbers. (MS freecell seed number)
+.TP
+.I ~/.xfreecell/msLost
+Lost game numbers. (MS freecell seed number)
+.TP
+.I ~/.xfreecell/msNumPath
+Path to data file called MSNumbers.
+
+.SH AUTHOR
+Nakayama Shintaro <nakayama@giganet.net>

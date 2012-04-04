@@ -1,0 +1,149 @@
+====INSTALL====
+<Source distribution>
+Make sure there is a font named 7x14. If you don't like round-corner
+cards or don't have the shape extension, delete -DSHAPE from the
+makefile. You need g++ 2.8.1 or higher.
+
+1. make
+2. make install (you may need to be root to do this)
+
+<Binary distribution>
+You need to be root.
+
+1. mv xfreecell /usr/local/bin
+2. mv xfreecell.6 /usr/local/man/man6
+
+Then if you want to use MS Freecell compatible seed number feature,
+you must download MSNumbers from my homepage and move it to the 
+directory specified in ./xfreecell/msNumPath.
+
+====CONTROL====
+<Mouse>
+Double click: Moves the card to freecell. Same as windows.
+
+Button2: Same as Double click. Recommended for 3-button mouse owners.
+	 Eases the load of your finger.
+
+Button3(card): Moves the card to foundation.
+		
+Button3(empty pile): Moves multiple cards to the empty pile.
+
+You can know other controls intuitively.
+
+Note: There are two modes to move multiple cards to an empty pile. One
+      is to use Button3 stated above. The other is to use query window
+      which asks 'Single or Multiple'. The default is Button3 mode. To 
+      use query window mode, press pref->toggle query->press Ok. Or 
+      start xfreecell with option '-q'.
+
+====BUTTONS====
+New: Begin a new game randomly. Previously played games excluded.
+Replay: Replay last game.
+Seed: Begin a new game which corresponds to the number you typed.
+Lost: Replay a lost game selected randomly.
+Undo: Do undo.
+Score: Display score.
+Pref: Preference.
+About: About.
+Exit: Exit.
+
+====ABOUT SEED====
+From version 1.0.4, you can seed a game. But there is no guarantee 
+about the uniqueness. If you hit upon an algorithm which guarantees
+the uniqueness, please send me. I'm currently using the algorithm
+of Microsoft Freecell (see mshuffle.txt).
+
+Instead of using srand() and rand() in libc, I use NSsrand() and
+NSrand() I implemented to make the seed numbers compatible over
+many Unices. If you want to use srand() and rand(), remove -DBOGUSRANDOM
+from makefile.
+
+The check whether you played or not is not done in different seed-num
+modes. That is, if you played a game in MS-seed-num mode, you may play
+the same game in original-seed-num mode. But the possibility is very
+low because there are too many games and there are only 32000 games in
+MS-seed-num mode.
+
+To play MS-seed-num mode, start xfreecell with option '-m' or toggle
+'MS Seed' in pref.
+
+====BUG AND REQUEST, SUGGESTION====
+If you find any bugs, requests or suggestions, mail to 
+nakayama@giganet.net or k62057@csc.titech.ac.jp. 
+In bug report, please include the version number and how to 
+reproduce the bug.
+
+====COPYRIGHT====
+       Copyright 1998 by Nakayama Shintaro
+
+       Permission to use, copy, modify, and distribute this soft-
+       ware and its documentation for any purpose and without fee
+       is  hereby  granted,  provided  that  the  above copyright
+       notice appear in all copies and that both  that  copyright
+       notice  and  this  permission  notice appear in supporting
+       documentation, and that the name of Nakayama Shintaro or
+       his employers not be used in advertising or publicity per-
+       taining to distribution of  the  software  without  speci-
+       fic,  written prior permission. Nakayama Shintaro makes no
+       representations  about the  suitability  of this software
+       for any purpose.  It is provided "as is" without express
+       or implied warranty.
+
+       NAKAYAMA SHINTARO AND HIS EMPLOYERS DISCLAIM ALL WARRANTIES
+       WITH REGARD TO THIS SOFTWARE, INCLUDING ALL IMPLIED WARRAN-
+       TIES OF MERCHANTABILITY AND FITNESS, IN NO EVENT SHALL THEY
+       BE LIABLE FOR ANY SPECIAL, INDIRECT OR CONSEQUENTIAL DAMAGES
+       OR ANY DAMAGES WHATSOEVER RESULTING  FROM  LOSS  OF  USE, 
+       DATA  OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGE-
+       NCE OR OTHER  TORTIOUS  ACTION, ARISING  OUT  OF  OR IN  
+       CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+---
+
+I borrowed some code from grafix-1.4 by Wolfgang Koehler.
+
+---
+
+Some part of code is taken from seahaven by Terry Weissman and 
+Charles Heynes. 
+
+Copyright 1991 by Terry Weissman and Charles Heynes.
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation.
+
+---
+
+The following notices are taken from seahaven's README.
+
+---
+
+Card drawing code and some code cleanup by
+Bill Spitzak
+spitzak@d2.com
+
+---
+
+Card images from the "spider" game which is:
+
+Copyright (c) 1990 by  David  Lemke  &  Network  Computing Devices, Inc.
+(lemke@ncd.com)
+Copyright 1990 Heather Rose and Sun Microsystems, Inc.
+Copyright  (c) 1989, Donald R. Woods and Sun Microsystems, Inc.
+
+Permission to use, copy, modify, and distribute this software and its
+documentation for any purpose and without fee is hereby granted,
+provided that the above copyright notice appear in all copies and that
+both that copyright notice and this permission notice appear in
+supporting documentation.
+
+===THANKS TO===
+Andy Green
+Steven Swamp
+Jeff King
+Andre Majorel
+Phoenix Chan
+Chris Faulhaber
