@@ -66,8 +66,6 @@ static bool gamePlaying;
 static int gameNumber;
 static GameNumberManager* gnManager; 
 static const int PathLength = 256;
-static char msNumbersPath[PathLength] = "\0";
-static const char defaultMSNumbersPath[] = "/usr/local/lib/xfreecell/MSNumbers";
 
 // ##### Functions declarations #####
 static void adjustSubwindow(NSWindow*);
@@ -86,7 +84,6 @@ static void beginNewGame(int = 0);
 static unsigned int numEmptySingleStacks();
 static unsigned int numEmptyPlayStacks();
 static PlayStack* emptyPlayStack();
-static void readMSNumbersPath();
 
 static NSButtonCallback newCallback;
 static NSButtonCallback replayCallback;
@@ -222,7 +219,6 @@ int main(int argc, char* argv[])
   gamePlaying = false;
   gameNumber = 0;
   gnManager = new GameNumberManager;
-  readMSNumbersPath();
 
   XMapWindow(dpy, toplevel);
   XSync(dpy, False);
@@ -662,70 +658,6 @@ PlayStack* emptyPlayStack()
 
   return 0;
 }  
-
-void readMSNumbersPath()
-{
-  char* home = getenv("HOME");
-  std::string saveFile;
-
-  if (home == NULL) {
-    fprintf(stderr, "Cannot get $HOME. Assuming I am at home directory now.\n");
-    saveFile = ".xfreecell";
-  } else {
-    saveFile = home;
-    saveFile += "/.xfreecell";
-  }
-
-  DIR* dir = opendir(saveFile.c_str());
-
-  if (dir == NULL) {
-    switch (errno) {
-    case ENOENT:
-      fprintf(stderr, "Directory %s not found. Creating.\n", saveFile.c_str());
-      mkdir(saveFile.c_str(), 0755);
-      break;
-    case ENOTDIR:
-      fprintf(stderr, "%s must be directory.\n", saveFile.c_str());
-      exit(1);
-      break;
-    default:
-      perror("readMSNumbersPath\n");
-      exit(1);
-    }
-  } else
-    closedir(dir);
-  saveFile += "/msNumPath";
-
-  FILE* fp = fopen(saveFile.c_str(), "r");
-
-  if (fp == NULL) {
-    if (errno == ENOENT) {
-      fprintf(stderr, "%s does not exist. Creating.\n", saveFile.c_str());
-      fp = fopen(saveFile.c_str(), "w+");
-      fprintf(fp, "%s\n", defaultMSNumbersPath);
-      fclose(fp);
-      strncpy(msNumbersPath, defaultMSNumbersPath, PathLength);
-      return;
-    } else {
-      perror("readMSNumbersPath\n");
-      strncpy(msNumbersPath, defaultMSNumbersPath, PathLength);
-      return;
-    }
-  }
-
-  char line[PathLength];
-
-  if (fgets(line, PathLength, fp) == NULL) {
-    fprintf(stderr, "Cannot read from %s\n", saveFile.c_str());
-    strncpy(msNumbersPath, defaultMSNumbersPath, PathLength);
-    return;
-  }
-
-  if (sscanf(line, "%s", msNumbersPath) != 1) {
-    fprintf(stderr, "%s's format is strange\n", saveFile.c_str());
-    strncpy(msNumbersPath, defaultMSNumbersPath, PathLength);
-  }
-}
 
 // Interface to external
 void autoMove()
