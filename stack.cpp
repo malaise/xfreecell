@@ -185,7 +185,7 @@ SingleStack::SingleStack(int x_ini, int y_ini)
   background(getColor(dpy, "darkgreen"));
   border(getColor(dpy, "green"));
   borderWidth(1);
-  selectInput(ButtonPressMask);
+  selectInput(ButtonPressMask | EnterWindowMask | LeaveWindowMask);
 
   map();
 }
@@ -204,14 +204,45 @@ bool SingleStack::acceptable(Card* c __attribute__ ((unused)) ) const
   return false;
 }
 
-void SingleStack::dispatchEvent(const XEvent& ev)
+void SingleStack::dispatchButtonPress()
 {
-  if (ev.type != ButtonPress || hilighted == 0) return;
+  if (hilighted == 0) return;
   
   if (acceptable(hilighted)) {
     hilighted->unhilighten();
     hilighted->moveToStack(this);
     hilighted = 0;
+  }
+}
+
+void SingleStack::dispatchEnterNotify()
+{
+  if (hilighted != 0 && size() == 0) {
+    XDefineCursor(dpy, window(), cursor);
+    cursorChanged = true;
+  }
+}
+
+void SingleStack::dispatchLeaveNotify()
+{
+  if (cursorChanged) {
+    XUndefineCursor(dpy, window());
+    cursorChanged = false;
+  }
+}
+
+void SingleStack::dispatchEvent(const XEvent& ev)
+{
+  switch (ev.type) {
+  case ButtonPress:
+    dispatchButtonPress();
+    break;
+  case EnterNotify:
+    dispatchEnterNotify();
+    break;
+  case LeaveNotify:
+    dispatchLeaveNotify();
+    break;
   }
 }
 

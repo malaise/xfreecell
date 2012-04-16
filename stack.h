@@ -55,6 +55,9 @@ public:
   bool acceptable(Card*) const;
 
   void dispatchEvent(const XEvent&);
+  void dispatchButtonPress();
+  void dispatchEnterNotify();
+  void dispatchLeaveNotify();
 };
 
 class DoneStack : public Stack {

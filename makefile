@@ -3,16 +3,18 @@ INCLUDES = $(wildcard *.h)
 CC = g++
 CFLAGS = -g -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
          -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare \
-         -Wmissing-noreturn -Winline -Wfloat-equal -Wundef -std=c++0x
+         -Wmissing-noreturn -Winline -Wfloat-equal -Wundef
 LIBS = -L./widget -lns -L/usr/X11R6/lib -lXext -lX11 -lm
 STATICDIR = xfreecell-static
 DOCS = README CHANGES mshuffle.txt xfreecell.6
 DESTDIR ?= /usr/local
-all: xfreecell
+all: xfreecell Xfreecell.html
 
 xfreecell: $(OBJECTS) widget/libns.a
 	$(CC) -o xfreecell $(CFLAGS) $(OBJECTS) $(LIBS)
 
+%.html : %.txt
+	@asciidoc --section-numbers -o $@ $<
 
 %.o: %.cpp $(INCLUDES) ms-compatible/MSNumbers.h
 	$(CC) -c $(CFLAGS) $<
