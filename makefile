@@ -3,7 +3,7 @@ INCLUDES = $(wildcard *.h)
 CC = g++
 CFLAGS = -g -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
          -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare \
-         -Wmissing-noreturn -Winline -Wfloat-equal -Wundef
+         -Wmissing-noreturn -Winline -Wfloat-equal -Wundef -std=c++0x
 LIBS = -L./widget -lns -L/usr/X11R6/lib -lXext -lX11 -lm
 STATICDIR = xfreecell-static
 DOCS = README CHANGES mshuffle.txt xfreecell.6
