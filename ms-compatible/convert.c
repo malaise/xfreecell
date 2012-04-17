@@ -21,7 +21,7 @@ int main (void) {
 
   fprintf (fo, "static char MSNumbers[] = {\n");
   for (i = 1; i <= 32001; i++) {
-    res = fread (line, 1, 52, fi); 
+    res = fread (line, 1, 52, fi);
     if (res != 52) {
       perror ("Fread fi");
       exit (1);

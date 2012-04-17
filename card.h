@@ -20,11 +20,11 @@ public:
   void parent(Card* c) { _parent = c; }
   void removed() { _removed = true; } // This is called only when pushed to DoneStack
   void undone() { _removed = false; } // This is called only when being undone and pushed back from DoneStack
-  
+
   bool isTop() const { return _stack->topCard() == this; }
   bool canBeParent(Card* child_wanna_be) const;
   bool isRemoved() const { return _removed; }
-  
+
   Suit suit() const { return _suit; }
   unsigned int value() const { return _value; }
   Stack* stack() const { return _stack; }
@@ -34,7 +34,7 @@ public:
   void dispatchButtonPress(const XEvent&);
   void dispatchEnterNotify(const XEvent&);
   void dispatchLeaveNotify(const XEvent&);
-  
+
 private:
   Pixmap _usualPixmap, _hilightedPixmap;
 

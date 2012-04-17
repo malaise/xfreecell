@@ -50,7 +50,7 @@ static NSButton* aboutButton;
 static NSButton* exitButton;
 
 // subwindows
-static Option* option; 
+static Option* option;
 static SeedWindow* seedWindow;
 static ScoreWindow* scoreWindow;
 static AboutWindow* aboutWindow;
@@ -64,7 +64,7 @@ const int vGap = 16;
 // misc
 static bool gamePlaying;
 static int gameNumber;
-static GameNumberManager* gnManager; 
+static GameNumberManager* gnManager;
 static const int PathLength = 256;
 
 // ##### Functions declarations #####
@@ -206,13 +206,13 @@ int main(int argc, char* argv[])
   doneClub = doneStack[3];
 
   // card
-  for (int i = 0; i < 13; i++) 
+  for (int i = 0; i < 13; i++)
     (cards[0][i] = new Card(Heart, i))->moveToStackInitial(doneHeart);
-  for (int i = 0; i < 13; i++) 
+  for (int i = 0; i < 13; i++)
     (cards[1][i] = new Card(Diamond, i))->moveToStackInitial(doneDiamond);
-  for (int i = 0; i < 13; i++) 
+  for (int i = 0; i < 13; i++)
     (cards[2][i] = new Card(Club, i))->moveToStackInitial(doneClub);
-  for (int i = 0; i < 13; i++) 
+  for (int i = 0; i < 13; i++)
     (cards[3][i] = new Card(Spade, i))->moveToStackInitial(doneSpade);
 
   // misc
@@ -298,12 +298,12 @@ inline void setWindowName(int num, bool ms)
 
 void distributeCards(unsigned int gameNumber)
 {
-  if (gameNumber == 0) 
+  if (gameNumber == 0)
     gameNumber = appropriateGameNumber();
 
   setWindowName(gameNumber, false);
   ::gameNumber = gameNumber;
-  
+
   // Using the algorithm of MS Freecell
 #ifdef BOGUSRANDOM
   NSsrand(gameNumber);
@@ -438,12 +438,12 @@ void msDistributeCards(unsigned int gameNumber)
     deck[i-1] = numToCard(i);
 
   for (unsigned int i = 0; i < 4; i++) {
-    for (unsigned int j = 0; j < 7; j++) 
+    for (unsigned int j = 0; j < 7; j++)
       deck[line[i*7+j]-1]->moveToStackInitial(playStack[i]);
   }
 
   for (unsigned int i = 0; i < 4; i++) {
-    for (unsigned int j = 0; j < 6; j++) 
+    for (unsigned int j = 0; j < 6; j++)
       deck[line[i*6+j+28]-1]->moveToStackInitial(playStack[i+4]);
   }
 
@@ -476,13 +476,13 @@ void seedCallback(const XEvent&, void*)
 void lostCallback(const XEvent&, void*)
 {
   int number;
-  
+
   number = gnManager->randomLostGame();
 
   if (number == 0) return; // You cannot replay game number 0.
 
   beginNewGame(number);
-}  
+}
 
 void undoCallback(const XEvent&, void*)
 {
@@ -527,7 +527,7 @@ void moveToDoneStackIfPossible(Card* card)
 {
   if (card == 0) return;
 
-  if (card->value() == 0 || canAutoMove(card)) 
+  if (card->value() == 0 || canAutoMove(card))
     moveToAppropriateDoneStack(card);
 }
 
@@ -642,7 +642,7 @@ unsigned int numEmptySingleStacks()
 unsigned int numEmptyPlayStacks()
 {
   unsigned int num = 0;
-  
+
   for (unsigned int i = 0; i < numPlayStack; i++)
     if (playStack[i]->size() == 0) num++;
 
@@ -657,7 +657,7 @@ PlayStack* emptyPlayStack()
   }
 
   return 0;
-}  
+}
 
 // Interface to external
 void autoMove()
@@ -718,7 +718,7 @@ void moveMultipleCards(Card* from, Card* to)
   int index = 0;
   PlayStack* tempStack[numPlayStack];
   int numEmptyPlayStack = numEmptyPlayStacks();
-  
+
   PlayStack* tmp;
   for (; numEmptyPlayStack > 0 && numCardsToBeMoved > numMovableCards;
        numEmptyPlayStack--, numCardsToBeMoved -= numMovableCards) {
@@ -740,7 +740,7 @@ void moveMultipleCards(Card* from, Card* to)
 void moveMultipleCards(Card* from, PlayStack* destStack)
 {
   Stack* fromStack = from->stack();
-  
+
   unsigned int numMovableCards = 0;
   for (; from != 0; from = from->parent(), numMovableCards++)
     ;

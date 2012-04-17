@@ -63,7 +63,7 @@ public:
 class DoneStack : public Stack {
 public:
   DoneStack(int x_ini, int y_ini, Suit);
-  
+
   Suit suit() const { return _suit; }
 
   void pushCard(Card*);

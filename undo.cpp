@@ -3,7 +3,7 @@
 #include "card.h"
 #include "stack.h"
 
-// There is no need to make undo a class. It adds another 
+// There is no need to make undo a class. It adds another
 // global variable, and I hate g v.
 
 struct Move {

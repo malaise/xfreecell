@@ -24,13 +24,13 @@ int main(int argc, char* argv[])
   fread(line, sizeof(char), 52, fp);
 
   for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 7; j++) 
+    for (int j = 0; j < 7; j++)
       printCard(line[i*7+j]);
     putchar('\n');
   }
 
   for (int i = 0; i < 4; i++) {
-    for (int j = 0; j < 6; j++) 
+    for (int j = 0; j < 6; j++)
       printCard(line[i*6+j+28]);
     putchar('\n');
   }

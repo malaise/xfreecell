@@ -28,7 +28,7 @@ enum MoveMode { SingleMode, MultipleMode };
 extern Display* dpy;
 extern Window gameWindow;
 
-// 
+//
 Card* hilighted = 0;
 bool cursorChanged = false;
 Cursor cursor;
@@ -51,10 +51,11 @@ Card::Card(Suit s, unsigned int v)
 #ifdef SHAPE
   if (Option::roundCard() && !initialized) {
     //Shape
-    boundingMask = XCreateBitmapFromData(dpy, root(), (char*)boundingMask_bits, 
-					 boundingMask_width, boundingMask_height);
+    boundingMask = XCreateBitmapFromData(dpy, root(), (char*)boundingMask_bits,
+                                         boundingMask_width,
+                                         boundingMask_height);
     clipMask = XCreateBitmapFromData(dpy, root(), (char*)clipMask_bits,
-           clipMask_width, clipMask_height);
+                                     clipMask_width, clipMask_height);
 
     //Cursor
     XColor fore, back, xc;
@@ -62,9 +63,9 @@ Card::Card(Suit s, unsigned int v)
     Colormap cm = DefaultColormap(dpy, 0);
 
     p =  XCreateBitmapFromData(dpy, gameWindow, (char*) cursor_bits,
-			       cursor_width, cursor_height);
+                               cursor_width, cursor_height);
     mask = XCreateBitmapFromData(dpy, gameWindow, (char*) cursor_back_bits,
-				 cursor_back_width, cursor_back_height);
+                                 cursor_back_width, cursor_back_height);
     XAllocNamedColor(dpy, cm, "white", &fore, &xc);
     XAllocNamedColor(dpy, cm, "black", &back, &xc);
     cursor = XCreatePixmapCursor(dpy, p,mask, &fore, &back, 0, 0);
@@ -90,12 +91,13 @@ Card::Card(Suit s, unsigned int v)
   back = WhitePixel(dpy, 0);
   hilight = getColor(dpy, "lightskyblue4");
 
-  _usualPixmap = 
-    XCreatePixmapFromBitmapData(dpy, gameWindow, bitmap, cardWidth - 2,
-				cardHeight - 2, fore, back, DefaultDepth(dpy, DefaultScreen(dpy)));
-  _hilightedPixmap = 
-    XCreatePixmapFromBitmapData(dpy, gameWindow, bitmap, cardWidth - 2,
-                                cardHeight - 2, fore, hilight, DefaultDepth(dpy, DefaultScreen(dpy)));
+  _usualPixmap = XCreatePixmapFromBitmapData(dpy, gameWindow, bitmap,
+                                             cardWidth - 2, cardHeight - 2,
+                                             fore, back,
+                                     DefaultDepth(dpy, DefaultScreen(dpy)));
+  _hilightedPixmap = XCreatePixmapFromBitmapData(dpy, gameWindow, bitmap, cardWidth - 2,
+                                                 cardHeight - 2, fore, hilight,
+                                     DefaultDepth(dpy, DefaultScreen(dpy)));
 
   selectInput(ButtonPressMask | EnterWindowMask | LeaveWindowMask);
   backgroundPixmap(_usualPixmap);
@@ -150,7 +152,7 @@ void Card::moveToStack(Stack* s, bool autoMoving, bool pushUndo)
   if (pushUndo)
     undoAddMove(_stack, s);
 
-  _stack->popCard(); 
+  _stack->popCard();
   _stack = s;
 
   Card* top = _stack->topCard();
@@ -211,12 +213,12 @@ void Card::dispatchButtonPress(const XEvent& ev)
     if (ev.xbutton.time - lastPressTime < doubleClickInterval) {
       SingleStack* stack = emptySingleStack();
       if (stack != 0)
-      	_stack->topCard()->moveToStack(stack);
+        _stack->topCard()->moveToStack(stack);
     }
   } else if (hilighted != 0 && (hilighted->_stack == _stack) ) {
     hilighted->unhilighten();
     hilighted = 0;
-  } else if (hilighted == 0 && !_removed) { 
+  } else if (hilighted == 0 && !_removed) {
     switch (ev.xbutton.button) {
     case 1:
       _stack->topCard()->hilighten();
@@ -224,7 +226,7 @@ void Card::dispatchButtonPress(const XEvent& ev)
       lastPressTime = ev.xbutton.time;
       break;
     case 2:
-      { 
+      {
         SingleStack* stack = emptySingleStack();
         if (stack != 0)
           _stack->topCard()->moveToStack(stack);
@@ -235,7 +237,7 @@ void Card::dispatchButtonPress(const XEvent& ev)
       break;
     }
   } else if (cursorChanged) {
-    // cursorChanged == true means moving is possible. 
+    // cursorChanged == true means moving is possible.
     if (moveMode == SingleMode) {
       hilighted->unhilighten();
       hilighted->moveToStack(_stack);

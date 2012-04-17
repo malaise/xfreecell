@@ -68,78 +68,78 @@ void NSTextField::dispatchEvent(const XEvent& ev)
       XLookupString(&xkey, keyString, keyStringLength, &keysym, NULL);
 
       if ((ev.xkey.state & ControlMask) == 0) {
-	switch (keysym) {
-	case XK_Left:
-	  if (cursorPos == strStart && strStart > 0) strStart--;
-	  if (cursorPos > 0) cursorPos--; 
-	  draw();
-	  break;
-	case XK_Delete:
-	  if (cursorPos < _str.length()) _str.erase(cursorPos, 1);
-	  draw();
-	  break;
-	case XK_Right:
-	  if (_str.length() > maxCharNum - 1 && cursorPos == maxCharNum - 1 + strStart) strStart++;
-	  if (cursorPos < _str.length()) cursorPos++;
-	  draw();
-	  break;
-	case XK_BackSpace:
-	  if (cursorPos == strStart && strStart > 0) strStart--;
-	  if (cursorPos > 0) {
-	    _str.erase(cursorPos - 1, 1);
-	    cursorPos--;
-	  }
-	  if (strStart > 0) strStart--;
-	  draw();
-	  break;
-	case XK_Linefeed: case XK_Return:
-          if (_listener != 0) _listener->textAction (true, _listenerArg);
-          if (_callback != 0) _callback(true, _callbackArg);
-	  break;
-	case XK_Escape:
-          if (_listener != 0) _listener->textAction (false, _listenerArg);
-          if (_callback != 0) _callback(false, _callbackArg);
-	  break;
-	}
-	if (!isprint(keyString[0])) return;
-	cursorPos++;
-	if (cursorPos - strStart == maxCharNum) strStart++;
-	if (cursorPos == _str.length()) 
-	  _str += keyString;
-	else 
-	  _str.insert(cursorPos - 1, keyString);
-	draw();
-      } else {
-	switch (keysym) {
-	case XK_a: case XK_A:
-	  cursorPos = 0; strStart = 0; break;
-	case XK_b: case XK_B:
-	  if (cursorPos == strStart && strStart > 0) strStart--;
-	  if (cursorPos > 0) cursorPos--; 
-	  break;
-	case XK_d: case XK_D:
-	  if (cursorPos < _str.length()) _str.erase(cursorPos, 1);
-	  break;
-	case XK_e: case XK_E:
-	  if (_str.length() > maxCharNum - 1) strStart = _str.length() - maxCharNum + 1;
-	  cursorPos = _str.length();
-	  break;
-	case XK_f: case XK_F:
-	  if (_str.length() > maxCharNum - 1 && cursorPos == maxCharNum - 1 + strStart) strStart++;
-	  if (cursorPos < _str.length()) cursorPos++;
-	  break;
-	case XK_h: case XK_H:
-	  if (cursorPos == strStart && strStart > 0) strStart--;
-	  if (cursorPos > 0) {
-	    _str.erase(cursorPos - 1, 1);
-	    cursorPos--;
-	  }
-	  if (strStart > 0) strStart--;
-	  break;
-	case XK_k: case XK_K:
-	  _str.erase(cursorPos, _str.length() - cursorPos); break;
-	}
-	draw();
+       switch (keysym) {
+         case XK_Left:
+           if (cursorPos == strStart && strStart > 0) strStart--;
+           if (cursorPos > 0) cursorPos--;
+           draw();
+           break;
+         case XK_Delete:
+           if (cursorPos < _str.length()) _str.erase(cursorPos, 1);
+           draw();
+           break;
+         case XK_Right:
+           if (_str.length() > maxCharNum - 1 && cursorPos == maxCharNum - 1 + strStart) strStart++;
+           if (cursorPos < _str.length()) cursorPos++;
+           draw();
+           break;
+         case XK_BackSpace:
+           if (cursorPos == strStart && strStart > 0) strStart--;
+           if (cursorPos > 0) {
+             _str.erase(cursorPos - 1, 1);
+             cursorPos--;
+           }
+           if (strStart > 0) strStart--;
+           draw();
+           break;
+         case XK_Linefeed: case XK_Return:
+            if (_listener != 0) _listener->textAction (true, _listenerArg);
+            if (_callback != 0) _callback(true, _callbackArg);
+           break;
+         case XK_Escape:
+                  if (_listener != 0) _listener->textAction (false, _listenerArg);
+                  if (_callback != 0) _callback(false, _callbackArg);
+           break;
+       }
+       if (!isprint(keyString[0])) return;
+       cursorPos++;
+       if (cursorPos - strStart == maxCharNum) strStart++;
+       if (cursorPos == _str.length())
+         _str += keyString;
+       else
+         _str.insert(cursorPos - 1, keyString);
+       draw();
+     } else {
+       switch (keysym) {
+       case XK_a: case XK_A:
+         cursorPos = 0; strStart = 0; break;
+       case XK_b: case XK_B:
+         if (cursorPos == strStart && strStart > 0) strStart--;
+         if (cursorPos > 0) cursorPos--;
+         break;
+       case XK_d: case XK_D:
+         if (cursorPos < _str.length()) _str.erase(cursorPos, 1);
+         break;
+       case XK_e: case XK_E:
+         if (_str.length() > maxCharNum - 1) strStart = _str.length() - maxCharNum + 1;
+         cursorPos = _str.length();
+         break;
+       case XK_f: case XK_F:
+         if (_str.length() > maxCharNum - 1 && cursorPos == maxCharNum - 1 + strStart) strStart++;
+         if (cursorPos < _str.length()) cursorPos++;
+         break;
+       case XK_h: case XK_H:
+         if (cursorPos == strStart && strStart > 0) strStart--;
+         if (cursorPos > 0) {
+           _str.erase(cursorPos - 1, 1);
+           cursorPos--;
+         }
+         if (strStart > 0) strStart--;
+         break;
+       case XK_k: case XK_K:
+         _str.erase(cursorPos, _str.length() - cursorPos); break;
+       }
+       draw();
       }
       break;
     }
@@ -157,3 +157,4 @@ void NSTextField::dispatchEvent(const XEvent& ev)
     break;
   }
 }
+

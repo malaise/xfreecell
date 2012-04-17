@@ -7,7 +7,7 @@
 class QueryWindow : public NSButtonListener, public NSFrame {
 public:
   QueryWindow(const char*, const char*, const char*);
-  
+
   bool left() const { return _left; }
   bool right() const { return _right; }
 
@@ -29,7 +29,7 @@ private:
 class SingleOrMultiple : public QueryWindow {
 public:
   SingleOrMultiple() : QueryWindow("How many do you want to move?", "Single", "Multiple") {}
-  
+
   bool single() const { return left(); }
   bool multiple() const { return right(); }
 };
@@ -45,18 +45,18 @@ public:
 class PlayAgainOrCancel : public QueryWindow {
 public:
   PlayAgainOrCancel() : QueryWindow("You have played this game. Again?", "Yes", "No") {}
-  
+
   bool again() const { return left(); }
   bool cancel() const { return right(); }
 };
 
 //##### ScoreWindow #####
-  
+
 class ScoreWindow : public NSFrame, public NSButtonListener {
 public:
   ScoreWindow();
   ~ScoreWindow() { writeScore(); }
-  
+
   void incWins();
   void incDefeats();
   void incUndos();
@@ -65,7 +65,7 @@ public:
   void waitForEvent();
 
   void buttonAction(const XEvent&, void*);
-    
+
 private:
   void readScore();
   void writeScore() const;
@@ -86,7 +86,7 @@ private:
   NSLabel winLabel, defeatLabel, winpLabel, defeatpLabel, cwinLabel;
   NSLabel cdefeatLabel, undoLabel, totalLabel;
   NSVContainer mainCon;
-};    
+};
 
 // ##### AboutWindow #####
 class AboutWindow : public NSFrame, public NSButtonListener {
@@ -105,7 +105,7 @@ private:
   NSLabel homepage;
   NSButton okButton;
   NSVContainer labelCon, mainCon;
-}; 
+};
 
 // ##### SeedWindow #####
 class SeedWindow : public NSFrame, public NSButtonListener, public NSTextListener {

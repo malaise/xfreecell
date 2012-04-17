@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
 
   FILE* fp = fopen("list", "r");
   fseek(fp, atoi(argv[1]), SEEK_SET);
-  
+
   char line[100];
 
   for (int i = 0; i < 9; i++) {

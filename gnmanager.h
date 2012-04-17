@@ -32,7 +32,7 @@ private:
   void writeFile(const std::string&, Set*);
 
   std::string lostGameFile, wonGameFile;
-  
+
   Set wonGames;
   Set lostGames;
 

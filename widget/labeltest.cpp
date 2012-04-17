@@ -10,7 +10,7 @@ private:
   NSLabel l;
   NSHContainer con;
 };
-  
+
 void TestFrame::dispatchEvent(const XEvent& ev)
 {
   static string str("");

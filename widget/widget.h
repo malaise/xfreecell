@@ -62,9 +62,10 @@ public:
 // ##### NSWindow #####
 class NSWindow : public NSComponent {
 public:
-  NSWindow(bool create, Window parent = RootWindow(NSdpy, 0), int x = 0, int y = 0, unsigned int width = 50,
-	   unsigned int height = 50, unsigned int borderWidth = 0, unsigned long border = 0,
-	   unsigned long bg = 0);
+  NSWindow(bool create, Window parent = RootWindow(NSdpy, 0), int x = 0,
+           int y = 0, unsigned int width = 50, unsigned int height = 50,
+           unsigned int borderWidth = 0, unsigned long border = 0,
+           unsigned long bg = 0);
   virtual ~NSWindow();
 
   void window(Window w) { _window = w; }
@@ -155,7 +156,7 @@ class NSString {
 public:
   NSString(const char*);
   virtual ~NSString() {}
-  
+
   const char* label() const { return _label.c_str(); }
   unsigned int length() const { return _label.length(); }
 
@@ -298,9 +299,9 @@ private:
 class NSContainer : public NSComponent {
 public:
   NSContainer() : _width(0), _height(0), _x(0), _y(0), _vGap(0), _hGap(0), _neighborGap(0), _parentWindow(0) {}
-  NSContainer(unsigned int vGap, unsigned int hGap, unsigned int neighborGap) 
-      : _width(0), _height(0), _x(0), _y(0), _vGap(vGap), _hGap(hGap),
-	_neighborGap(neighborGap), _parentWindow(0) {}
+  NSContainer(unsigned int vGap, unsigned int hGap, unsigned int neighborGap)
+    : _width(0), _height(0), _x(0), _y(0), _vGap(vGap), _hGap(hGap),
+      _neighborGap(neighborGap), _parentWindow(0) {}
   virtual ~NSContainer() {}
 
   int x() const { return _x; }
@@ -311,7 +312,7 @@ public:
   unsigned int vGap() { return _vGap; }
   unsigned int hGap() { return _hGap; }
   unsigned int neighborGap() { return _neighborGap; }
-  
+
   void move(int, int);
   void x(int);
   void y(int);
@@ -388,7 +389,8 @@ public:
 // ##### NSStaticVContainer #####
 class NSStaticVContainer : public NSContainer {
 public:
-  NSStaticVContainer(unsigned int hGap = 0, unsigned int vGap = 0, unsigned int neighborGap = 0)
+  NSStaticVContainer(unsigned int hGap = 0, unsigned int vGap = 0,
+                     unsigned int neighborGap = 0)
     : NSContainer(hGap, vGap, neighborGap) {}
 
   void add(NSComponent*);
@@ -399,9 +401,10 @@ public:
 // ##### NSFrame #####
 class NSFrame : public NSWindow {
 public:
-    NSFrame(NSContainer* = 0, int x = 0, int y = 0, unsigned int width = 50, unsigned int height = 50,
-	    unsigned int borderWidth = 0, unsigned long border = 0);
-    
+    NSFrame(NSContainer* = 0, int x = 0, int y = 0, unsigned int width = 50,
+            unsigned int height = 50, unsigned int borderWidth = 0,
+            unsigned long border = 0);
+
     void container(NSContainer*);
     void map() { if (_container != 0) _container->map(); NSWindow::map(); }
 private:
@@ -412,7 +415,7 @@ private:
 class NSScrollbarListener {
 public:
   virtual ~NSScrollbarListener() {}
-  
+
   virtual void vScrollAction(const XEvent&, void*, int pos) = 0;
   virtual void hScrollAction(const XEvent&, void*, int pos) = 0;
 };
@@ -421,7 +424,7 @@ public:
 class NSVScrollbar : public NSPlate {
 public:
   NSVScrollbar(unsigned int barHeight, unsigned int height, NSScrollbarListener* nsl = 0, void* nslArg = 0);
-  
+
   unsigned int width() const { return NSWindow::width(); }
   unsigned int height() const { return NSWindow::height(); }
   unsigned int currentPos() const; // 1 <= currentPos <= height() - thickness * 2 - barPercent
@@ -459,7 +462,7 @@ private:
 class NSHScrollbar : public NSPlate {
 public:
   NSHScrollbar(unsigned int barWidth, unsigned int width, NSScrollbarListener* nsl = 0, void* nslArg = 0);
-  
+
   unsigned int width() const { return NSWindow::width(); }
   unsigned int height() const { return NSWindow::height(); }
   unsigned int currentPos() const; // 1 <= currentPos <= height() - thickness * 2 - barPercent

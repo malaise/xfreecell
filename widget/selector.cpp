@@ -14,13 +14,13 @@ public:
 
   void x(int arg) { NSWindow::x(arg); _vscroll.x(NSWindow::width() + arg); _hscroll.x(arg); }
   void y(int arg) { NSWindow::y(arg); _vscroll.y(arg); _hscroll.y(NSWindow::height() + arg); }
-  void move(int x, int y) 
+  void move(int x, int y)
     { NSWindow::move(x, y); _vscroll.move(NSWindow::width() + x, y); _hscroll.move(x, NSWindow::height() + y); }
   void parent(Window arg) { NSWindow::parent(arg); _vscroll.parent(arg); _hscroll.parent(arg); }
   void parent(NSWindow& arg) { parent(arg.window()); }
 
   void map() { NSWindow::map(); _vscroll.map(); _hscroll.map(); }
- 
+
   void vScrollAction(const XEvent&, void*, int pos);
   void hScrollAction(const XEvent&, void*, int pos);
 
@@ -94,7 +94,7 @@ NSSelector::~NSSelector()
 
 const char* NSSelector::selected()
 {
-  if (_first <= _selected && _selected < _last) 
+  if (_first <= _selected && _selected < _last)
     return items[_selected];
 
   return 0;
@@ -124,11 +124,12 @@ void NSSelector::addItem(const char* str)
   char* newStr = new char[strlen(str) + 1];
   strcpy(newStr, str);
   items.push_back(newStr);
-  
+
   if (_last - _first + 1 <= _displayableNum) {
     _last = items.size();
-    XDrawString(NSdpy, window(), _gc, _hGap, (_vGap + _font.height()) * (_last - _first),
-		items[_last - 1], strlen(items[_last - 1]));
+    XDrawString(NSdpy, window(), _gc, _hGap,
+                (_vGap + _font.height()) * (_last - _first),
+                items[_last - 1], strlen(items[_last - 1]));
   } else {
     _vscroll.barPercent(_displayableNum * 100 / items.size());
     _vscroll.movement(_vscroll.height() / items.size());
@@ -136,15 +137,16 @@ void NSSelector::addItem(const char* str)
 
   unsigned int strWidth = _font.textWidth(str);
   unsigned int width = NSWindow::width();
-  
-  if (strWidth > width) 
+
+  if (strWidth > width)
     _hscroll.barPercent(width * 100 / strWidth);
 }
 
 inline void NSSelector::drawBorder()
 {
-  XPoint points[] = { {0, 0}, {NSWindow::width() - 1, 0}, {NSWindow::width() - 1, NSWindow::height() - 1}, 
-		      {0, NSWindow::height() - 1}, {0, 0} };
+  XPoint points[] = { {0, 0}, {NSWindow::width() - 1, 0},
+                      {NSWindow::width() - 1, NSWindow::height() - 1},
+                      {0, NSWindow::height() - 1}, {0, 0} };
 
   XDrawLines(NSdpy, window(), _gc, points, 5, CoordModeOrigin);
 }
@@ -156,7 +158,7 @@ void NSSelector::redraw()
   XClearWindow(NSdpy, window());
   for (unsigned int i = _first; i < _last; i++) {
     XDrawString(NSdpy, window(), _gc, _hGap, (_vGap + _font.height()) * (i - _first + 1),
-		items[i], strlen(items[i]));
+                items[i], strlen(items[i]));
   }
   if (_hilighted)
     hilightSelected();
@@ -179,8 +181,8 @@ void NSSelector::dispatchEvent(const XEvent& ev)
       if (_hilighted) _hilighted = false;
       else _hilighted = true;
     } else {
-      if (_hilighted) 
-	hilightSelected();
+      if (_hilighted)
+        hilightSelected();
       _selected = tmp;
       hilightSelected();
       _hilighted = true;
@@ -192,8 +194,9 @@ void NSSelector::dispatchEvent(const XEvent& ev)
 inline void NSSelector::hilightSelected()
 {
   if (_first <= _selected && _selected < _last) {
-    XFillRectangle(NSdpy, window(), _gc, _hGap, (_vGap + _font.height()) * (_selected - _first) + _vGap,
-		   _font.textWidth(items[_selected]), _font.height());
+    XFillRectangle(NSdpy, window(), _gc, _hGap,
+                   (_vGap + _font.height()) * (_selected - _first) + _vGap,
+                   _font.textWidth(items[_selected]), _font.height());
   }
 }
 

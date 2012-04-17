@@ -28,13 +28,13 @@ int main()
   con2.add(&yes);
   con2.add(&no);
   con2.reallocate();
-  con1.add(&label); 
+  con1.add(&label);
   con1.add(&con2);
   con1.reallocate();
   frame.container(&con1);
-  
+
   frame.map();
-  
+
   NSMainLoop();
 
   return 0;

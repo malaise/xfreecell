@@ -18,9 +18,9 @@ NSLabel::NSLabel(const char* str)
 }
 
 void NSLabel::label(const char* str)
-{ 
+{
     NSString::label(str);
-    resize(fontWindowWidth(), fontWindowHeight()); 
+    resize(fontWindowWidth(), fontWindowHeight());
     XClearWindow(NSdpy, window());
     XDrawString(NSdpy, window(), gc, hGap(), height() - vGap(), _label.c_str(), _label.length());
 }

@@ -21,7 +21,7 @@ bool Option::_animation = true;
 bool Option::_msSeed = false;
 
 Option::Option()
-  : mainCon(300, 200), speedCon(300, 50), speedLabel("Speed"), speedTF(80, this), 
+  : mainCon(300, 200), speedCon(300, 50), speedLabel("Speed"), speedTF(80, this),
     togglesCon(300, 50), anim("Anim"), query("Query"), ms("MS Seed"), replyCon(300, 100),
     okButton("  OK  ", this), cancelButton("Cancel", this)
 {
@@ -141,7 +141,7 @@ void Option::readPrefs()
   if (fgets(line, lineLength, fp) == NULL) goto ERROR;
   if (sscanf(line, "animation = %d", &tmp) != 1) goto ERROR;
   _animation = (tmp == 0 ? false : true);
-  
+
   if (fgets(line, lineLength, fp) == NULL) goto ERROR;
   if (sscanf(line, "query = %d", &tmp) != 1) goto ERROR;
   _queryWindow = (tmp == 0 ? false : true);
@@ -192,18 +192,18 @@ void Option::parse(int argc, char* argv[])
       continue;
     ERROR:
       fprintf(stderr, "Positive integer must follow -s\n");
-    } else if (strcmp(arg, "-q") == 0 || strcmp(arg, "--query-window") == 0) 
+    } else if (strcmp(arg, "-q") == 0 || strcmp(arg, "--query-window") == 0)
       _queryWindow = true;
     else if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
-      printf("%s by Nakayama Shintaro\n", VersionStr);
+      printf("%s by Nakayama Shintaro, maintained by PMA\n", VersionStr);
       exit(0);
-    } 
+    }
 #ifdef SHAPE
     else if (strcmp(arg, "-r") == 0 || strcmp(arg, "--no-round-card") == 0)
       _roundCard = false;
 #endif
     else if (strcmp(arg, "-a") == 0 || strcmp(arg, "--no-animation") == 0)
-      _animation = false;    
+      _animation = false;
     else if (strcmp(arg, "-m") == 0 || strcmp(arg, "--ms-seed") == 0)
       _msSeed = true;
     else

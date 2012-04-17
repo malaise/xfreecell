@@ -5,7 +5,7 @@ unsigned long allocColor(Display* NSdpy, unsigned int red, unsigned int green, u
 {
   XColor col = { 0, red, green, blue, 0, 0};
   if (XAllocColor(NSdpy, DefaultColormap(NSdpy, 0), &col) == 0) {
-    printf(" Warning : Color map full (%x,%x,%x) \n",red,green,blue); 
+    printf(" Warning : Color map full (%x,%x,%x) \n",red,green,blue);
     return WhitePixel(NSdpy, 0);
   }
   return col.pixel;
@@ -30,7 +30,7 @@ void NSInitialize()
   }
   font = XLoadFont(NSdpy, defaultFont);
 }
- 
+
 void NSMainLoop() __attribute__ ((noreturn));
 void NSMainLoop()
 {

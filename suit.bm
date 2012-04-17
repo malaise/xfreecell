@@ -1,12 +1,12 @@
 /*
- *	Spider
+ *  Spider
  *
- *	(c) Copyright 1989, Donald R. Woods and Sun Microsystems, Inc.
- *	(c) Copyright 1990, David Lemke and Network Computing Devices Inc.
+ *  (c) Copyright 1989, Donald R. Woods and Sun Microsystems, Inc.
+ *  (c) Copyright 1990, David Lemke and Network Computing Devices Inc.
  *
- *	See copyright.h for the terms of the copyright.
+ *  See copyright.h for the terms of the copyright.
  *
- *	@(#)suit.bm	2.1	90/04/25
+ *  @(#)suit.bm  2.1  90/04/25
  *
  */
 #define spade_width 15

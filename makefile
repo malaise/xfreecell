@@ -8,10 +8,11 @@ LIBS = -L./widget -lns -L/usr/X11R6/lib -lXext -lX11 -lm
 STATICDIR = xfreecell-static
 DOCS = README CHANGES mshuffle.txt xfreecell.6
 DESTDIR ?= /usr/local
-all: xfreecell Xfreecell.html
+all: xfreecell
 
 xfreecell: $(OBJECTS) widget/libns.a
 	$(CC) -o xfreecell $(CFLAGS) $(OBJECTS) $(LIBS)
+doc: Xfreecell.html
 
 %.html : %.txt
 	@asciidoc --section-numbers -o $@ $<

@@ -27,7 +27,7 @@ void NSsrand(int x)
 unsigned int NSrand()
 {
   rseed = (2531011 + (rseed * 214013)) % 2147483648;
-  
+
   return (rseed / 65536) % 32768;
 }
 */

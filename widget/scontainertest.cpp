@@ -14,7 +14,7 @@ int main()
   NSStaticHContainer con2;
   NSButton b3("Test3");
   NSButton b4("Test4");
-  
+
   con2.add(&b3); con2.add(&b4);
   con2.reallocate();
 

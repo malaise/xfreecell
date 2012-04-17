@@ -27,7 +27,7 @@ static unsigned int stackingHeight = 28;
 Stack::Stack(int x_ini, int y_ini)
  : NSWindow(true, gameWindow, x_ini - 1, y_ini - 1)
 {
-  _next_x = x_ini; _next_y = y_ini; 
+  _next_x = x_ini; _next_y = y_ini;
 }
 
 Card* Stack::topCard() const
@@ -48,7 +48,7 @@ Card* Stack::popCard()
 
 void Stack::initialize()
 {
-  while (_cards.size() > 0) 
+  while (_cards.size() > 0)
     _cards.pop_back();
 }
 
@@ -108,7 +108,7 @@ void PlayStack::dispatchEvent(const XEvent& ev)
 void PlayStack::dispatchButtonPress(const XEvent& ev)
 {
   if (hilighted == 0 || size() != 0 || !cursorChanged) return;
-  
+
   if (Option::queryWindow()) {
     if (hilighted->parent() == 0) { //single
       hilighted->unhilighten();
@@ -119,19 +119,19 @@ void PlayStack::dispatchButtonPress(const XEvent& ev)
     } else {
       mapSingleOrMultiple();
       if (singleButtonPressed()) { //single
-	hilighted->unhilighten();
-	hilighted->moveToStack(this);
-	hilighted = 0;
-	XUndefineCursor(dpy, window());
-	cursorChanged = false;
+        hilighted->unhilighten();
+        hilighted->moveToStack(this);
+        hilighted = 0;
+        XUndefineCursor(dpy, window());
+        cursorChanged = false;
       } else if (multipleButtonPressed()) { //multiple
-	hilighted->unhilighten();
-	moveMultipleCards(hilighted, this);
-	hilighted = 0;
-	XUndefineCursor(dpy, window());
-	cursorChanged = false;
-      } else 
-	fprintf(stderr, "Error in PlayStack::dispatchButtonPress()\n");
+        hilighted->unhilighten();
+        moveMultipleCards(hilighted, this);
+        hilighted = 0;
+        XUndefineCursor(dpy, window());
+        cursorChanged = false;
+      } else
+        fprintf(stderr, "Error in PlayStack::dispatchButtonPress()\n");
     }
   } else {
     switch (ev.xbutton.button) {
@@ -142,19 +142,19 @@ void PlayStack::dispatchButtonPress(const XEvent& ev)
       cursorChanged = false;
       hilighted = 0;
       break;
-    case 3: 
+    case 3:
       if (hilighted->parent() == 0) { //single
-	hilighted->unhilighten();
-	hilighted->moveToStack(this);
-	hilighted = 0;
-	XUndefineCursor(dpy, window());
-	cursorChanged = false;
+        hilighted->unhilighten();
+        hilighted->moveToStack(this);
+        hilighted = 0;
+        XUndefineCursor(dpy, window());
+        cursorChanged = false;
       } else {
-	hilighted->unhilighten();
-	moveMultipleCards(hilighted, this);
-	XUndefineCursor(dpy, window());
-	cursorChanged = false;
-	hilighted = 0;
+        hilighted->unhilighten();
+        moveMultipleCards(hilighted, this);
+        XUndefineCursor(dpy, window());
+        cursorChanged = false;
+        hilighted = 0;
       }
       break;
     }
@@ -200,14 +200,14 @@ Card* SingleStack::popCard()
 bool SingleStack::acceptable(Card* c __attribute__ ((unused)) ) const
 {
   if (size() == 0) return true;
-  
+
   return false;
 }
 
 void SingleStack::dispatchButtonPress()
 {
   if (hilighted == 0) return;
-  
+
   if (acceptable(hilighted)) {
     hilighted->unhilighten();
     hilighted->moveToStack(this);
@@ -281,7 +281,8 @@ DoneStack::DoneStack(int x_ini, int y_ini, Suit s)
   makeOneSymbolBitmap(s, bitmap);
 
   bgpixmap = XCreatePixmapFromBitmapData(dpy, gameWindow, bitmap, cardWidth - 2,
-					 cardHeight - 2, fore, back, DefaultDepth(dpy, DefaultScreen(dpy)));
+                                         cardHeight - 2, fore, back,
+                                         DefaultDepth(dpy, DefaultScreen(dpy)));
   resize(cardWidth, cardHeight);
   backgroundPixmap(bgpixmap);
   border(getColor(dpy, "black"));
@@ -310,7 +311,7 @@ Card* DoneStack::popCard()
   //  fprintf(stderr, "Can't pop\n");
   //  exit(1);
 
-  Card *c = Stack::popCard(); 
+  Card *c = Stack::popCard();
   c->undone();
   return c;
 }

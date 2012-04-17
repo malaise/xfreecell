@@ -6,7 +6,7 @@ public:
   void hScrollAction(const XEvent&, void*, int);
 };
 
-void Listener::vScrollAction(const XEvent&, void*, int pos) 
+void Listener::vScrollAction(const XEvent&, void*, int pos)
 {
   printf("V: delta = %d\n", pos);
 }
@@ -36,7 +36,7 @@ int main()
   frame.container(&con);
 
   frame.map();
-  
+
   XFlush(NSdisplay());
 
   NSMainLoop();

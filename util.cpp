@@ -18,7 +18,7 @@ unsigned long getColor(Display *dpy, const char* name)
 {
   Colormap cmap;
   XColor c0, c1;
-  
+
   cmap = DefaultColormap(dpy, 0);
   XAllocNamedColor(dpy, cmap, name, &c1, &c0);
 
@@ -139,12 +139,12 @@ void makeBitmap(Suit s, int v, char * bitmap)
     }
   } else { // face card:
     drawBox((cardWidth-2-king_c_width)/2-1,
-	     (cardHeight-2-king_c_height)/2-1,
-	     king_c_width+2, king_c_height+2, bitmap);
+            (cardHeight-2-king_c_height)/2-1,
+            king_c_width+2, king_c_height+2, bitmap);
     draw((const char*) faces[s][v-10],
-	 (cardWidth-2-king_c_width)/2,
-	 (cardHeight-2-king_c_height)/2,
-	 king_c_width, king_c_height, bitmap);
+         (cardWidth-2-king_c_width)/2,
+         (cardHeight-2-king_c_height)/2,
+         king_c_width, king_c_height, bitmap);
   }
   draw((char*)rank_bits[v], 3, 5, rank_width, rank_height, bitmap);
   draw180((char*)rank_bits[v], 3, 5, rank_width, rank_height, bitmap);
@@ -158,12 +158,12 @@ void makeBitmap(Suit s, int v, char * bitmap)
 
 void makeOneSymbolBitmap(Suit s, char* bitmap)
 {
-    const char* b = (const char*)main_suit[s];
-    int w = suit_width[s];
-    int h = suit_height[s];
-    
-    memset(bitmap, 0, bmWidth*(cardHeight-2));
-    draw(b, (cardWidth-2-w)/2, (cardHeight-2-h)/2, w, h, bitmap);
+  const char* b = (const char*)main_suit[s];
+  int w = suit_width[s];
+  int h = suit_height[s];
+
+  memset(bitmap, 0, bmWidth*(cardHeight-2));
+  draw(b, (cardWidth-2-w)/2, (cardHeight-2-h)/2, w, h, bitmap);
 }
 
 static void draw(const char* from, int x, int y, int w, int h, char* bitmap) {

@@ -23,7 +23,7 @@ NSString::NSString(const char* str)
     XCharStruct charStruct;
 
     XTextExtents(fontStruct, _label.c_str(), _label.length(), &direction, &ascent, &descent, &charStruct);
-  
+
     _fontWindowWidth = charStruct.rbearing - charStruct.lbearing + fontGap * 2;
     _vGap = (_fontWindowHeight - (charStruct.ascent + charStruct.descent)) / 2;
     _hGap = fontGap;
@@ -33,10 +33,10 @@ NSString::NSString(const char* str)
 void NSString::label(const char* str)
 {
   _label = str;
-  
+
   int direction, ascent, descent;
   XCharStruct charStruct;
-  
+
   XTextExtents(fontStruct, _label.c_str(), _label.length(), &direction, &ascent, &descent, &charStruct);
 
   if (_resizable) {
@@ -52,7 +52,7 @@ void NSString::fontWindowWidth(unsigned int arg)
 {
   int direction, ascent, descent;
   XCharStruct charStruct;
-  
+
   XTextExtents(fontStruct, _label.c_str(), _label.length(), &direction, &ascent, &descent, &charStruct);
 
   if (_resizable) {
@@ -65,7 +65,7 @@ void NSString::fontWindowHeight(unsigned int arg)
 {
   int direction, ascent, descent;
   XCharStruct charStruct;
-  
+
   XTextExtents(fontStruct, _label.c_str(), _label.length(), &direction, &ascent, &descent, &charStruct);
 
   if (_resizable) {

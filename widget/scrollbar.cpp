@@ -52,7 +52,7 @@ inline bool NSVScrollbar::inLimits(int arg)
   int lowerLimit = height() - thickness() - _bar.height();
   unsigned int delta = abs(arg - _bar.y());
 
-  return (arg >= upperLimit && arg <= lowerLimit) && 
+  return (arg >= upperLimit && arg <= lowerLimit) &&
     (delta >= _movement && delta % _movement == 0);
 }
 
@@ -70,12 +70,13 @@ void NSVScrollbar::dispatchEvent(const XEvent& ev)
     {
       int newY = appropriatePos(ev.xmotion.y - _bar.height() / 2);
       if (outOfBar(ev.xbutton.y) && inLimits(newY)) {
-	int prev = _bar.y();
-	_bar.y(newY);
-	if (listener != 0)
-	  listener->vScrollAction(ev, listenerArg, (_bar.y() - prev) / (int) _movement);
+        int prev = _bar.y();
+        _bar.y(newY);
+        if (listener != 0)
+          listener->vScrollAction(ev, listenerArg,
+                                  (_bar.y() - prev) / (int) _movement);
       } else if (insideBar(ev.xbutton.y)) {
-	_buttonPressed = true;
+        _buttonPressed = true;
       }
       break;
     }
@@ -87,7 +88,8 @@ void NSVScrollbar::dispatchEvent(const XEvent& ev)
       int prev = _bar.y();
       _bar.y(ev.xmotion.y - _bar.height() / 2);
       if (listener != 0)
-	listener->vScrollAction(ev, listenerArg, (_bar.y() - prev) / (int) _movement);
+        listener->vScrollAction(ev, listenerArg,
+                                (_bar.y() - prev) / (int) _movement);
     }
     break;
   }
@@ -144,7 +146,7 @@ inline bool NSHScrollbar::inLimits(int arg)
   int upperLimit = thickness();
   int lowerLimit = width() - thickness() - _bar.width();
   unsigned int delta = abs(arg - _bar.x());
-  
+
   return (arg >= upperLimit && arg <= lowerLimit) &&
     (delta >= _movement && delta % _movement == 0);
 }
@@ -163,12 +165,13 @@ void NSHScrollbar::dispatchEvent(const XEvent& ev)
     {
       int newX = appropriatePos(ev.xmotion.x - _bar.width() / 2);
       if (outOfBar(ev.xbutton.x) && inLimits(newX)) {
-	int prev = _bar.x();
-	_bar.x(newX);
-	if (listener != 0)
-	  listener->hScrollAction(ev, listenerArg, (_bar.x() - prev) / (int) _movement);
+        int prev = _bar.x();
+        _bar.x(newX);
+        if (listener != 0)
+          listener->hScrollAction(ev, listenerArg,
+                                  (_bar.x() - prev) / (int) _movement);
       } else if (insideBar(ev.xbutton.x)) {
-	_buttonPressed = true;
+        _buttonPressed = true;
       }
       break;
     }
@@ -180,10 +183,12 @@ void NSHScrollbar::dispatchEvent(const XEvent& ev)
       int prev = _bar.x();
       _bar.x(ev.xmotion.x - _bar.width() / 2);
       if (listener != 0)
-	listener->hScrollAction(ev, listenerArg, (_bar.x() - prev) / (int) _movement);
+        listener->hScrollAction(ev, listenerArg,
+                                (_bar.x() - prev) / (int) _movement);
     }
     break;
   }
 
   NSPlate::dispatchEvent(ev);
 }
+

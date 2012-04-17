@@ -18,7 +18,7 @@ QueryWindow::QueryWindow(const char* queryLabel, const char* leftLabel, const ch
 {
   con.add(&leftButton); con.add(&rightButton);
   con.reallocate();
-  
+
   mainCon.add(&label); mainCon.add(&con);
   mainCon.reallocate();
 
@@ -54,10 +54,10 @@ void QueryWindow::waitForEvent()
 
   while (!_left && !_right) {
     XNextEvent(dpy, &ev);
-    if ((win = NSWindow::windowToNSWindow(ev.xany.window)) != 0) 
+    if ((win = NSWindow::windowToNSWindow(ev.xany.window)) != 0)
       win->dispatchEvent(ev);
   }
-  
+
   unmap();
 }
 
@@ -68,7 +68,7 @@ const int undoScore = 1;
 const int continuousScore = 1;
 
 ScoreWindow::ScoreWindow()
-  : exitButton("exit", this), 
+  : exitButton("exit", this),
     winLabel(""),
     defeatLabel(""),
     winpLabel(""),
@@ -79,7 +79,7 @@ ScoreWindow::ScoreWindow()
     totalLabel(""),
     mainCon(300, 400)
 {
-  mainCon.add(&winLabel); 
+  mainCon.add(&winLabel);
   mainCon.add(&defeatLabel);
   mainCon.add(&winpLabel);
   mainCon.add(&defeatpLabel);
@@ -89,9 +89,9 @@ ScoreWindow::ScoreWindow()
   mainCon.add(&totalLabel);
   mainCon.add(&exitButton);
   mainCon.reallocate();
-    
+
   container(&mainCon);
-    
+
   _wins = _defeats = 0;
   _continuousWins = 0;
   _continuousDefeats = 0;
@@ -136,7 +136,7 @@ ScoreWindow::ScoreWindow()
 
 void ScoreWindow::incWins()
 {
-  if (_previousWon == false) 
+  if (_previousWon == false)
     _previousWon = true;
 
   _wins++;
@@ -177,7 +177,7 @@ void ScoreWindow::readScore()
   char line[lineLength];
 
   if (fp == NULL) {
-    if (errno == ENOENT) 
+    if (errno == ENOENT)
       fprintf(stderr, "%s does not exist. Creating.\n", saveFile.c_str());
     writeScore();
     return;
@@ -195,7 +195,7 @@ void ScoreWindow::readScore()
   if (fgets(line, lineLength, fp) == NULL) goto ERROR;
   if (sscanf(line, "Continuous Defeats = %d", &_continuousDefeats) != 1) goto ERROR;
 
-  int tmp; 
+  int tmp;
   if (fgets(line, lineLength, fp) == NULL) goto ERROR;
   if (sscanf(line, "Previous Won = %d", &tmp) != 1) goto ERROR;
   _previousWon = (tmp == 0 ? false : true);
@@ -205,7 +205,7 @@ void ScoreWindow::readScore()
 
   if (fgets(line, lineLength, fp) == NULL) goto ERROR;
   if (sscanf(line, "Total Score = %d", &_totalScore) != 1) goto ERROR;
-  
+
   fclose(fp);
   return;
 
@@ -234,7 +234,7 @@ void ScoreWindow::writeScore() const
 
   fclose(fp);
   return;
-}    
+}
 
 void ScoreWindow::waitForEvent()
 {
@@ -271,11 +271,12 @@ void ScoreWindow::setLabels()
   defeatLabel.label(line);
 
   sprintf(line, "Win Percentage: %2.2f%%",
-	  _wins + _defeats == 0 ? 0 : ((float) _wins) / (_wins + _defeats) * 100);
+     _wins + _defeats == 0 ? 0 : ((float) _wins) / (_wins + _defeats) * 100);
   winpLabel.label(line);
 
   sprintf(line, "Defeat Percentage: %2.2f%%",
-  	  _wins + _defeats == 0 ? 0 : ((float) _defeats) / (_wins + _defeats) * 100);
+      _wins + _defeats == 0 ? 0 
+                            : ((float) _defeats) / (_wins + _defeats) * 100);
   defeatpLabel.label(line);
 
   sprintf(line, "Continuous Wins: %d", _continuousWins);
@@ -289,15 +290,15 @@ void ScoreWindow::setLabels()
 
   sprintf(line, "Total Score: %d", _totalScore);
   totalLabel.label(line);
-  
+
   mainCon.reallocate();
-}    
+}
 
 // About
 AboutWindow::AboutWindow()
   : version(VersionStr),
-    copyright("PMA"),
-    homepage(""),
+    copyright("Nakayama Shintaro"),
+    homepage("Maintained by PMA"),
     okButton(" Ok ", this),
     labelCon(350, 100),
     mainCon(350, 150)

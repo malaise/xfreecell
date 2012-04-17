@@ -9,44 +9,47 @@ screen (eight columns) to the two top right and two top left target decks.
 Preferences
 -----------
 anchor:XPreferences[]
-The environment variable HOME is used to build the directory
+The environment variable HOME is used to define the directory
 $\{HOME\}/.xfreecell where are saved the current configuration and scores
 (default is ".").
 
-The following options can be provided at startup:
+The following options can be provided in the command line:
 
   -s | --speedup to set speed of animation (default is 100)
   -r | --no-round-card for sharp corner of cards (default is round)
   -a | --no-animation for no animation of card movements (default is animation)
   -m | --ms-seed for comptibility with microsoft seed generator (default is Unix)
+  -q | --query-window for a popup window for single or multiple cards move
+
+(see xref:XShortcut[shortcuts] for single/multiple cards movements).
 
 These preferences can also be set in the 'Pref' menu.
 
-They are save in the file $\{HOME\}/.xfreecell/prefs 
+They are saved in the file $\{HOME\}/.xfreecell/prefs 
 
 Playing
 -------
 Starting a game
 ~~~~~~~~~~~~~~~
-anchor:XStart[]First, you must start a game by clicking on menu 'New'.
+anchor:XStart[]First, you must start a new game by clicking on menu 'New'.
 
 At any time you can:
 
 * click on the 'New' button to start a random new game (not played yet),
-* click on the 'Replay' button to restart current game,
-* click on the 'Seed' button and enter a game number to start a given new game,
+* click on the 'Replay' button to restart the current game,
+* click on the 'Seed' button and enter a game number to start a given game,
 * click on the 'Lost' button start a random game among thoses that have already
 been lost.
 
-Note: In all these cases the current game, if any in progress, is considered as
+Note: In all these cases the current game in progress if any is considered as
 lost and counted as such.
 
 The three areas and what can go where
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .Playing area
-This area is the whole bottom of the screen. There are 4 columns of 7 cards and
-4 columns of 6 cards.
+This area is the whole bottom (all but the first row) of the screen.
+There are 4 columns of 7 cards and 4 columns of 6 cards.
 
 At start-up all the 52 cards are randomly placed in the playing area.
 
@@ -55,8 +58,8 @@ Stacking rule: You can append a card at the bottom of a column providing that th
 one level below the bottom card (e.g. Jack on Queen) and that the new card is
 of different color (in term of black and red) from the previous.
 
-In an empty column you can stack some cards, starting from any card you want
-and respecting the above xref:XStackingRule[stacking rule] of
+In an empty column you can put any card you want then stack several cards as
+long as they respect the above xref:XStackingRule[stacking rule] of
 decrescent levels and alternative colors.
 
 .Foundations
@@ -65,7 +68,7 @@ the top right (Diamonds and Clubs) of the top row.
 
 At start-up they show their target color.
 
-Here you must place the cards, all of the same one color per deck, in the order
+Here you must place the cards, one color per deck, in the order
 Ace, two, three..., Queen, Kind.
 
 *The goal of the game is to move all the cards in the target foundation decks.*
@@ -80,33 +83,33 @@ Here you can temporary put one card at a time in each free cell.
 Moving the cards
 ~~~~~~~~~~~~~~~~
 You move the cards one by one, from any area to any area except that you cannot
-move back a card from the target area.
+move a card back from the target area.
 
 * Select a card to move by left clicking on it. It becomes selected (its
 background becomes grey). You can de-select it by clicking back on the card.
-* Once a card is selected, select the destination by left clicking on the
+* Once a card is selected, select the destination by clicking on the
 location. Valid destinations are indicated by a vertical arrow &#8657; when
 the mouse cursor moves on it.
 
 Note: An Ace that appears at the bottom of a row automatically moves at its
-destination in its foundation. At the beginning of the game this happens
-together with the first card movement that you trigger.
+destination in its foundation. At the beginning of the game this triggered by
+the first card movement.
 
 Shortcuts
 ~~~~~~~~~
-You can double left click or middle click on a non selected card to move it in
-a free cell if any is available.
+anchor:XShortcut[]You can double left click or middle click on a non selected
+card to move it in a free cell if any is available.
 
-You can left click on a non selected to move it to its foundation (if
+You can left click on a non selected card to move it to its foundation (if
 possible).
 
 Once a card of the playing area is selected you can left click on an empy column
-to move as many as possible cards from the selected colomn to the new one.
-They move as if you moved them one by one, so the amount of cards moved depends
-on:
+to move as many cards as possible from the selected colomn to the new one.
+The cards move as if you moved them one by one, so the amount of cards moved
+depends on:
 
 * how many cards are following the xref:XStackingRule[stacking rule],
-* how many empty columns and free cells there are.
+* how many empty columns and free cells can be used for temporary storage.
 
 Undo and redo
 ~~~~~~~~~~~~~
@@ -136,6 +139,9 @@ a game
 - decremented by '10 + NbContinuousLost' each time a game is lost,
 - decremented by '1' for each undo that is not re-done.
 
+These statistics are saved from one session to another in the file 
+$\{HOME\}/.xfreecell/score.
+
 Pref
 ~~~~
 This button allows modifying your preferences, see section
@@ -151,3 +157,4 @@ button to start a game already lost
 * The game numbers won (Unix seed and microsoft seed), in order for the 'New'
 button to start a game not yet played (neither won nor lost)
 * Your score and associated statistics, see section xref:XScore[Score]
+

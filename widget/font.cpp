@@ -18,7 +18,7 @@ void NSFont::textExtents(const char* str, XCharStruct* cs, int* dir, int* asc, i
   int direction, ascent, descent;
 
   XTextExtents(_fontStruct, str, strlen(str), &direction, &ascent, &descent, cs);
-  
+
   if (dir != 0) *dir = direction;
   if (asc != 0) *asc = ascent;
   if (desc != 0) *desc = descent;

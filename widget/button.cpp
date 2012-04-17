@@ -8,8 +8,8 @@ NSButton::NSButton
   gc = XCreateGC(NSdpy, root(), 0, 0);
   XSetFont(NSdpy, gc, font);
   XSetForeground(NSdpy, gc, BlackPixel(NSdpy, 0));
-  selectInput(ExposureMask | EnterWindowMask | LeaveWindowMask | 
-	      ButtonPressMask | ButtonReleaseMask);
+  selectInput(ExposureMask | EnterWindowMask | LeaveWindowMask |
+              ButtonPressMask | ButtonReleaseMask);
   NSWindow::resize(fontWindowWidth(), fontWindowHeight());
 }
 
@@ -55,7 +55,7 @@ void NSButton::label(const char* str)
 void NSButton::redraw()
 {
     XDrawString(NSdpy, window(), gc, hGap(), height() - vGap(), _label.c_str(), _label.length());
-    NSPlate::redraw(up);  
+    NSPlate::redraw(up);
 }
 
 void NSButton::dispatchEvent(const XEvent& ev)
@@ -107,14 +107,14 @@ NSToggleButton::NSToggleButton(const char* str, bool t)
 
 void NSToggleButton::redraw()
 {
-  if (_toggled) 
+  if (_toggled)
     rect3D(down, width() - hGap() - squareLength, vGap(), squareLength, squareLength);
-  else 
+  else
     rect3D(up, width() - hGap() - squareLength, vGap(), squareLength, squareLength);
 }
 
 void NSToggleButton::dispatchEvent(const XEvent& ev)
-{ 
+{
   switch (ev.type) {
   case Expose:
     NSButton::redraw();

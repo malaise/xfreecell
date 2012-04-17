@@ -42,7 +42,7 @@ GameNumberManager::GameNumberManager()
       perror("GameNumberManager::GameNumberManager()");
       exit(1);
     }
-  } else 
+  } else
     closedir(dir);
 
   wonGameFile = lostGameFile = msWonGameFile = msLostGameFile = directory;
@@ -94,12 +94,12 @@ bool GameNumberManager::alreadyWon(int num)
   }
 
   return false;
-}  
+}
 
 bool GameNumberManager::alreadyLost(int num)
 {
   Set::iterator i;
-  
+
   if (Option::msSeed()) {
     i = msLostGames.find(num);
     if (i != msLostGames.end()) return true;
@@ -179,7 +179,7 @@ void GameNumberManager::writeFile(const std::string& file, Set* map)
     return;
   }
 
-  for (Set::iterator i = map->begin(); i != map->end(); i++) 
+  for (Set::iterator i = map->begin(); i != map->end(); i++)
     fprintf(fp, "%d\n", *i);
 
   fclose(fp);

@@ -4,12 +4,13 @@ bool NSWindow::windowInitialized = false;
 Window NSWindow::_root;
 std::vector<NSWindow::Elt> NSWindow::eltVector;
 
-NSWindow::NSWindow(bool create, Window w, int x, int y, unsigned int width, unsigned int height, 
-		   unsigned int borderWidth, unsigned long border, unsigned long bg)
+NSWindow::NSWindow(bool create, Window w, int x, int y, unsigned int width,
+                   unsigned int height, unsigned int borderWidth,
+                   unsigned long border, unsigned long bg)
 {
   if (!windowInitialized) {
     windowInitialized = true;
-    
+
     _root = RootWindow(NSdpy, 0);
   }
   if (create) {
@@ -35,19 +36,19 @@ NSWindow::~NSWindow()
   XDestroyWindow(NSdpy, _window);
 }
 
-void NSWindow::move(int arg1, int arg2) 
-{ 
+void NSWindow::move(int arg1, int arg2)
+{
   if (arg1 != _x || arg2 != _y) {
-    _x = arg1; _y = arg2; 
+    _x = arg1; _y = arg2;
     XMoveWindow(NSdpy, _window, _x, _y);
   }
 }
 
-void NSWindow::resize(unsigned int arg1, unsigned int arg2) 
-{ 
+void NSWindow::resize(unsigned int arg1, unsigned int arg2)
+{
   if (arg1 != _width || arg2 != _height) {
     _width = arg1; _height = arg2;
-    XResizeWindow(NSdpy, _window, _width, _height); 
+    XResizeWindow(NSdpy, _window, _width, _height);
   }
 }
 
@@ -98,7 +99,7 @@ void NSWindow::registerWindow(NSWindow* nsw, Window w)
   for (std::vector<Elt>::iterator iter = begin; iter != end; iter++)
     if ((*iter).window > w)
       eltVector.insert(iter, elt);
-  
+
   fprintf(stderr, "registerWindow bug\n");
 }
 
@@ -112,7 +113,7 @@ void NSWindow::eraseWindow(Window w)
     if ((*iter).window == w) eltVector.erase(iter);
     return;
   }
-  
+
   fprintf(stderr, "eraseWindow bug\n");
 }
 
