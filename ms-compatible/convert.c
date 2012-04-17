@@ -6,7 +6,6 @@ int main (void) {
   char line[52];
   int i, j;
   size_t res;
-  char str[4];
 
   fi = fopen ("MSNumbers", "r");
   if (fi == NULL) {
@@ -36,5 +35,7 @@ int main (void) {
 
   fclose (fi);
   fclose (fo);
+
+  exit (0);
 }
 

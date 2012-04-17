@@ -197,7 +197,7 @@ void Option::parse(int argc, char* argv[])
     else if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
       printf("%s\n", VersionStr);
       printf("Written by Nakayama Shintaro\n");
-      printf("Maintained by Pascal Malaise\n", VersionStr);
+      printf("Maintained by Pascal Malaise\n");
       exit(0);
     }
 #ifdef SHAPE

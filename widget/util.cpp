@@ -1,7 +1,8 @@
 #include <stdlib.h>
 #include "widget.h"
 
-unsigned long allocColor(Display* NSdpy, unsigned int red, unsigned int green, unsigned int blue)
+unsigned long allocColor(Display* NSdpy, unsigned short red,
+                         unsigned short green, unsigned short blue)
 {
   XColor col = { 0, red, green, blue, 0, 0};
   if (XAllocColor(NSdpy, DefaultColormap(NSdpy, 0), &col) == 0) {

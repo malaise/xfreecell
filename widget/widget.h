@@ -32,7 +32,8 @@ class NSFrame;
 class NSScrollbarListener;
 class NSVScrollbar;
 
-unsigned long allocColor(Display*, unsigned int R, unsigned int G, unsigned int B);
+unsigned long allocColor(Display*, unsigned short R, unsigned short G,
+                                   unsigned short B);
 unsigned long nameToPixel(const char* colorName);
 void NSInitialize();
 void NSMainLoop();

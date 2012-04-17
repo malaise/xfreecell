@@ -31,11 +31,11 @@ doc: Xfreecell.html
 
 %.o: %.cpp $(INCLUDES)
 	@echo $(CC) -c $<
-	@$(CC) -c $(CFLAGS) $(CXXOPT) $<
+	@$(CC) -c $(CFLAGS) $(CXXOPTS) $<
 
 freecell.o: freecell.cpp $(INCLUDES) ms-compatible/MSNumbers.h
 	@echo $(CC) -c $<
-	@$(CC) -c $(CFLAGS) $<
+	@$(CC) -c $(CFLAGS) $(CXXOPTS) $<
 
 widget/libwidget.a:
 	@echo make -C widget
