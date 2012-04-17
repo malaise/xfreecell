@@ -1,35 +1,51 @@
-OBJECTS = card.o freecell.o option.o stack.o subwindows.o undo.o util.o gnmanager.o random.o
-INCLUDES = $(wildcard *.h)
 CC = g++
+CXX = $(CC)
+
+CXX11OPT := $(shell $(CXX) -dumpversion | awk -F "." ' \
+  ( ($$1 > 4) || ( ($$1 == 4) && ($$2 >= 3))) {print "-std=c++0x"}')
+
+
+OBJECTS = card.o option.o stack.o subwindows.o undo.o util.o gnmanager.o random.o
+INCLUDES = $(wildcard *.h)
 CFLAGS = -g -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
          -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare \
-         -Wmissing-noreturn -Winline -Wfloat-equal -Wundef -std=c++0x
-LIBS = -L./widget -lns -L/usr/X11R6/lib -lXext -lX11 -lm
+         -Wmissing-noreturn -Winline -Wfloat-equal -Wundef
+CXXOPTS = $(CXX11OPT)
+
+
+LIBS = -L./widget -lwidget -L/usr/X11R6/lib -lXext -lX11 -lm
 STATICDIR = xfreecell-static
-DOCS = README CHANGES mshuffle.txt xfreecell.6
+DOCS = README CHANGES mshuffle.txt xfreecell.6 Xfreecell.html
 DESTDIR ?= /usr/local
+
 all: xfreecell
 
-xfreecell: $(OBJECTS) widget/libns.a
-	$(CC) -o xfreecell $(CFLAGS) $(OBJECTS) $(LIBS)
+xfreecell: widget/libwidget.a $(OBJECTS) freecell.o
+	@echo $(CC) -o $@ freecell.o $(OBJECTS) $(LIBS)
+	@$(CC) -o $@ freecell.o $(OBJECTS) $(LIBS)
+
 doc: Xfreecell.html
 
 %.html : %.txt
 	@asciidoc --section-numbers -o $@ $<
 
-%.o: %.cpp $(INCLUDES) ms-compatible/MSNumbers.h
-	$(CC) -c $(CFLAGS) $<
+%.o: %.cpp $(INCLUDES)
+	@echo $(CC) -c $<
+	@$(CC) -c $(CFLAGS) $(CXXOPT) $<
 
-widget/libns.a:
-	make -C widget
+freecell.o: freecell.cpp $(INCLUDES) ms-compatible/MSNumbers.h
+	@echo $(CC) -c $<
+	@$(CC) -c $(CFLAGS) $<
+
+widget/libwidget.a:
+	@echo make -C widget
+	@make -C widget CFLAGS="$(CFLAGS)" "CXXOPTS=$(CXXOPTS)"
 
 ms-compatible/MSNumbers.h :
-	make -C ms-compatible
+	@echo make -C ms-compatible
+	@make -C ms-compatible CFLAGS="$(CFLAGS)" "CXXOPTS=$(CXXOPTS)"
 
-static: MSNumbers $(OBJECTS) lib
-	$(CC) -o xfreecell -static $(CFLAGS) $(OBJECTS) $(LIBS)
-
-static-release: static
+static-release: xfreecell doc
 	mkdir $(STATICDIR)
 	strip xfreecell
 	mv xfreecell $(STATICDIR)
@@ -38,7 +54,7 @@ static-release: static
 	rm -rf $(STATICDIR)
 
 clean:
-	rm -f *~ *.o a.out xfreecell
+	rm -f *.o xfreecell
 	rm -rf $(STATICDIR)
 	make -C widget clean
 	make -C ms-compatible clean
