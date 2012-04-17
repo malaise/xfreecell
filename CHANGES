@@ -69,3 +69,19 @@ version 2.5
 Impose fixed size to the window manager
 Port to gcc 4.4 (-std=c++0x)
 
+version 2.6
+Add support of "Delete" reaquest from window manager
+
+version 2.7
+Report fix of selected card remaining highlighted when re-distributing
+
+version 2.8
+Remove MSNumbers path
+
+version 2.9
+Show arrow when move to free cell is possible
+Improve doc
+
+version 2.10
+Re-calibrate the animation speed
+

@@ -13,10 +13,6 @@ You need to be root.
 1. mv xfreecell /usr/local/bin
 2. mv xfreecell.6 /usr/local/man/man6
 
-Then if you want to use MS Freecell compatible seed number feature,
-you must download MSNumbers from my homepage and move it to the 
-directory specified in ./xfreecell/msNumPath.
-
 ====CONTROL====
 <Mouse>
 Double click: Moves the card to freecell. Same as windows.
@@ -42,6 +38,7 @@ Replay: Replay last game.
 Seed: Begin a new game which corresponds to the number you typed.
 Lost: Replay a lost game selected randomly.
 Undo: Do undo.
+Redo: redo after undo.
 Score: Display score.
 Pref: Preference.
 About: About.

@@ -297,8 +297,8 @@ void ScoreWindow::setLabels()
 // About
 AboutWindow::AboutWindow()
   : version(VersionStr),
-    copyright("Nakayama Shintaro"),
-    homepage("Maintained by PMA"),
+    copyright("written by Nakayama Shintaro"),
+    homepage("maintained by Pascal Malaise"),
     okButton(" Ok ", this),
     labelCon(350, 100),
     mainCon(350, 150)

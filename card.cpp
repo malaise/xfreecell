@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <math.h>
+#include <unistd.h>
 #ifdef SHAPE
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -124,6 +125,8 @@ void Card::move(int dest_x, int dest_y, bool animate)
     int newx = dest_x;
     int newy = dest_y;
     int steps = std::max(abs(oldx - newx), abs(oldy - newy)) / Option::speedup();
+    unsigned long mpause = 1000000 / Option::speedup();
+    unsigned long upause = 100000 / Option::speedup();
     float curx = (float) oldx;
     float cury = (float) oldy;
 
@@ -136,8 +139,10 @@ void Card::move(int dest_x, int dest_y, bool animate)
         cury += ((float) (newy - oldy)) / steps;
         NSWindow::move((int) curx, (int) cury);
         XFlush(dpy);
+        usleep (upause);
       }
     }
+    usleep (mpause);
   } else {
     NSWindow::move(dest_x, dest_y);
   }

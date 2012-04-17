@@ -195,7 +195,9 @@ void Option::parse(int argc, char* argv[])
     } else if (strcmp(arg, "-q") == 0 || strcmp(arg, "--query-window") == 0)
       _queryWindow = true;
     else if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
-      printf("%s by Nakayama Shintaro, maintained by PMA\n", VersionStr);
+      printf("%s\n", VersionStr);
+      printf("Written by Nakayama Shintaro\n");
+      printf("Maintained by Pascal Malaise\n", VersionStr);
       exit(0);
     }
 #ifdef SHAPE

@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V2.9
+V2.10
 
 The goal of the game is to move all the cards from the bottom part of the
 screen (eight columns) to the two top right and two top left target decks.
@@ -15,7 +15,7 @@ $\{HOME\}/.xfreecell where are saved the current configuration and scores
 
 The following options can be provided in the command line:
 
-  -s | --speedup to set speed of animation (default is 100)
+  -s | --speedup to set speed of animation, the bigger the faster (default is 100)
   -r | --no-round-card for sharp corner of cards (default is round)
   -a | --no-animation for no animation of card movements (default is animation)
   -m | --ms-seed for comptibility with microsoft seed generator (default is Unix)
