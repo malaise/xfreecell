@@ -21,7 +21,7 @@ bool Option::_animation = true;
 bool Option::_msSeed = false;
 
 Option::Option()
-  : mainCon(300, 200), speedCon(300, 50), speedLabel("Speed"), speedTF(80, this),
+  : mainCon(300, 200), speedCon(300, 50), speedLabel("Speed (ms)"), speedTF(80, this),
     togglesCon(300, 50), anim("Anim"), query("Query"), ms("MS Seed"), replyCon(300, 100),
     okButton("  OK  ", this), cancelButton("Cancel", this)
 {
@@ -112,7 +112,8 @@ void Option::waitForEvent()
 
   if (okPressed) {
     int val = atoi(speedTF.text());
-    if (val > 0) _speedup = val;
+    if (val < 0) val = 0;
+    _speedup = val;
     _animation = anim.toggled();
     _queryWindow = query.toggled();
     _msSeed = ms.toggled();

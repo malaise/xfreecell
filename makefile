@@ -1,11 +1,12 @@
-CC = g++
-CXX = $(CC)
+CC = gcc
+CXX = g++
 
 CXX11OPT := $(shell $(CXX) -dumpversion | awk -F "." ' \
   ( ($$1 > 4) || ( ($$1 == 4) && ($$2 >= 3))) {print "-std=c++0x"}')
 
 
-OBJECTS = card.o option.o stack.o subwindows.o undo.o util.o gnmanager.o random.o
+OBJECTS = card.o option.o stack.o subwindows.o undo.o util.o gnmanager.o \
+          random.o timeval.o
 INCLUDES = $(wildcard *.h)
 CFLAGS = -g -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
          -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare \
@@ -21,8 +22,8 @@ DESTDIR ?= /usr/local
 all: xfreecell
 
 xfreecell: widget/libwidget.a $(OBJECTS) freecell.o
-	@echo $(CC) -o $@ freecell.o $(OBJECTS) $(LIBS)
-	@$(CC) -o $@ freecell.o $(OBJECTS) $(LIBS)
+	@echo $(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
+	@$(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
 
 doc: Xfreecell.html
 
@@ -30,12 +31,16 @@ doc: Xfreecell.html
 	@asciidoc --section-numbers -o $@ $<
 
 %.o: %.cpp $(INCLUDES)
+	@echo $(CXX) -c $<
+	@$(CXX) -c $(CFLAGS) $(CXXOPTS) $<
+
+%.o: %.c $(INCLUDES)
 	@echo $(CC) -c $<
-	@$(CC) -c $(CFLAGS) $(CXXOPTS) $<
+	@$(CC) -c $(CFLAGS) $(CCOPTS) $<
 
 freecell.o: freecell.cpp $(INCLUDES) ms-compatible/MSNumbers.h
-	@echo $(CC) -c $<
-	@$(CC) -c $(CFLAGS) $(CXXOPTS) $<
+	@echo $(CXX) -c $<
+	@$(CXX) -c $(CFLAGS) $(CXXOPTS) $<
 
 widget/libwidget.a:
 	@echo make -C widget

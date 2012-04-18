@@ -85,3 +85,6 @@ Improve doc
 version 2.10
 Re-calibrate the animation speed
 
+version 2.11
+Animation speed becomes the time in ms to move each card
+

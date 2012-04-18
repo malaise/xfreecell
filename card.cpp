@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <math.h>
 #include <unistd.h>
+
 #ifdef SHAPE
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -14,6 +15,7 @@
 #include "option.h"
 #include "undo.h"
 #include "util.h"
+#include "timeval.h"
 
 #ifdef SHAPE
 #include "cursor.bm"
@@ -117,6 +119,19 @@ Card::Card(Suit s, unsigned int v)
 
 void Card::move(int dest_x, int dest_y, bool animate)
 {
+  const int steps = 500;
+
+  timeout_t start_time, stop_time, mpause;
+
+  // Time of end of animation
+  get_time (&start_time);
+  stop_time = start_time;
+  incr_time (&stop_time, (unsigned) Option::speedup());
+
+  // Delay between steps
+  double_to_time ((double)Option::speedup() / 1000.0 / 2.0 / (double)steps,
+                  &mpause);
+
   raise();
 
   if (animate && Option::animation()) {
@@ -124,30 +139,24 @@ void Card::move(int dest_x, int dest_y, bool animate)
     int oldy = y();
     int newx = dest_x;
     int newy = dest_y;
-    int steps = std::max(abs(oldx - newx), abs(oldy - newy)) / Option::speedup();
-    unsigned long mpause = 1000000 / Option::speedup();
-    unsigned long upause = 100000 / Option::speedup();
     float curx = (float) oldx;
     float cury = (float) oldy;
 
-    if (steps == 0) {
-      NSWindow::move(newx, newy);
+    for (int i = 0; i < steps; i++) {
+      curx += ((float) (newx - oldx)) / steps;
+      cury += ((float) (newy - oldy)) / steps;
+      NSWindow::move((int) curx, (int) cury);
       XFlush(dpy);
-    } else {
-      for (int i = 0; i < steps; i++) {
-        curx += ((float) (newx - oldx)) / steps;
-        cury += ((float) (newy - oldy)) / steps;
-        NSWindow::move((int) curx, (int) cury);
-        XFlush(dpy);
-        usleep (upause);
-      }
+      add_time (&start_time, &mpause);
+      wait_until (&start_time);
     }
-    usleep (mpause);
   } else {
     NSWindow::move(dest_x, dest_y);
   }
-
+  XFlush(dpy);
   raise();
+
+  if (animate) wait_until (&stop_time);
 }
 
 void Card::moveToStack(Stack* s, bool autoMoving, bool pushUndo)

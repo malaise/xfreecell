@@ -275,7 +275,7 @@ void ScoreWindow::setLabels()
   winpLabel.label(line);
 
   sprintf(line, "Defeat Percentage: %2.2f%%",
-      _wins + _defeats == 0 ? 0 
+      _wins + _defeats == 0 ? 0
                             : ((float) _defeats) / (_wins + _defeats) * 100);
   defeatpLabel.label(line);
 
