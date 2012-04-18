@@ -119,7 +119,7 @@ Card::Card(Suit s, unsigned int v)
 
 void Card::move(int dest_x, int dest_y, bool animate)
 {
-  const int steps = 500;
+  const int steps = 100;
 
   timeout_t start_time, stop_time, mpause;
 
