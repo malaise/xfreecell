@@ -54,7 +54,7 @@ There are 4 columns of 7 cards and 4 columns of 6 cards.
 At start-up all the 52 cards are randomly placed in the playing area.
 
 anchor:XStackingRule[]
-Stacking rule: You can append a card at the bottom of a column providing that the new card is
+[underline]#Stacking rule:# You can append a card at the bottom of a column providing that the new card is
 one level below the bottom card (e.g. Jack on Queen) and that the new card is
 of different color (in term of black and red) from the previous.
 
@@ -79,6 +79,8 @@ These are the four places in the midlle of the top row.
 They are highlighed with a light green border.
 
 Here you can temporary put one card at a time in each free cell.
+
+image:Xfreecell.png["Areas",title="Areas"]
 
 Moving the cards
 ~~~~~~~~~~~~~~~~
