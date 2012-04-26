@@ -88,3 +88,6 @@ Re-calibrate the animation speed
 version 2.11
 Animation speed becomes the time in ms to move each card
 
+version 2.12
+Improve makefile and documentation
+

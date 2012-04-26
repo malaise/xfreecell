@@ -1,17 +1,67 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V2.11
+V2.12
 
 The goal of the game is to move all the cards from the bottom part of the
 screen (eight columns) to the two top right and two top left target decks.
 
-Preferences
------------
-anchor:XPreferences[]
+Installation
+------------
+Prerequisits::
+You need the C\++ compiler g++, gnu make, and the package X11 dev (or devel)
+in order to compile xfreecell.
++
+Optionnally you need asciidoc to generate the html xref:XDoc[documentation].
+
+Documentation::
+anchor:XDoc[]Xfreecell comes with a man page xfreecell.6 and this asciidoc
+document Xfreecell.txt. The Xfreecell.html document is automatically
+generated together with the xref:XComp[compilation] if asciidoc is installed.
+
+  make doc
+
+Compilation::
+anchor:XComp[]In xfrecell directory launch:
+
+ make
++
+This has the effect of:
+
+* in 'ms-compatible' directory compile 'convert.c' and launch 'convert'
+that generates 'MSNumbers.h' from the binary database 'MSNumbers' of Microsoft
+seed numbers,
+* compile cpp sources in directory 'widget' and make an archive 'libwidget.a',
+* compile cpp sources in current xfreecell directory and link xfreecell,
+* generate the html documentation if possible.
+//////
+//////
+
+Installation::
+In xfrecell directory launch:
+
+ make install
++
+Note: You may need to be root for this (or use sudo).
++
+This installs xfreecell binary in DESTDIR/bin, xfreecell man page in
+DESTDIR/man/man6 and Xfreecell.html (if any) in DESTDIR/share/xfreecell.
++
+Default DESTDIR is /usr/local but you can change it by launching:
+
+  make install DESTDIR=<your_dest_dir>
+
+Clean-up::
+You can clean the result of compilation and generated documentation with:
+
+  make clean
+
+Options
+-------
+anchor:XOptions[]
 The environment variable HOME is used to define the directory
-$\{HOME\}/.xfreecell where are saved the current configuration and scores
-(default is ".").
+$\{HOME\}/.xfreecell where are saved the current configuration (options) and
+scores. Default directory is current directory (".").
 
 The following options can be provided in the command line:
 
@@ -146,17 +196,17 @@ $\{HOME\}/.xfreecell/score.
 
 Pref
 ~~~~
-This button allows modifying your preferences, see section
-xref:XPreferences[Preferences].
+anchor:XPref[]This button allows modifying your preferences, see section
+xref:XOptions[Options].
 
-Profile
--------
+User profile
+------------
 The directory $\{HOME\}/.xfreecell is used to save:
 
-* Your preferences, see section xref:XPreferences[Preferences]
-* The game numbers lost (Unix seed and microsoft seed), in order for the 'Lost'
-button to start a game already lost
-* The game numbers won (Unix seed and microsoft seed), in order for the 'New'
-button to start a game not yet played (neither won nor lost)
+* Your preferences, see sections xref:XOptions[Options] and xref:XPref[Pref]
+* The game numbers lost (Unix seed and microsoft seed), in order for the 
+xref:XStart[Lost] button to start a game already lost
+* The game numbers won (Unix seed and microsoft seed), in order for the
+xref:XStart[New] button to start a game not yet played (neither won nor lost)
 * Your score and associated statistics, see section xref:XScore[Score]
 

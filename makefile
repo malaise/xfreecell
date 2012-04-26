@@ -19,16 +19,18 @@ STATICDIR = xfreecell-static
 DOCS = README CHANGES mshuffle.txt xfreecell.6 Xfreecell.html
 DESTDIR ?= /usr/local
 
-all: xfreecell
+all: xfreecell Xfreecell.html
 
 xfreecell: widget/libwidget.a $(OBJECTS) freecell.o
 	@echo $(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
 	@$(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
 
-doc: Xfreecell.html
-
 %.html : %.txt
-	@asciidoc --section-numbers -o $@ $<
+	@type asciidoc >/dev/null 2>&1;\
+	if [ $$? -eq 0 ] ; then \
+	  echo asciidoc --section-numbers -o $@ $< ;\
+	  asciidoc --section-numbers -o $@ $< ;\
+	fi
 
 %.o: %.cpp $(INCLUDES)
 	@echo $(CXX) -c $<
@@ -59,7 +61,7 @@ static-release: xfreecell doc
 	rm -rf $(STATICDIR)
 
 clean:
-	rm -f *.o xfreecell
+	rm -f *.o xfreecell Xfreecell.html
 	rm -rf $(STATICDIR)
 	make -C widget clean
 	make -C ms-compatible clean
@@ -68,4 +70,10 @@ install: all
 	install -d $(DESTDIR)/bin $(DESTDIR)/man/man6
 	install xfreecell -t $(DESTDIR)/bin
 	install xfreecell.6 -t $(DESTDIR)/man/man6
+	@if [ -f Xfreecell.html ] ; then \
+	  echo install -d $(DESTDIR)/share/xfreecell ;\
+	  install -d $(DESTDIR)/share/xfreecell; \
+	  echo install Xfreecell.html -t $(DESTDIR)/share/xfreecell ;\
+	  install Xfreecell.html -t $(DESTDIR)/share/xfreecell; \
+	fi
 
