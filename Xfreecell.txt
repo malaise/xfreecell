@@ -8,18 +8,28 @@ screen (eight columns) to the two top right and two top left target decks.
 
 Installation
 ------------
+anchor:XPrerequisits[]
+
 Prerequisits::
-You need the C\++ compiler g++, gnu make, and the package X11 dev (or devel)
-in order to compile xfreecell.
+In order to compile xfreecell you need:
+
+* the gnu C\++ compiler g++, 
+* gnu make, 
+* the X11 development package libx11-dev (or devel),
+* the X11 extensions development package libxext-dev (or devel) for
+the round corners of cards and for the cursor shape indicating valid
+xref:XDestinations[destinations] of cards.
+If this package is not available you need to remove the '-DSHAPE' compilation
+option from the makefile.
+
 +
-Optionnally you need asciidoc to generate the html xref:XDoc[documentation].
+Optionnally you need the tool 'asciidoc' to generate the html
+xref:XDoc[documentation].
 
 Documentation::
 anchor:XDoc[]Xfreecell comes with a man page xfreecell.6 and this asciidoc
 document Xfreecell.txt. The Xfreecell.html document is automatically
 generated together with the xref:XComp[compilation] if asciidoc is installed.
-
-  make doc
 
 Compilation::
 anchor:XComp[]In xfrecell directory launch:
@@ -33,7 +43,7 @@ that generates 'MSNumbers.h' from the binary database 'MSNumbers' of Microsoft
 seed numbers,
 * compile cpp sources in directory 'widget' and make an archive 'libwidget.a',
 * compile cpp sources in current xfreecell directory and link xfreecell,
-* generate the html documentation if possible.
+* generate the html documentation if possible (if 'asciidoc' is installed).
 //////
 //////
 
@@ -140,8 +150,9 @@ move a card back from the target area.
 * Select a card to move by left clicking on it. It becomes selected (its
 background becomes grey). You can de-select it by clicking back on the card.
 * Once a card is selected, select the destination by clicking on the
-location. Valid destinations are indicated by a vertical arrow &#8657; when
-the mouse cursor moves on it.
+location. Valid anchor:XDestinations[] destinations are indicated by a vertical
+arrow *&#8657;* when the mouse cursor moves on it (if xfreecell is compiled with
+option '-DSHAPE', see section on xref:XPrerequisits[prerequisits]).
 
 Note: An Ace that appears at the bottom of a row automatically moves at its
 destination in its foundation. At the beginning of the game this triggered by
