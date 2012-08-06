@@ -2,6 +2,7 @@ Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
 V2.12
+:toc:
 
 The goal of the game is to move all the cards from the bottom part of the
 screen (eight columns) to the two top right and two top left target decks.
