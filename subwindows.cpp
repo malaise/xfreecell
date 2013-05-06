@@ -50,12 +50,10 @@ void QueryWindow::waitForEvent()
   XRaiseWindow(dpy, window());
 
   XEvent ev;
-  NSWindow* win;
 
   while (!_left && !_right) {
-    XNextEvent(dpy, &ev);
-    if ((win = NSWindow::windowToNSWindow(ev.xany.window)) != 0)
-      win->dispatchEvent(ev);
+    NSNextEvent(&ev);
+    NSDispatchEvent(ev);
   }
 
   unmap();
@@ -246,11 +244,9 @@ void ScoreWindow::waitForEvent()
   XRaiseWindow(dpy, window());
 
   XEvent ev;
-  NSWindow* win;
   while (!exitPressed) {
-    XNextEvent(dpy, &ev);
-    win = NSWindow::windowToNSWindow(ev.xany.window);
-    if (win != 0) win->dispatchEvent(ev);
+    NSNextEvent(&ev);
+    NSDispatchEvent(ev);
   }
   unmap();
 }
@@ -334,7 +330,7 @@ void AboutWindow::waitForEvent()
   XEvent ev;
 
   while (!okPressed) {
-    XNextEvent(dpy, &ev);
+    NSNextEvent(&ev);
     NSDispatchEvent(ev);
   };
 
@@ -396,7 +392,7 @@ void SeedWindow::waitForEvent()
   XEvent ev;
 
   while (!_okPressed && !_cancelPressed) {
-    NSNextEvent( &ev);
+    NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
 

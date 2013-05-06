@@ -96,20 +96,17 @@ static NSButtonCallback prefCallback;
 static NSButtonCallback aboutCallback;
 static NSButtonCallback exitCallback;
 
+static void exitCb (const XEvent&) __attribute__ ((noreturn));
+static void exitCb (const XEvent &ev) {
+  exitCallback (ev, NULL);
+}
+
 // ##### Code #####
 int main(int argc, char* argv[])
 {
-  Atom wm_protocols_code = None;
-  Atom delete_code = None;
 
   NSInitialize();
   dpy = NSdisplay();
-
-  wm_protocols_code = XInternAtom (dpy, "WM_PROTOCOLS", False);
-  if (wm_protocols_code != None) {
-    delete_code = XInternAtom (dpy, "WM_DELETE_WINDOW", False);
-  }
-
 
   // buttons
   newButton = new NSButton("New", 0, 0, &newCallback);
@@ -141,10 +138,9 @@ int main(int argc, char* argv[])
   sh.min_height = mainWindowHeight;
   sh.flags = PMaxSize|PMinSize;
   XSetWMNormalHints(dpy, toplevel, &sh);
-  //  XMapWindow(dpy, toplevel);
-  if (XSetWMProtocols (dpy, toplevel, &delete_code, 1) == 0 ) {
-    fprintf (stderr, "Can't register in WM for deletion\n");
-  }
+  // XMapWindow(dpy, toplevel);
+  NSRegisterExit(toplevel, exitCb);
+
 
   // menu
   menuContainer.add(newButton);
@@ -225,16 +221,7 @@ int main(int argc, char* argv[])
 
   while (true) {
     XEvent ev;
-
-    XNextEvent(dpy, &ev);
-    if (ev.type == ClientMessage) {
-      if ( ((Atom)ev.xclient.message_type == wm_protocols_code)
-        && ((Atom)ev.xclient.data.l[0] == delete_code)) {
-        /* Exit requested by WM */
-        exitCallback (ev, NULL);
-      }
-    }
-
+    NSNextEvent(&ev);
     NSDispatchEvent(ev);
 
     if (gamePlaying && gameWon()) {

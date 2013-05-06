@@ -64,7 +64,7 @@ void SeedWindow::waitForEvent()
   XEvent ev;
 
   while (!_okPressed && !_cancelPressed) {
-    NSNextEvent( &ev);
+    NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
 

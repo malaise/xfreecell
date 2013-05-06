@@ -36,6 +36,8 @@ unsigned long allocColor(Display*, unsigned short R, unsigned short G,
                                    unsigned short B);
 unsigned long nameToPixel(const char* colorName);
 void NSInitialize();
+void NSRegisterExit(const Window toplevel,
+                    void (*exitCallback)(const XEvent&));
 void NSMainLoop();
 void NSNextEvent(XEvent*);
 void NSDispatchEvent(const XEvent&);

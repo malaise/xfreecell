@@ -105,11 +105,9 @@ void Option::waitForEvent()
   XRaiseWindow(dpy, window());
 
   XEvent ev;
-  NSWindow* win;
   while (!exitPressed) {
-    XNextEvent(dpy, &ev);
-    win = NSWindow::windowToNSWindow(ev.xany.window);
-    if (win != 0) win->dispatchEvent(ev);
+    NSNextEvent(&ev);
+    NSDispatchEvent(ev);
   }
 
   unmap();
