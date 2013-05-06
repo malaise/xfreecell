@@ -18,6 +18,7 @@ public:
   static bool roundCard() { return _roundCard; }
   static bool animation() { return _animation; }
   static bool msSeed() { return _msSeed; }
+  static bool autoPlay() { return _autoPlay; }
 
 private:
   void readPrefs();
@@ -30,6 +31,7 @@ private:
   static bool _roundCard;
   static bool _animation;
   static bool _msSeed;
+  static bool _autoPlay;
 
   bool exitPressed;
   bool okPressed;
@@ -39,9 +41,10 @@ private:
   NSLabel speedLabel;
   NSTextField speedTF;
   NSHContainer togglesCon;
-  NSToggleButton anim, query, ms;
+  NSToggleButton anim, query, ms, play;
   NSHContainer replyCon;
   NSButton okButton, cancelButton;
 };
 
 #endif
+

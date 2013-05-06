@@ -15,7 +15,7 @@ public:
   void initialize() { _stack = 0; _parent = 0; _removed = false; } //move(0, 0);
   void hilighten() const { backgroundPixmap(_hilightedPixmap); clear(); }
   void unhilighten() const { backgroundPixmap(_usualPixmap); clear(); }
-  void moveToStack(Stack*, bool autoMove = true, bool pushUndo = true);
+  void moveToStack(Stack*, bool autoMoving = true, bool pushUndo = true);
   void moveToStackInitial(Stack*);
   void parent(Card* c) { _parent = c; }
   void removed() { _removed = true; } // This is called only when pushed to DoneStack

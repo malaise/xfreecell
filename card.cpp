@@ -178,7 +178,7 @@ void Card::moveToStack(Stack* s, bool autoMoving, bool pushUndo)
   _stack->pushCard(this);
   move(_stack->next_x(), _stack->next_y(), true);
 
-  if (autoMoving) autoMove();
+  if (autoMoving && Option::autoPlay()) autoMove();
 }
 
 void Card::moveToStackInitial(Stack* s)

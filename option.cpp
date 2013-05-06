@@ -19,16 +19,19 @@ bool Option::_queryWindow = false;
 bool Option::_roundCard = true;
 bool Option::_animation = true;
 bool Option::_msSeed = false;
+bool Option::_autoPlay = true;
 
 Option::Option()
-  : mainCon(300, 200), speedCon(300, 50), speedLabel("Speed (ms)"), speedTF(80, this),
-    togglesCon(300, 50), anim("Anim"), query("Query"), ms("MS Seed"), replyCon(300, 100),
+  : mainCon(350, 200), speedCon(350, 50), speedLabel("Speed (ms)"), speedTF(80, this),
+    togglesCon(350, 50), anim("Anim"), query("Query"), ms("MS Seed"),
+    play("Auto"), replyCon(300, 100),
     okButton("  OK  ", this), cancelButton("Cancel", this)
 {
   speedCon.add(&speedLabel); speedCon.add(&speedTF);
   speedCon.reallocate();
 
   togglesCon.add(&anim); togglesCon.add(&query); togglesCon.add(&ms);
+  togglesCon.add (&play);
   togglesCon.reallocate();
 
   replyCon.add(&okButton); replyCon.add(&cancelButton);
@@ -96,6 +99,7 @@ void Option::waitForEvent()
   anim.toggled(_animation);
   query.toggled(_queryWindow);
   ms.toggled(_msSeed);
+  play.toggled(_autoPlay);
 
   map();
   XRaiseWindow(dpy, window());
@@ -117,6 +121,7 @@ void Option::waitForEvent()
     _animation = anim.toggled();
     _queryWindow = query.toggled();
     _msSeed = ms.toggled();
+    _autoPlay = play.toggled();
   }
 
   writePrefs();
@@ -151,6 +156,10 @@ void Option::readPrefs()
   if (sscanf(line, "ms seed = %d", &tmp) != 1) goto ERROR;
   _msSeed = (tmp == 0 ? false : true);
 
+  if (fgets(line, lineLength, fp) == NULL) goto ERROR;
+  if (sscanf(line, "auto play = %d", &tmp) != 1) goto ERROR;
+  _autoPlay = (tmp == 0 ? false : true);
+
   fclose(fp);
   return;
 
@@ -173,6 +182,7 @@ void Option::writePrefs()
   fprintf(fp, "animation = %d\n", _animation);
   fprintf(fp, "query = %d\n", _queryWindow);
   fprintf(fp, "ms seed = %d\n", _msSeed);
+  fprintf(fp, "auto play = %d\n", _autoPlay);
 
   fclose(fp);
   return;
@@ -229,3 +239,4 @@ int main()
   return 0;
 }
 */
+
