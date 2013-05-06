@@ -287,7 +287,7 @@ DoneStack::DoneStack(int x_ini, int y_ini, Suit s)
   backgroundPixmap(bgpixmap);
   border(getColor(dpy, "black"));
   borderWidth(1);
-  selectInput(ButtonPressMask);
+  selectInput(ButtonPressMask | EnterWindowMask | LeaveWindowMask);
 
 #ifdef SHAPE
   if (Option::roundCard()) {
@@ -333,13 +333,35 @@ bool DoneStack::acceptable(Card* c) const
   return false;
 }
 
+
+
 void DoneStack::dispatchEvent(const XEvent& ev)
 {
-  if (ev.type != ButtonPress || hilighted == 0) return;
+  if (hilighted == 0) return;
 
-  if (acceptable(hilighted)) {
-    hilighted->unhilighten();
-    hilighted->moveToStack(this);
-    hilighted = 0;
+  switch (ev.type) {
+  case ButtonPress:
+    if (acceptable(hilighted)) {
+      hilighted->unhilighten();
+      hilighted->moveToStack(this);
+      hilighted = 0;
+      if (cursorChanged) {
+        XUndefineCursor(dpy, window());
+        cursorChanged = false;
+      }
+    }
+    break;
+  case EnterNotify:
+    if (acceptable(hilighted)) {
+      XDefineCursor(dpy, window(), cursor);
+      cursorChanged = true;
+    }
+    break;
+  case LeaveNotify:
+    if (cursorChanged) {
+      XUndefineCursor(dpy, window());
+      cursorChanged = false;
+    }
   }
 }
+

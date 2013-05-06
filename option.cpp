@@ -186,6 +186,17 @@ void Option::writePrefs()
   return;
 }
 
+static bool parseBool (int i, int argc, char* argv[])  {
+  char* arg = argv[i];
+
+  if (i == argc) goto ERRORB;
+  if (strcmp (arg, "true") == 0) return true;
+  else if (strcmp (arg, "false") == 0) return false;
+  ERRORB:
+    fprintf(stderr, "Boolean (true or false) integer must follow option\n");
+    exit (1);
+}
+
 void Option::parse(int argc, char* argv[])
 {
   if (argc == 1)
@@ -193,32 +204,48 @@ void Option::parse(int argc, char* argv[])
 
   for (int i = 1; i < argc; i++) {
     char* arg = argv[i];
-    if (strcmp(arg, "-s") == 0 || strcmp(arg, "--speedup") == 0) {
-      i++; arg = argv[i];
-      if (i == argc) goto ERROR;
-      _speedup = atoi(arg);
-      if (0 > _speedup) goto ERROR;
-      continue;
-    ERROR:
-      fprintf(stderr, "Positive integer must follow -s\n");
-    } else if (strcmp(arg, "-q") == 0 || strcmp(arg, "--query-window") == 0)
-      _queryWindow = true;
-    else if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
+    i++;
+    if (strcmp(arg, "-v") == 0 || strcmp(arg, "--version") == 0) {
       printf("%s\n", VersionStr);
       printf("Written by Nakayama Shintaro\n");
       printf("Maintained by Pascal Malaise\n");
       exit(0);
-    }
+    } else if (strcmp(arg, "-h") == 0 || strcmp(arg, "--help") == 0) {
+      printf("Usage %s { [ <option> ] }\n", argv[0]);
+      printf("<option> ::=\n");
+      printf("  -s <positive> | --speed <positive>\n");
 #ifdef SHAPE
-    else if (strcmp(arg, "-r") == 0 || strcmp(arg, "--no-round-card") == 0)
-      _roundCard = false;
+      printf("  -r <boolean>  | --round-card <boolean>\n");
 #endif
-    else if (strcmp(arg, "-a") == 0 || strcmp(arg, "--no-animation") == 0)
-      _animation = false;
-    else if (strcmp(arg, "-m") == 0 || strcmp(arg, "--ms-seed") == 0)
-      _msSeed = true;
-    else
+      printf("  -a <boolean>  | --animation <boolean>\n");
+      printf("  -m <boolean>  | --ms-seed <boolean>\n");
+      printf("  -p <boolean>  | --auto-play <boolean>\n");
+      exit(0);
+    } else if (strcmp(arg, "-s") == 0 || strcmp(arg, "--speed") == 0) {
+      arg = argv[i];
+      if (i == argc) goto ERRORI;
+      _speedup = atoi(arg);
+      if (0 > _speedup) goto ERRORI;
+      continue;
+    ERRORI:
+      fprintf(stderr, "Positive integer must follow -s\n");
+      exit (1);
+    } else if (strcmp(arg, "-q") == 0 || strcmp(arg, "--query-window") == 0) {
+      _queryWindow = parseBool(i, argc, argv);
+#ifdef SHAPE
+    } else if (strcmp(arg, "-r") == 0 || strcmp(arg, "--round-card") == 0) {
+      _roundCard = parseBool(i, argc, argv);
+#endif
+    } else if (strcmp(arg, "-a") == 0 || strcmp(arg, "--animation") == 0) {
+      _animation = parseBool(i, argc, argv);
+    } else if (strcmp(arg, "-m") == 0 || strcmp(arg, "--ms-seed") == 0) {
+      _msSeed = parseBool(i, argc, argv);
+    } else if (strcmp(arg, "-p") == 0 || strcmp(arg, "--auto-play") == 0) {
+      _autoPlay = parseBool(i, argc, argv);
+    } else {
       fprintf(stderr, "Unknown option: %s\n", arg);
+      exit (1);
+    }
   }
 }
 

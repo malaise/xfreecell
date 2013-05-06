@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V2.12
+V2.15
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -21,7 +21,7 @@ In order to compile xfreecell you need:
 the round corners of cards and for the cursor shape indicating valid
 xref:XDestinations[destinations] of cards.
 If this package is not available you need to remove the '-DSHAPE' compilation
-option from the makefile.
+option from the makefile, and the '-r' option becomes not supported.
 
 +
 Optionnally you need the tool 'asciidoc' to generate the html
@@ -53,7 +53,7 @@ In xfrecell directory launch:
 
  make install
 +
-Note: You may need to be root for this (or use sudo).
+NOTE: You may need to be root for this (or use sudo).
 +
 This installs xfreecell binary in DESTDIR/bin, xfreecell man page in
 DESTDIR/man/man6 and Xfreecell.html (if any) in DESTDIR/share/xfreecell.
@@ -76,17 +76,24 @@ scores. Default directory is current directory (".").
 
 The following options can be provided in the command line:
 
-  -s | --speedup to set time in ms to animate each move of each card (default is 100ms)
-  -r | --no-round-card for sharp corner of cards (default is round)
-  -a | --no-animation for no animation of card movements (default is animation)
-  -m | --ms-seed for comptibility with microsoft seed generator (default is Unix)
-  -q | --query-window for a popup window for single or multiple cards move
+  -a | --animation for animation of card movements (default is true)
+  -s | --speed to set time for the move of each card (default is 100ms)
+  -r | --round-card for sharp corner of cards, if compiled with -DSHAPE, (default is true)
+  -m | --ms-seed for comptibility with microsoft seed generator (default is false)
+  -q | --query-window for a popup window for single or multiple cards move (default is false)
+  -p | --auto-play for automatic move of cards to the foundations (defualt is true)
 
-(see xref:XShortcut[shortcuts] for single/multiple cards movements).
+--------------------------------
+Example:
+xfreecell -a true -s 100 -r true -m false -q false -p true
+--------------------------------
 
-These preferences can also be set in the 'Pref' menu.
+These preferences can also be set in the xref:XPref[Pref] menu.
 
 They are saved in the file $\{HOME\}/.xfreecell/prefs 
+
+See the section on xref:XShortcut[shortcuts] for the discution on
+single/multiple cards movements.
 
 Playing
 -------
@@ -102,8 +109,9 @@ At any time you can:
 * click on the 'Lost' button start a random game among thoses that have already
 been lost.
 
-Note: In all these cases the current game in progress if any is considered as
-lost and counted as such.
+NOTE: In all these cases the current game in progress, if any, is considered as
+lost and counted as such. Same if you close the main window (through the window
+manager).
 
 The three areas and what can go where
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -115,9 +123,10 @@ There are 4 columns of 7 cards and 4 columns of 6 cards.
 At start-up all the 52 cards are randomly placed in the playing area.
 
 anchor:XStackingRule[]
-[underline]#Stacking rule:# You can append a card at the bottom of a column providing that the new card is
-one level below the bottom card (e.g. Jack on Queen) and that the new card is
-of different color (in term of black and red) from the previous.
+[underline]#Stacking rule:# You can append a card at the bottom of a column
+providing that the new card is one level below the bottom card (e.g. Jack on
+Queen) and that the new card is of different color (in term of black and red)
+from the previous.
 
 In an empty column you can put any card you want then stack several cards as
 long as they respect the above xref:XStackingRule[stacking rule] of
@@ -145,19 +154,29 @@ image:Xfreecell.png["Areas",title="Areas"]
 
 Moving the cards
 ~~~~~~~~~~~~~~~~
-You move the cards one by one, from any area to any area except that you cannot
-move a card back from the target area.
+You move the cards one by one, from any area to any area, except that you cannot
+move a card back from the target area (but you can undo any move).
 
 * Select a card to move by left clicking on it. It becomes selected (its
 background becomes grey). You can de-select it by clicking back on the card.
 * Once a card is selected, select the destination by clicking on the
 location. Valid anchor:XDestinations[] destinations are indicated by a vertical
-arrow *&#8657;* when the mouse cursor moves on it (if xfreecell is compiled with
-option '-DSHAPE', see section on xref:XPrerequisits[prerequisits]).
+arrow *&#8657;* when the mouse cursor moves on it (if xfreecell is compiled
+with option '-DSHAPE', see section on xref:XPrerequisits[prerequisits]).
 
-Note: An Ace that appears at the bottom of a row automatically moves at its
-destination in its foundation. At the beginning of the game this triggered by
-the first card movement.
+The cards are moved automatically to the foundation if all the following
+conditions are fulfilled:
+
+- the movement is valid,
+- this does not generate more than two levels of difference in the foundations,
+example: if the last diamond on top of its foundation is the 7, then
+not more than the 9 of any other color will be automatically moved in the
+foundations,
+- the "auto-play" mode is activated.
+
+NOTE: At the beginning of the game, or just after switching back to auto-play
+mode, it is necessary to do a first movement in order to trigger the automatic
+move of cards to the foundations.
 
 Shortcuts
 ~~~~~~~~~
@@ -167,7 +186,7 @@ card to move it in a free cell if any is available.
 You can left click on a non selected card to move it to its foundation (if
 possible).
 
-Once a card of the playing area is selected you can left click on an empy column
+Once a card of the playing area is selected you can left click on another column
 to move as many cards as possible from the selected colomn to the new one.
 The cards move as if you moved them one by one, so the amount of cards moved
 depends on:
