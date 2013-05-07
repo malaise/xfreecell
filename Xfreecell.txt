@@ -168,10 +168,10 @@ The cards are moved automatically to the foundation if all the following
 conditions are fulfilled:
 
 - the movement is valid,
-- this does not generate more than two levels of difference in the foundations,
-example: if the last diamond on top of its foundation is the 7, then
-not more than the 9 of any other color will be automatically moved in the
-foundations,
+- this does not generate more than one level of difference between the colors 
+in the foundations. For example, if the smalest red (Heards or Diamonds) on top
+of its foundation is the 7, then not more than the 8 of blacks (Clubs and
+Spades) will be automatically moved in the foundations,
 - the "auto-play" mode is activated.
 
 NOTE: At the beginning of the game, or just after switching back to auto-play
