@@ -66,7 +66,7 @@ const int undoScore = 1;
 const int continuousScore = 1;
 
 ScoreWindow::ScoreWindow()
-  : exitButton("exit", this),
+  : exitButton("Exit", this),
     winLabel(""),
     defeatLabel(""),
     winpLabel(""),
