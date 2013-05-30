@@ -78,22 +78,27 @@ The following options can be provided in the command line:
 
   -a | --animation for animation of card movements (default is true)
   -s | --speed to set time for the move of each card (default is 100ms)
-  -r | --round-card for sharp corner of cards, if compiled with -DSHAPE, (default is true)
   -m | --ms-seed for comptibility with microsoft seed generator (default is false)
-  -q | --query-window for a popup window for single or multiple cards move (default is false)
+  -q | --query-window for a popup window for single or multiple cards move (default is false).
+       See the section on xref:XShortcut[shortcuts] for the discution on single/multiple cards movements.
   -p | --auto-play for automatic move of cards to the foundations (defualt is true)
+  -r | --round-card for sharp corner of cards, if xfreecell is compiled with -DSHAPE, (default is true)
 
 --------------------------------
 Example:
 xfreecell -a true -s 100 -r true -m false -q false -p true
 --------------------------------
 
-These preferences can also be set in the xref:XPref[Pref] menu.
+These preferences (except '-r | --round-card') can also be set in the xref:XPref[Pref] menu.
 
-They are saved in the file $\{HOME\}/.xfreecell/prefs 
+These preferences are saved in the file $\{HOME\}/.xfreecell/prefs 
 
-See the section on xref:XShortcut[shortcuts] for the discution on
-single/multiple cards movements.
+For each option xfreecell defines the value according to the followinf criteria:
+
+1. The one defined in the xref:XPref[Pref] menu, if any,
+2. Otherwise, the option of the command line, if any,
+3. Otherwise, the value retrieved from the previous execution of xfreecell, if any,
+4. Otherwise the default value defined above.
 
 Playing
 -------
