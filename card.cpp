@@ -170,6 +170,10 @@ void Card::moveToStack(Stack* s, bool autoMoving, bool pushUndo)
   _stack = s;
 
   Card* top = _stack->topCard();
+  if ( (top != 0) && (top == hilighted) ) {
+    hilighted->unhilighten();
+    hilighted = 0;
+  }
   if (top != 0 && top->canBeParent(this))
     parent(_stack->topCard());
   else
@@ -199,7 +203,8 @@ bool Card::canBeParent(Card* c) const
 {
   if (c == 0) return false;
 
-  return ( suitColor(c->suit()) != suitColor(_suit) ) && (_value == c->value() + 1);
+  return (suitColor(c->suit()) != suitColor(_suit))
+      && (_value == c->value() + 1);
 }
 
 void Card::dispatchEvent(const XEvent& ev)
