@@ -11,6 +11,64 @@
 extern Window gameWindow;
 extern Display* dpy;
 
+//Query3Window
+Query3Window::Query3Window(const char* queryLabel, const char* leftLabel,
+                           const char* middleLabel, const char* rightLabel)
+  : label(queryLabel), leftButton(leftLabel, this),
+    middleButton(middleLabel, this),rightButton(rightLabel, this),
+    con(300, 100), mainCon(300, 150)
+{
+  con.add(&leftButton); con.add(&middleButton); con.add(&rightButton);
+  con.reallocate();
+
+  mainCon.add(&label); mainCon.add(&con);
+  mainCon.reallocate();
+
+  container(&mainCon);
+
+  _left = false;
+  _middle = false;
+  _right = false;
+
+  borderWidth(1);
+}
+
+void Query3Window::buttonAction(const XEvent& ev, void*)
+{
+  if (ev.xany.window == leftButton.window()) {
+    _left = true;
+    _middle = false;
+    _right = false;
+  } else if (ev.xany.window == middleButton.window()) {
+    _left = false;
+    _middle = true;
+    _right = false;
+  } else if (ev.xany.window == rightButton.window()) {
+    _left = false;
+    _middle = false;
+    _right = true;
+  }
+}
+
+void Query3Window::waitForEvent()
+{
+  _left = false;
+  _middle = false;
+  _right = false;
+
+  map();
+  XRaiseWindow(dpy, window());
+
+  XEvent ev;
+
+  while (!_left && !_middle && !_right) {
+    NSNextEvent(&ev);
+    NSDispatchEvent(ev);
+  }
+
+  unmap();
+}
+
 //QueryWindow
 QueryWindow::QueryWindow(const char* queryLabel, const char* leftLabel, const char* rightLabel)
   : label(queryLabel), leftButton(leftLabel, this), rightButton(rightLabel, this),

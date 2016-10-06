@@ -55,7 +55,7 @@ static SeedWindow* seedWindow;
 static ScoreWindow* scoreWindow;
 static AboutWindow* aboutWindow;
 static SingleOrMultiple* singleOrMultiple;
-static AnotherOrQuit* anotherOrQuit;
+static AnotherOrQuitOrExit* anotherOrQuitOrExit;
 static PlayAgainOrCancel* playAgainOrCancel;
 
 const int hGap = 4;
@@ -171,7 +171,7 @@ int main(int argc, char* argv[])
   scoreWindow = new ScoreWindow;
   aboutWindow = new AboutWindow;
   singleOrMultiple = new SingleOrMultiple;
-  anotherOrQuit = new AnotherOrQuit;
+  anotherOrQuitOrExit = new AnotherOrQuitOrExit;
   playAgainOrCancel = new PlayAgainOrCancel;
 
   adjustSubwindow(option);
@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
   adjustSubwindow(scoreWindow);
   adjustSubwindow(aboutWindow);
   adjustSubwindow(singleOrMultiple);
-  adjustSubwindow(anotherOrQuit);
+  adjustSubwindow(anotherOrQuitOrExit);
   adjustSubwindow(playAgainOrCancel);
 
   Option::parse(argc, argv); // this must be done after the creation of option.
@@ -219,8 +219,8 @@ int main(int argc, char* argv[])
   XMapWindow(dpy, toplevel);
   XSync(dpy, False);
 
+  XEvent ev;
   while (true) {
-    XEvent ev;
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
 
@@ -228,15 +228,20 @@ int main(int argc, char* argv[])
       scoreWindow->incWins();
       gnManager->addWonGame(gameNumber);
       undoClearMoves();
-      anotherOrQuit->waitForEvent();
+      anotherOrQuitOrExit->waitForEvent();
 
-      if (anotherOrQuit->another()) {
+      if (anotherOrQuitOrExit->another()) {
         gamePlaying = true;
         redistributeCards();
-      } else
+      } else if (anotherOrQuitOrExit->quit()) {
         gamePlaying = false;
+      } else {
+        gamePlaying = false;
+        break;
+      }
     }
   }
+  exitCb(ev); 
 }
 
 inline void adjustSubwindow(NSWindow* nsw)

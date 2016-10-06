@@ -4,6 +4,40 @@
 #include <stdlib.h>
 #include "widget/widget.h"
 
+class Query3Window : public NSButtonListener, public NSFrame {
+public:
+  Query3Window(const char*, const char*, const char*, const char*);
+
+  bool left() const { return _left; }
+  bool middle() const { return _middle; }
+  bool right() const { return _right; }
+
+  void buttonAction(const XEvent&, void*);
+
+  void waitForEvent();
+private:
+  NSLabel label;
+  NSButton leftButton;
+  NSButton middleButton;
+  NSButton rightButton;
+
+  NSHContainer con;
+  NSVContainer mainCon;
+
+  bool _left;
+  bool _middle;
+  bool _right;
+};
+
+class AnotherOrQuitOrExit : public Query3Window {
+public:
+  AnotherOrQuitOrExit() : Query3Window("Another game?", "Yes", "No", "Exit") {}
+
+  bool another() const { return left(); }
+  bool quit() const { return middle(); }
+  bool exit() const { return right(); }
+};
+
 class QueryWindow : public NSButtonListener, public NSFrame {
 public:
   QueryWindow(const char*, const char*, const char*);
@@ -32,14 +66,6 @@ public:
 
   bool single() const { return left(); }
   bool multiple() const { return right(); }
-};
-
-class AnotherOrQuit : public QueryWindow {
-public:
-  AnotherOrQuit() : QueryWindow("Another game?", "Yes", "No") {}
-
-  bool another() const { return left(); }
-  bool quit() const { return right(); }
 };
 
 class PlayAgainOrCancel : public QueryWindow {
