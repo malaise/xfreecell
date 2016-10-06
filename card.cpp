@@ -300,9 +300,12 @@ void Card::dispatchLeaveNotify(const XEvent&)
 }
 
 // Interface to external
-void initializeHilighted()
+void resetHilighted()
 {
-  hilighted = 0;
+  if (hilighted != 0) {
+    hilighted->unhilighten();
+    hilighted = 0;
+  }
 }
 
 void initializeCursor()

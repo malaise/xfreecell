@@ -335,7 +335,7 @@ void redistributeCards(unsigned int gameNumber)
     singleStack[i]->initialize();
   for (unsigned int i = 0; i < numDoneStack; i++)
     doneStack[i]->initialize();
-  initializeHilighted();
+  resetHilighted();
   initializeCursor();
   if (Option::msSeed())
     msDistributeCards(gameNumber);
@@ -478,12 +478,14 @@ void lostCallback(const XEvent&, void*)
 
 void undoCallback(const XEvent&, void*)
 {
+  resetHilighted();
   scoreWindow->incUndos();
   undoDoUndo();
 }
 
 void redoCallback(const XEvent&, void*)
 {
+  resetHilighted();
   if (undoDoRedo()) scoreWindow->decUndos();
 }
 

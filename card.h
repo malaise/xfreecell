@@ -46,6 +46,6 @@ private:
   bool _removed;
 };
 
-void initializeHilighted();
+void resetHilighted();
 void initializeCursor();
 #endif
