@@ -170,10 +170,6 @@ void Card::moveToStack(Stack* s, bool autoMoving, bool pushUndo)
   _stack = s;
 
   Card* top = _stack->topCard();
-  if ( (top != 0) && (top == hilighted) ) {
-    hilighted->unhilighten();
-    hilighted = 0;
-  }
   if (top != 0 && top->canBeParent(this))
     parent(_stack->topCard());
   else
