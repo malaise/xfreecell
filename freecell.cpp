@@ -235,7 +235,7 @@ int main(int argc, char* argv[])
         redistributeCards();
       } else if (anotherOrQuitOrExit->quit()) {
         gamePlaying = false;
-      } else {
+      } else if (anotherOrQuitOrExit->exit()) {
         gamePlaying = false;
         break;
       }
@@ -618,6 +618,7 @@ inline void beginNewGame(int gameNumber)
     gnManager->addLostGame(::gameNumber);
   }
 
+  anotherOrQuitOrExit->hide();
   gamePlaying = true;
   undoClearMoves();
   redistributeCards(gameNumber);

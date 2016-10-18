@@ -15,6 +15,7 @@ public:
   void buttonAction(const XEvent&, void*);
 
   void waitForEvent();
+  void hide();
 private:
   NSLabel label;
   NSButton leftButton;
@@ -27,6 +28,7 @@ private:
   bool _left;
   bool _middle;
   bool _right;
+  bool _mapped;
 };
 
 class AnotherOrQuitOrExit : public Query3Window {
@@ -48,6 +50,8 @@ public:
   void buttonAction(const XEvent&, void*);
 
   void waitForEvent();
+
+  void hide();
 private:
   NSLabel label;
   NSButton leftButton;
@@ -58,6 +62,7 @@ private:
 
   bool _left;
   bool _right;
+  bool _mapped;
 };
 
 class SingleOrMultiple : public QueryWindow {

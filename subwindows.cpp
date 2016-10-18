@@ -29,6 +29,7 @@ Query3Window::Query3Window(const char* queryLabel, const char* leftLabel,
   _left = false;
   _middle = false;
   _right = false;
+  _mapped = false;
 
   borderWidth(1);
 }
@@ -57,16 +58,26 @@ void Query3Window::waitForEvent()
   _right = false;
 
   map();
+  _mapped = true;
   XRaiseWindow(dpy, window());
 
   XEvent ev;
 
-  while (!_left && !_middle && !_right) {
+  while (_mapped && !_left && !_middle && !_right) {
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
 
-  unmap();
+  this->hide();
+  _mapped = false;
+}
+
+void Query3Window::hide()
+{
+  if (_mapped) {
+    unmap();
+    _mapped = false;
+  }
 }
 
 //QueryWindow
@@ -84,6 +95,7 @@ QueryWindow::QueryWindow(const char* queryLabel, const char* leftLabel, const ch
 
   _left = false;
   _right = false;
+  _mapped = false;
 
   borderWidth(1);
 }
@@ -105,6 +117,7 @@ void QueryWindow::waitForEvent()
   _right = false;
 
   map();
+  _mapped = true;
   XRaiseWindow(dpy, window());
 
   XEvent ev;
@@ -114,7 +127,16 @@ void QueryWindow::waitForEvent()
     NSDispatchEvent(ev);
   }
 
-  unmap();
+  this->hide();
+  _mapped = false;
+}
+
+void QueryWindow::hide()
+{
+  if (_mapped) {
+    unmap();
+    _mapped = false;
+  }
 }
 
 //Score
