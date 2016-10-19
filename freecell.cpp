@@ -228,20 +228,31 @@ int main(int argc, char* argv[])
       scoreWindow->incWins();
       gnManager->addWonGame(gameNumber);
       undoClearMoves();
+      gamePlaying = false;
       anotherOrQuitOrExit->waitForEvent();
 
       if (anotherOrQuitOrExit->another()) {
         gamePlaying = true;
         redistributeCards();
       } else if (anotherOrQuitOrExit->quit()) {
-        gamePlaying = false;
+        ;
       } else if (anotherOrQuitOrExit->exit()) {
-        gamePlaying = false;
         break;
       }
     }
   }
   exitCb(ev); 
+}
+
+// Hide any sub-window
+void hideWindows() {
+  option->hide();
+  anotherOrQuitOrExit->hide();
+  singleOrMultiple->hide();
+  playAgainOrCancel->hide();
+  scoreWindow->hide();
+  aboutWindow->hide();
+  seedWindow->hide();
 }
 
 inline void adjustSubwindow(NSWindow* nsw)
@@ -491,16 +502,19 @@ void redoCallback(const XEvent&, void*)
 
 void scoreCallback(const XEvent&, void*)
 {
+  hideWindows();
   scoreWindow->waitForEvent();
 }
 
 void prefCallback(const XEvent&, void*)
 {
+  hideWindows();
   option->waitForEvent();
 }
 
 void aboutCallback(const XEvent&, void*)
 {
+  hideWindows();
   aboutWindow->waitForEvent();
 }
 
@@ -512,6 +526,7 @@ void exitCallback(const XEvent&, void*)
     gnManager->addLostGame(gameNumber);
   }
 
+  hideWindows();
   gnManager->writeFiles();
   exit(0);
 }
@@ -618,7 +633,7 @@ inline void beginNewGame(int gameNumber)
     gnManager->addLostGame(::gameNumber);
   }
 
-  anotherOrQuitOrExit->hide();
+  hideWindows();
   gamePlaying = true;
   undoClearMoves();
   redistributeCards(gameNumber);

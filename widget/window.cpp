@@ -59,6 +59,26 @@ void NSWindow::selectInput(long mask)
   XSelectInput(NSdpy, _window, attr.your_event_mask | mask);
 }
 
+void NSWindow::map()
+{
+  XMapWindow(NSdpy, _window);
+  _mapped = true;
+}
+
+void NSWindow::unmap()
+{
+  if (_mapped) {
+    XUnmapWindow(NSdpy, _window);
+    _mapped = false;
+  }
+}
+
+bool NSWindow::mapped()
+{
+  return _mapped;
+}
+
+
 void NSWindow::setMaxMinSize(unsigned int maxW, unsigned int maxH, unsigned int minW, unsigned int minH)
 {
   XSizeHints hint;

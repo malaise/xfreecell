@@ -47,13 +47,13 @@ void NSContainer::add(NSComponent* nsc)
       nsc->parent(_parentWindow);
 }
 
-void NSContainer::map() const
+void NSContainer::map()
 {
   for (unsigned int i = 0; i < nscVec.size(); i++)
     nscVec[i]->map();
 }
 
-void NSContainer::unmap() const
+void NSContainer::unmap()
 {
   for (unsigned int i = 0; i < nscVec.size(); i++)
     nscVec[i]->unmap();

@@ -105,12 +105,12 @@ void Option::waitForEvent()
   XRaiseWindow(dpy, window());
 
   XEvent ev;
-  while (!exitPressed) {
+  while (mapped() && !exitPressed) {
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
 
-  unmap();
+  this->hide();
 
   if (okPressed) {
     int val = atoi(speedTF.text());
@@ -124,6 +124,12 @@ void Option::waitForEvent()
 
   writePrefs();
 }
+
+void Option::hide()
+{
+  unmap();
+}
+
 
 void Option::readPrefs()
 {

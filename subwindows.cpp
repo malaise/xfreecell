@@ -29,7 +29,6 @@ Query3Window::Query3Window(const char* queryLabel, const char* leftLabel,
   _left = false;
   _middle = false;
   _right = false;
-  _mapped = false;
 
   borderWidth(1);
 }
@@ -58,26 +57,21 @@ void Query3Window::waitForEvent()
   _right = false;
 
   map();
-  _mapped = true;
   XRaiseWindow(dpy, window());
 
   XEvent ev;
 
-  while (_mapped && !_left && !_middle && !_right) {
+  while (mapped() && !_left && !_middle && !_right) {
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
 
   this->hide();
-  _mapped = false;
 }
 
 void Query3Window::hide()
 {
-  if (_mapped) {
-    unmap();
-    _mapped = false;
-  }
+  unmap();
 }
 
 //QueryWindow
@@ -95,7 +89,6 @@ QueryWindow::QueryWindow(const char* queryLabel, const char* leftLabel, const ch
 
   _left = false;
   _right = false;
-  _mapped = false;
 
   borderWidth(1);
 }
@@ -117,26 +110,21 @@ void QueryWindow::waitForEvent()
   _right = false;
 
   map();
-  _mapped = true;
   XRaiseWindow(dpy, window());
 
   XEvent ev;
 
-  while (!_left && !_right) {
+  while (mapped() && !_left && !_right) {
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
 
   this->hide();
-  _mapped = false;
 }
 
 void QueryWindow::hide()
 {
-  if (_mapped) {
-    unmap();
-    _mapped = false;
-  }
+  unmap();
 }
 
 //Score
@@ -324,10 +312,15 @@ void ScoreWindow::waitForEvent()
   XRaiseWindow(dpy, window());
 
   XEvent ev;
-  while (!exitPressed) {
+  while (mapped() && !exitPressed) {
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
+  this->hide();
+}
+
+void ScoreWindow::hide()
+{
   unmap();
 }
 
@@ -409,11 +402,16 @@ void AboutWindow::waitForEvent()
 
   XEvent ev;
 
-  while (!okPressed) {
+  while (mapped() && !okPressed) {
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
   };
 
+  this->hide();
+}
+
+void AboutWindow::hide()
+{
   unmap();
 }
 
@@ -471,10 +469,16 @@ void SeedWindow::waitForEvent()
 
   XEvent ev;
 
-  while (!_okPressed && !_cancelPressed) {
+  while (mapped() && !_okPressed && !_cancelPressed) {
     NSNextEvent(&ev);
     NSDispatchEvent(ev);
   }
 
+  this->hide();
+}
+
+void SeedWindow::hide()
+{
   unmap();
 }
+

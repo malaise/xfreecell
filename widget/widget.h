@@ -58,8 +58,8 @@ public:
   virtual void parent(NSWindow&) = 0;
   virtual void parent(Window) = 0;
 
-  virtual void map() const = 0;
-  virtual void unmap() const = 0;
+  virtual void map() = 0;
+  virtual void unmap() = 0;
 };
 
 // ##### NSWindow #####
@@ -85,8 +85,9 @@ public:
   void background(unsigned long pixel) const { XSetWindowBackground(NSdpy, _window, pixel); }
   void backgroundPixmap(Pixmap p) const { XSetWindowBackgroundPixmap(NSdpy, _window, p); }
   void selectInput(long);
-  virtual void map() const { XMapWindow(NSdpy, _window); }
-  void unmap() const { XUnmapWindow(NSdpy, _window); }
+  void map();
+  void unmap();
+  bool mapped();
   void setMaxMinSize(unsigned int minW, unsigned int minH, unsigned int maxW, unsigned int maxH);
   void raise() const { XRaiseWindow(NSdpy, _window); }
   void clear() const { XClearWindow(NSdpy, _window); }
@@ -106,6 +107,7 @@ private:
   Window _window;
   int _x, _y;
   unsigned int _height, _width;
+  bool _mapped;
 
   static bool windowInitialized;
   static Window _root;
@@ -329,8 +331,8 @@ public:
   virtual void remove(NSComponent*);
   virtual void reallocate() = 0;
 
-  void map() const;
-  void unmap() const;
+  void map();
+  void unmap();
 
 protected:
   void hremove(NSComponent*);

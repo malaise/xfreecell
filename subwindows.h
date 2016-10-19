@@ -28,7 +28,6 @@ private:
   bool _left;
   bool _middle;
   bool _right;
-  bool _mapped;
 };
 
 class AnotherOrQuitOrExit : public Query3Window {
@@ -62,7 +61,6 @@ private:
 
   bool _left;
   bool _right;
-  bool _mapped;
 };
 
 class SingleOrMultiple : public QueryWindow {
@@ -94,6 +92,8 @@ public:
   void decUndos();
 
   void waitForEvent();
+
+  void hide();
 
   void buttonAction(const XEvent&, void*);
 
@@ -128,6 +128,8 @@ public:
 
   void waitForEvent();
 
+  void hide();
+
 private:
   bool okPressed;
 
@@ -149,6 +151,7 @@ public:
   int value() const { return atoi(textField.text()); }
   bool ok() const { return _okPressed; }
   void waitForEvent();
+  void hide();
 
 private:
   NSHContainer buttonCon;
@@ -160,3 +163,4 @@ private:
   bool _okPressed, _cancelPressed;
 };
 #endif
+

@@ -10,6 +10,7 @@ public:
 
   static void parse(int, char**);
   void waitForEvent();
+  void hide();
   void buttonAction(const XEvent&, void*);
   void textAction(bool, void *);
 
