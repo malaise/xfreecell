@@ -596,8 +596,10 @@ bool canAutoMove(Card* card)
 }
 
 // Functions for multipleMove
-void movePlayStackToPlayStack(Stack* from, Stack* to, unsigned int num)
+// Move num cards from a stack to another
+static void movePlayStackToPlayStack(Stack* from, Stack* to, unsigned int num)
 {
+  // Limit to the source stack size
   if (from->size() < num) num = from->size();
 
   unsigned int numEmptySingleStack = numEmptySingleStacks();
@@ -605,8 +607,11 @@ void movePlayStackToPlayStack(Stack* from, Stack* to, unsigned int num)
   Card* movedCards[numSingleStack];
   unsigned int index = 0;
 
+  // Limit to the number of empty single stacks plus 1
   if (numEmptySingleStack + 1 < num) num = numEmptySingleStack + 1;
 
+  // Move num-1 cards into empty single stacks
+  // Store them in moveCards
   Card* tmp;
   while (index < numEmptySingleStack && num > 0) {
     sStack = emptySingleStack();
@@ -616,9 +621,11 @@ void movePlayStackToPlayStack(Stack* from, Stack* to, unsigned int num)
     num--;
   }
 
+  // Move num-th card into dest stack
   if (num != 0)
     from->topCard()->moveToStack(to);
 
+  // Move cards from single stacks into dest stack
   for (; index > 0; index--) {
     if (!movedCards[index - 1]->isRemoved())
       movedCards[index - 1]->moveToStack(to);
@@ -670,6 +677,7 @@ PlayStack* emptyPlayStack()
 }
 
 // Interface to external
+// Move as many cards as possible to Done stacks
 void autoMove()
 {
   Card* card;
@@ -683,6 +691,7 @@ void autoMove()
   }
 }
 
+// Find the first empty single stack
 SingleStack* emptySingleStack()
 {
   for (unsigned int i = 0; i < numSingleStack; i++) {
@@ -693,16 +702,18 @@ SingleStack* emptySingleStack()
   return 0;
 }
 
+// Check if card "from" can be moved on top of card "to" with multiple moves
 bool multipleMovable(Card* from, Card* to)
 {
   if (from == 0 || to == 0) return false;
 
-  // Checks whether from's ancestors are accpeted
+  // Checks whether from's ancestors are accepted
   Stack* destStack = to->stack();
+  unsigned int toMoveNum = 1;
   unsigned int movableNum = 1;
   bool found = false;
 
-  for (Card* c = from; c != 0; c = c->parent(), movableNum++) {
+  for (Card* c = from; c != 0; c = c->parent(), toMoveNum++) {
     if (destStack->acceptable(c)) {
       found = true;
       break;
@@ -715,20 +726,31 @@ bool multipleMovable(Card* from, Card* to)
   unsigned int numEmptySS = numEmptySingleStacks();
   unsigned int numEmptyPS = numEmptyPlayStacks();
 
-  return movableNum <= (numEmptySS + 1) * (numEmptyPS + 1);
+  // Algo will put a card on each empty Single stack
+  //  then stack all these on the first empty Play stack... and so on
+  //  then put a card in each S
+  // So we can move P * (S + 1) + S + 1
+  movableNum = numEmptyPS * (numEmptySS + 1) + numEmptySS + 1;
+
+  return toMoveNum <= movableNum;
 }
 
+// Multi move card "from" on top of card "to"
 void moveMultipleCards(Card* from, Card* to)
 {
   Stack* fromStack = from->stack();
   Stack* toStack = to->stack();
 
+  // Total Nb of cards to move
   int numCardsToBeMoved = to->value() - from->value();
+  // Nb of cards moved in each empty play stack
   int numMovableCards = numEmptySingleStacks() + 1;
   int index = 0;
+  // List of playstack used
   PlayStack* tempStack[numPlayStack];
   int numEmptyPlayStack = numEmptyPlayStacks();
 
+  // Move Movable cards into each empty play stack
   PlayStack* tmp;
   for (; numEmptyPlayStack > 0 && numCardsToBeMoved > numMovableCards;
        numEmptyPlayStack--, numCardsToBeMoved -= numMovableCards) {
@@ -737,20 +759,25 @@ void moveMultipleCards(Card* from, Card* to)
     tempStack[index++] = tmp;
   }
 
-  if (numCardsToBeMoved > 1)
+  if (numCardsToBeMoved > 1) {
+    // Move remaining cards card to dest
     movePlayStackToPlayStack(fromStack, toStack, numCardsToBeMoved);
-
-  if (numCardsToBeMoved == 1)
+  } else if (numCardsToBeMoved == 1) {
+    // Move final card to dest
     fromStack->topCard()->moveToStack(toStack);
+  }
 
+  // Move cards from used play stacks to dest
   for (; index > 0; index--)
     movePlayStackToPlayStack(tempStack[index - 1], toStack, numMovableCards);
 }
 
+// Multi move card "from" on top of srack destStack
 void moveMultipleCards(Card* from, PlayStack* destStack)
 {
   Stack* fromStack = from->stack();
 
+  // Potentially all from stack
   unsigned int numMovableCards = 0;
   for (; from != 0; from = from->parent(), numMovableCards++)
     ;

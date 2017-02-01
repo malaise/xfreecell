@@ -223,24 +223,29 @@ void Card::dispatchButtonPress(const XEvent& ev)
   static Time lastPressTime = 0;
 
   if (hilighted == _stack->topCard()) {
+    // Second selection: toggle hilight
     hilighted->unhilighten();
     hilighted = 0;
     if (ev.xbutton.time - lastPressTime < doubleClickInterval) {
+      // Double click: Move to an empty single stack
       SingleStack* stack = emptySingleStack();
       if (stack != 0)
         _stack->topCard()->moveToStack(stack);
     }
   } else if (hilighted != 0 && (hilighted->_stack == _stack) ) {
+    // Second selection: toggle hilight
     hilighted->unhilighten();
     hilighted = 0;
   } else if (hilighted == 0 && !_removed) {
     switch (ev.xbutton.button) {
     case 1:
+      // First selection: toggle hilight
       _stack->topCard()->hilighten();
       hilighted = _stack->topCard();
       lastPressTime = ev.xbutton.time;
       break;
     case 2:
+      // Middle button: Move to an empty single stack
       {
         SingleStack* stack = emptySingleStack();
         if (stack != 0)
@@ -248,18 +253,21 @@ void Card::dispatchButtonPress(const XEvent& ev)
       }
       break;
     case 3:
+      // Righ button: Move to Done stack (if no autoplay)
       moveToAppropriateDoneStack(_stack->topCard());
       break;
     }
   } else if (cursorChanged) {
     // cursorChanged == true means moving is possible.
     if (moveMode == SingleMode) {
+      // Move one card
       hilighted->unhilighten();
       hilighted->moveToStack(_stack);
       hilighted = 0;
       XUndefineCursor(dpy, window());
       cursorChanged = false;
     } else if (moveMode == MultipleMode) {
+      // Move as many cards as possible 
       hilighted->unhilighten();
       moveMultipleCards(hilighted, _stack->topCard());
       hilighted = 0;

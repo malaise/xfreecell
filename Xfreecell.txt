@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V2.22
+V2.23
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
