@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V2.23
+V3.01
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -191,13 +191,18 @@ card to move it in a free cell if any is available.
 You can left click on a non selected card to move it to its foundation (if
 possible).
 
-Once a card of the playing area is selected you can left click on another column
-to move as many cards as possible from the selected colomn to the new one.
+Once a card of the playing area is selected you can right click on another
+column to move as many cards as possible from the selected colomn to the new
+ one.
 The cards move as if you moved them one by one, so the amount of cards moved
 depends on:
 
 * how many cards are following the xref:XStackingRule[stacking rule],
 * how many empty columns and free cells can be used for temporary storage.
+
+NOTE: The automatic move fills the free cells and columns with one card each,
+then stacks these cards in a column, and so on. This is not fully optimal when
+there are three or more free columns.
 
 Undo and redo
 ~~~~~~~~~~~~~

@@ -11,7 +11,7 @@ INCLUDES = $(wildcard *.h)
 CFLAGS = -g -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
          -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare \
          -Wmissing-noreturn -Winline -Wfloat-equal -Wundef
-CXXOPTS = $(CXX11OPT)
+CXXOPTS = $(CXX11OPT) $(CFLAGS)
 
 
 LIBS = -L./widget -lwidget -L/usr/X11R6/lib -lXext -lX11 -lm
