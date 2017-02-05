@@ -66,6 +66,7 @@ static bool gamePlaying;
 static int gameNumber;
 static GameNumberManager* gnManager;
 static const int PathLength = 256;
+static bool traceOn;
 
 // ##### Functions declarations #####
 static void adjustSubwindow(NSWindow*);
@@ -102,8 +103,27 @@ static void exitCb (const XEvent &ev) {
 }
 
 // ##### Code #####
+void trace(const char* msg) {
+  if (!traceOn) return;
+  printf ("%s\n", msg);
+}
+
+void trace1(const char* msg, const unsigned int a1) {
+  if (!traceOn) return;
+  printf ("%s %u\n", msg, a1);
+}
+
+void trace2(const char* msg1, const unsigned int a1, 
+            const char* msg2, const unsigned int a2){
+  if (!traceOn) return;
+  printf ("%s %u %s %u\n", msg1, a1, msg2, a2);
+}
+
+
+
 int main(int argc, char* argv[])
 {
+  traceOn = (getenv("xfreecell_TRACE") != 0);
 
   NSInitialize();
   dpy = NSdisplay();
@@ -255,7 +275,7 @@ void hideWindows() {
   seedWindow->hide();
 }
 
-inline void adjustSubwindow(NSWindow* nsw)
+void adjustSubwindow(NSWindow* nsw)
 {
   nsw->parent(gameWindow);
   nsw->move(mainWindowWidth / 2 - nsw->width() / 2,
@@ -263,12 +283,12 @@ inline void adjustSubwindow(NSWindow* nsw)
   nsw->borderWidth(1);
 }
 
-inline bool gameWon()
+bool gameWon()
 {
   return numEmptyPlayStacks() == numPlayStack;
 }
 
-inline int appropriateGameNumber()
+int appropriateGameNumber()
 {
   int gameNumber;
 
@@ -286,7 +306,7 @@ inline int appropriateGameNumber()
   return gameNumber;
 }
 
-inline void setWindowName(int num, bool ms)
+void setWindowName(int num, bool ms)
 {
   char line[30];
 
@@ -420,7 +440,6 @@ bool msRead (char *fileName, char* line) {
   fclose(fp);
   return true;
 }
-
 
 void msDistributeCards(unsigned int gameNumber)
 {
@@ -608,6 +627,21 @@ bool canAutoMove(Card* card)
   }
 }
 
+// Interface to external
+// Move as many cards as possible to Done stacks
+void autoMove()
+{
+  Card* card;
+  for (unsigned int i = 0; i < numPlayStack; i++) {
+    card = playStack[i]->topCard();
+    moveToDoneStackIfPossible(card);
+  }
+  for (unsigned int i = 0; i < numSingleStack; i++) {
+    card = singleStack[i]->topCard();
+    moveToDoneStackIfPossible(card);
+  }
+}
+
 // Functions for multipleMove
 // Move num cards from a stack to another
 static void movePlayStackToPlayStack(Stack* from, Stack* to, unsigned int num)
@@ -617,19 +651,6 @@ static void movePlayStackToPlayStack(Stack* from, Stack* to, unsigned int num)
   Stack* tmpStack;
   Card* movedCards[numSingleStack + numPlayStack];
   unsigned int index = 0;
-
-  // If dest is an empty stack then reserve it
-  if (to->size() == 0) {
-    numEmptyPlayStack--;
-  }
-
-  // Limit to the source stack size
-  if (from->size() < num) num = from->size();
-
-  // Limit to the number of empty single+play stacks + 1
-  if (numEmptySingStack + numEmptyPlayStack + 1 < num) {
-    num = numEmptySingStack + numEmptyPlayStack + 1;
-  }
 
   // Move num-1 cards into empty single stacks then empty play stacks
   // Store them in moveCards
@@ -666,7 +687,6 @@ static void movePlayStackToPlayStack(Stack* from, Stack* to, unsigned int num)
   }
 }
 
-
 unsigned int numEmptySingleStacks()
 {
   unsigned int num = 0;
@@ -687,6 +707,7 @@ unsigned int numEmptyPlayStacks()
   return num;
 }
 
+// Find the first empty play stack - skip avoid
 PlayStack* emptyPlayStack(Stack *avoid)
 {
   for (unsigned int i = 0; i < numPlayStack; i++) {
@@ -698,21 +719,6 @@ PlayStack* emptyPlayStack(Stack *avoid)
   return 0;
 }
 
-// Interface to external
-// Move as many cards as possible to Done stacks
-void autoMove()
-{
-  Card* card;
-  for (unsigned int i = 0; i < numPlayStack; i++) {
-    card = playStack[i]->topCard();
-    moveToDoneStackIfPossible(card);
-  }
-  for (unsigned int i = 0; i < numSingleStack; i++) {
-    card = singleStack[i]->topCard();
-    moveToDoneStackIfPossible(card);
-  }
-}
-
 // Find the first empty single stack
 SingleStack* emptySingleStack()
 {
@@ -722,6 +728,10 @@ SingleStack* emptySingleStack()
   }
 
   return 0;
+}
+
+inline unsigned int min(unsigned int x, unsigned int y) {
+  return (x < y ? x : y);
 }
 
 // Check if card "from" can be moved on top of card "to" with multiple moves
@@ -764,54 +774,81 @@ bool multipleMovable(Card* from, Card* to)
 // Multi move card "from" on top of card "to"
 void moveMultipleCards(Card* from, Card* to)
 {
+  PlayStack* toStack = (PlayStack*)to->stack();
+  moveMultipleCards(from, toStack);
+}
+
+// Multi move card "from" on top of stack destStack
+void moveMultipleCards(Card* from, PlayStack* toStack)
+{
   Stack* fromStack = from->stack();
-  Stack* toStack = to->stack();
+  unsigned int numEmptyPlayStack = numEmptyPlayStacks();
+  unsigned int numEmptySingStack = numEmptySingleStacks();
+  // Nb of cards that can be moved at each iteration
+  //  according to empty stacks
+  unsigned int numMovableCards;
+  // Nb of cards that can need to moved according to src and dest
+  unsigned int numCardsToBeMoved;
+
+
+  if (toStack->size() == 0) {
+    // Move to empty play stack
+    // Potentially all from stack
+    numCardsToBeMoved = 0;
+    while (from != 0) {
+      from = from->parent();
+      numCardsToBeMoved++;
+    }
+    // One less play stack to be used as tmp
+    numEmptyPlayStack--;
+  } else {
+    // Move to a top of a card
+    numCardsToBeMoved = toStack->topCard()->value() - from->value();
+  }
+  numMovableCards = numEmptySingStack + numEmptyPlayStack;
+  trace2 ("Movable", numMovableCards, " To move", numCardsToBeMoved);
+
 
   // Total Nb of cards to move
-  int numCardsToBeMoved = to->value() - from->value();
   // List of playstack used
   PlayStack* tempStack[numPlayStack];
-  int numEmptyPlayStack = numEmptyPlayStacks();
-  // Nb of cards moved in each empty single and play stack
-  int numMovableCards = numEmptySingleStacks() + numEmptyPlayStack + 1;
   int index = 0;
+  unsigned int num;
 
-  // Move Movable cards into each empty play stack
+  // Move cards into each empty play stack
   PlayStack* tmp;
-  for (; numEmptyPlayStack > 0 && numCardsToBeMoved > numMovableCards;
-       numEmptyPlayStack--, numCardsToBeMoved -= numMovableCards) {
-    tmp = emptyPlayStack(0);
-    movePlayStackToPlayStack(fromStack, tmp, numMovableCards);
+  while (numEmptyPlayStack > 0 && numCardsToBeMoved > numEmptySingStack) {
+    num = min(numCardsToBeMoved - 1, numMovableCards);
+    tmp = emptyPlayStack(toStack);
     tempStack[index++] = tmp;
+    trace1 ("  Moving to play", num);
+    movePlayStackToPlayStack(fromStack, tmp, num);
+    trace1 ("  Moved ", tempStack[index - 1]->size());
+    numEmptyPlayStack--;
+    numCardsToBeMoved -= num;
+    // One less free play stack
     numMovableCards--;
   }
 
   if (numCardsToBeMoved > 1) {
     // Move remaining cards card to dest, using single stacks
+    trace1 ("  Moving last cards to dest", numCardsToBeMoved);
     movePlayStackToPlayStack(fromStack, toStack, numCardsToBeMoved);
   } else if (numCardsToBeMoved == 1) {
     // Move final card to dest
+    trace ("  Moving last card to dest");
     fromStack->topCard()->moveToStack(toStack);
   }
 
   // Move cards from used play stacks to dest
+  trace1 ("  Movable", numMovableCards);
   for (; index > 0; index--) {
-    movePlayStackToPlayStack(tempStack[index - 1], toStack, numMovableCards);
+    trace1 ("  index", index);
+    numCardsToBeMoved = tempStack[index - 1]->size();
+    trace2 ("  Movable tmp", numMovableCards, " To move", numCardsToBeMoved);
+    movePlayStackToPlayStack(tempStack[index - 1], toStack, numCardsToBeMoved);
     numMovableCards++;
   }
-}
-
-// Multi move card "from" on top of srack destStack
-void moveMultipleCards(Card* from, PlayStack* destStack)
-{
-  Stack* fromStack = from->stack();
-
-  // Potentially all from stack
-  unsigned int numMovableCards = 0;
-  for (; from != 0; from = from->parent(), numMovableCards++)
-    ;
-
-  movePlayStackToPlayStack(fromStack, destStack, numMovableCards);
 }
 
 void mapSingleOrMultiple()

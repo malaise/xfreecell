@@ -10,4 +10,7 @@ void mapSingleOrMultiple();
 bool singleButtonPressed();
 bool multipleButtonPressed();
 void moveToAppropriateDoneStack(Card*);
+void trace(const char*);
+void trace1(const char*, const unsigned int);
+void trace2(const char*, const unsigned int, const char*, const unsigned int);
 #endif
