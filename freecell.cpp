@@ -558,7 +558,7 @@ static void writeSave (const int i, const int len = 1) {
   fwrite (&i, len, 1, saveFile);
 }
 static int readSave (const int len = 1) {
-  int r;
+  int r = 0;
   fread (&r, len, 1, saveFile);
   return r;
 }
@@ -661,14 +661,16 @@ void load (void) {
   unsigned int i;
   int v;
   
-  // Reset cards
-  resetCards();
 
   // Open file and read game number
   trace ("Start load");
   saveFile = fopen(name.c_str(), "r");
+  if (saveFile == 0) return;
   gameNumber = readSave(4);
   if (gameNumber != 0) setWindowName(gameNumber, false);
+
+  // Reset cards
+  resetCards();
   hideWindows();
   gamePlaying = (gameNumber != 0);
 
