@@ -16,7 +16,7 @@ public:
   void hilighten() const { backgroundPixmap(_hilightedPixmap); clear(); }
   void unhilighten() const { backgroundPixmap(_usualPixmap); clear(); }
   void moveToStack(Stack*, bool autoMoving = true, bool pushUndo = true);
-  void moveToStackInitial(Stack*);
+  void moveToStackInitial(Stack*, bool animate = false);
   void parent(Card* c) { _parent = c; }
   void removed() { _removed = true; } // This is called only when pushed to DoneStack
   void undone() { _removed = false; } // This is called only when being undone and pushed back from DoneStack

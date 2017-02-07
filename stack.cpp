@@ -37,6 +37,15 @@ Card* Stack::topCard() const
   return _cards.back();
 }
 
+// Nth card: 0 for bottom of the stack (front of the vector)
+Card* Stack::nthCard(unsigned int i) const
+{
+  if (_cards.size() == 0) return 0;
+  if (i >= _cards.size()) return 0;
+
+  return _cards.at(_cards.size() - i  - 1);
+}
+
 Card* Stack::popCard()
 {
   if (_cards.size() == 0) return 0;

@@ -20,6 +20,8 @@ bool Option::_roundCard = true;
 bool Option::_animation = true;
 bool Option::_msSeed = false;
 bool Option::_autoPlay = true;
+bool Option::_load = false;
+std::string Option::_dir;
 
 Option::Option()
   : mainCon(350, 200), speedCon(350, 50), speedLabel("Speed (ms)"), speedTF(80, this),
@@ -46,31 +48,32 @@ Option::Option()
 
   if (home == NULL) {
     fprintf(stderr, "Cannot get $HOME. Assuming I am at home directory now.\n");
-    saveFile = ".xfreecell";
+    _dir = ".xfreecell";
   } else {
-    saveFile = home;
-    saveFile += "/.xfreecell";
+    _dir = home;
+    _dir += "/.xfreecell";
   }
 
-  DIR* dir = opendir(saveFile.c_str());
+  DIR* dir = opendir(_dir.c_str());
 
   if (dir == NULL) {
     switch (errno) {
     case ENOENT:
-      fprintf(stderr, "Directory %s not found. Creating.\n", saveFile.c_str());
-      mkdir(saveFile.c_str(), 0755);
+      fprintf(stderr, "Directory %s not found. Creating.\n", _dir.c_str());
+      mkdir(_dir.c_str(), 0755);
       break;
     case ENOTDIR:
-      fprintf(stderr, "%s must be directory.\n", saveFile.c_str());
+      fprintf(stderr, "%s must be directory.\n", _dir.c_str());
       exit(1);
       break;
     default:
       perror("ScoreWindow::ScoreWindow()");
       exit(1);
     }
-  } else
+  } else {
     closedir(dir);
-  saveFile += "/prefs";
+  }
+  saveFile = _dir + "/prefs";
 
   readPrefs();
 }
@@ -248,6 +251,8 @@ void Option::parse(int argc, char* argv[])
       _msSeed = parseBool(i, argc, argv);
     } else if (strcmp(arg, "-p") == 0 || strcmp(arg, "--auto-play") == 0) {
       _autoPlay = parseBool(i, argc, argv);
+    } else if (strcmp(arg, "-l") == 0 || strcmp(arg, "--load") == 0) {
+      _load = parseBool(i, argc, argv);
     } else {
       fprintf(stderr, "Unknown option: %s\n", arg);
       exit (1);

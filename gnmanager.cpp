@@ -13,38 +13,8 @@
 
 const int lineLength = 30;
 
-GameNumberManager::GameNumberManager()
+GameNumberManager::GameNumberManager(const std::string directory)
 {
-  char* home = getenv("HOME");
-  std::string directory;
-
-  if (home == NULL) {
-    fprintf(stderr, "Cannot get $HOME. Assuming I am at home directory now.\n");
-    directory = ".xfreecell";
-  } else {
-    directory = home;
-    directory += "/.xfreecell";
-  }
-
-  DIR* dir = opendir(directory.c_str());
-
-  if (dir == NULL) {
-    switch (errno) {
-    case ENOENT:
-      fprintf(stderr, "Directory %s not found. Creating.\n", directory.c_str());
-      mkdir(directory.c_str(), 0755);
-      break;
-    case ENOTDIR:
-      fprintf(stderr, "%s must be directory.\n", directory.c_str());
-      exit(1);
-      break;
-    default:
-      perror("GameNumberManager::GameNumberManager()");
-      exit(1);
-    }
-  } else
-    closedir(dir);
-
   wonGameFile = lostGameFile = msWonGameFile = msLostGameFile = directory;
 
   wonGameFile += "/won";

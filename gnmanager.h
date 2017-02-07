@@ -14,7 +14,7 @@
 
 class GameNumberManager {
 public:
-  GameNumberManager();
+  GameNumberManager(const std::string);
 
   bool alreadyPlayed(int num) { return alreadyWon(num) || alreadyLost(num); }
 

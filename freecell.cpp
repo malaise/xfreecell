@@ -44,6 +44,7 @@ static NSButton* seedButton;
 static NSButton* lostButton;
 static NSButton* undoButton;
 static NSButton* redoButton;
+static NSButton* saveButton;
 static NSButton* scoreButton;
 static NSButton* prefButton;
 static NSButton* aboutButton;
@@ -72,9 +73,10 @@ static bool traceOn;
 static void adjustSubwindow(NSWindow*);
 static bool gameWon();
 
+static void resetCards(void);
 static void distributeCards(unsigned int = 0);
-static void redistributeCards(unsigned int = 0);
 static void msDistributeCards(unsigned int = 0);
+static void redistributeCards(unsigned int = 0);
 
 static void moveToDoneStackIfPossible(Card*);
 static bool canAutoMove(Card*);
@@ -82,6 +84,7 @@ static bool canAutoMove(Card*);
 static void movePlayStackToPlayStack(Stack*, Stack*, unsigned int);
 
 static void beginNewGame(int = 0);
+static void load(void);
 static unsigned int numEmptySingleStacks();
 static unsigned int numEmptyPlayStacks();
 static PlayStack* emptyPlayStack(Stack*);
@@ -92,6 +95,7 @@ static NSButtonCallback seedCallback;
 static NSButtonCallback lostCallback;
 static NSButtonCallback undoCallback;
 static NSButtonCallback redoCallback;
+static NSButtonCallback saveCallback;
 static NSButtonCallback scoreCallback;
 static NSButtonCallback prefCallback;
 static NSButtonCallback aboutCallback;
@@ -135,6 +139,7 @@ int main(int argc, char* argv[])
   lostButton = new NSButton("Lost", 0, 0, &lostCallback);
   undoButton = new NSButton("Undo", 0, 0, &undoCallback);
   redoButton = new NSButton("Redo", 0, 0, &redoCallback);
+  saveButton = new NSButton("Save", 0, 0, &saveCallback);
   scoreButton = new NSButton("Score", 0, 0, &scoreCallback);
   prefButton = new NSButton("Pref", 0, 0, &prefCallback);
   aboutButton = new NSButton("About", 0, 0, &aboutCallback);
@@ -170,6 +175,7 @@ int main(int argc, char* argv[])
   menuContainer.add(undoButton);
   menuContainer.add(redoButton);
   menuContainer.add(scoreButton);
+  menuContainer.add(saveButton);
   menuContainer.add(prefButton);
   menuContainer.add(aboutButton);
   menuContainer.add(exitButton);
@@ -234,7 +240,10 @@ int main(int argc, char* argv[])
   // misc
   gamePlaying = false;
   gameNumber = 0;
-  gnManager = new GameNumberManager;
+  gnManager = new GameNumberManager(option->getDir());
+
+  // Load
+  if (option->load()) load();
 
   XMapWindow(dpy, toplevel);
   XSync(dpy, False);
@@ -354,8 +363,9 @@ void distributeCards(unsigned int gameNumber)
   }
 }
 
-void redistributeCards(unsigned int gameNumber)
+void resetCards(void)
 {
+
   for (unsigned int i = 0; i < numCards; i++) {
     cards[i / 13][i % 13]->initialize();
     cards[i / 13][i % 13]->unhilighten();
@@ -368,34 +378,57 @@ void redistributeCards(unsigned int gameNumber)
     doneStack[i]->initialize();
   resetHilighted();
   initializeCursor();
-  if (Option::msSeed())
-    msDistributeCards(gameNumber);
-  else
-    distributeCards(gameNumber);
 }
 
+void redistributeCards(unsigned int gameNumber)
+{
+  resetCards();
+  if (Option::msSeed()) msDistributeCards(gameNumber);
+  else distributeCards(gameNumber);
+}
+
+static const int iClub = 0;
+static const int iDiamond = 1;
+static const int iHeart = 2;
+static const int iSpade = 3;
 inline Card* numToCard(int num)
 {
-  static const int Club = 0;
-  static const int Diamond = 1;
-  static const int Heart = 2;
-  static const int Spade = 3;
 
   int suit = (num - 1) % 4;
 
   switch (suit) {
-  case Club:
-    return cards[2][(num - 1) / 4];
-  case Diamond:
-    return cards[1][(num - 1) / 4];
-  case Heart:
-    return cards[0][(num - 1) / 4];
-  case Spade:
-    return cards[3][(num - 1) / 4];
+    case iClub:
+      return cards[2][(num - 1) / 4];
+    case iDiamond:
+      return cards[1][(num - 1) / 4];
+    case iHeart:
+      return cards[0][(num - 1) / 4];
+    case iSpade:
+      return cards[3][(num - 1) / 4];
   }
 
   fprintf(stderr, "Bug in numToCard\n");
   return 0;
+}
+
+inline unsigned int cardToNum (const Card* card) {
+  int res;
+
+  switch (card->suit()) {
+    case Club:
+      res = iClub;
+    break;
+    case Diamond:
+      res = iDiamond;
+    break;
+    case Heart:
+      res = iHeart;
+    break;
+    case Spade:
+      res = iSpade;
+    break;
+  }
+  return res + 4 * card->value() + 1;
 }
 
 bool msRead (char *fileName, char* line) {
@@ -519,6 +552,65 @@ void redoCallback(const XEvent&, void*)
   if (undoDoRedo()) scoreWindow->decUndos();
 }
 
+static const std::string saveName="/saved";
+static FILE* saveFile;
+static void writeSave (const int i, const int len = 1) {
+  fwrite (&i, len, 1, saveFile);
+}
+static int readSave (const int len = 1) {
+  int r;
+  fread (&r, len, 1, saveFile);
+  return r;
+}
+
+void saveCallback(const XEvent&, void*)
+{
+  const std::string name=option->getDir() + saveName;
+  Card *card;
+  unsigned int i, j;
+  unsigned int u;
+
+  // Open file and save game number
+  saveFile = fopen(name.c_str(), "w");
+  writeSave (gameNumber, 4);
+
+  // The 4 single stack
+  for (i = 0; i < numSingleStack; i++) {
+    card = singleStack[i]->topCard();
+    writeSave (card == 0 ? 0 : cardToNum (card));
+  }
+
+  // The 8 play stacks, each terminated by a 0
+  for (i = 0; i < numPlayStack; i++) {
+    j = playStack[i]->size();
+    for (;;) {
+      j--;
+      card = playStack[i]->nthCard(j);
+      if (card == 0) break;
+      u = cardToNum (card);
+      writeSave (u);
+    }
+    // Mark end of playstack
+    writeSave (0);
+  }
+
+  //The 4 done stacks, each terminated by a 0
+  for (i = 0; i < numDoneStack; i++) {
+    j = doneStack[i]->size();
+    for (;;) {
+      j--;
+      card = doneStack[i]->nthCard(j);
+      if (card == 0) break;
+      u = cardToNum (card);
+      writeSave (u);
+    }
+    // Mark end of playstack
+    writeSave (0);
+  }
+
+  fclose (saveFile);
+}
+
 void scoreCallback(const XEvent&, void*)
 {
   hideWindows();
@@ -561,6 +653,59 @@ void beginNewGame(int gameNumber)
   gamePlaying = true;
   undoClearMoves();
   redistributeCards(gameNumber);
+}
+
+void load (void) {
+  const std::string name=option->getDir() + saveName;
+  Card *card;
+  unsigned int i;
+  int v;
+  
+  // Reset cards
+  resetCards();
+
+  // Open file and read game number
+  trace ("Start load");
+  saveFile = fopen(name.c_str(), "r");
+  gameNumber = readSave(4);
+  if (gameNumber != 0) setWindowName(gameNumber, false);
+  hideWindows();
+  gamePlaying = (gameNumber != 0);
+
+  // The 4 single stack
+  trace ("  Load single stacks");
+  for (i = 0; i < numSingleStack; i++) {
+    v = readSave();
+    if (v != 0) {
+      card = numToCard(v);
+      card->moveToStackInitial(singleStack[i]);
+    }
+  }
+
+  // The 8 play stacks, each terminated by a 0
+  trace ("  Load play stacks");
+  for (i = 0; i < numPlayStack; i++) {
+    for (;;) {
+      v = readSave();
+      if (v == 0) break;
+      card = numToCard(v);
+      card->moveToStackInitial(playStack[i]);
+    }
+  }
+
+  //The 4 done stacks, each terminated by a 0
+  trace ("  Load done stacks");
+  for (i = 0; i < numDoneStack; i++) {
+    for (;;) {
+      v = readSave();
+      if (v == 0) break;
+      card = numToCard(v);
+      card->moveToStackInitial(doneStack[i]);
+    }
+  }
+
+  fclose (saveFile);
+  trace ("Done load");
 }
 
 // Functions for automove

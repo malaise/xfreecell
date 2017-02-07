@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V3.03
+V4.00
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -71,8 +71,8 @@ Options
 -------
 anchor:XOptions[]
 The environment variable HOME is used to define the directory
-$\{HOME\}/.xfreecell where are saved the current configuration (options) and
-scores. Default directory is current directory (".").
+$\{HOME\}/.xfreecell where are saved the current configuration (options), 
+scores and saved game. Default directory is "./.xfreecell".
 
 The following options can be provided in the command line:
 
@@ -80,24 +80,29 @@ The following options can be provided in the command line:
   -s | --speed to set time for the move of each card (default is 100ms)
   -m | --ms-seed for comptibility with microsoft seed generator (default is false)
   -q | --query-window for a popup window for single or multiple cards move (default is false).
-       See the section on xref:XShortcut[shortcuts] for the discution on single/multiple cards movements.
-  -p | --auto-play for automatic move of cards to the foundations (defualt is true)
+       See the section on shortcuts for the discution on single/multiple cards movements.
+  -p | --auto-play for automatic move of cards to the foundations (default is true)
   -r | --round-card for sharp corner of cards, if xfreecell is compiled with -DSHAPE, (default is true)
+  -l | --load to load at start-up a game previouly saved (default is false)
 
 --------------------------------
 Example:
-xfreecell -a true -s 100 -r true -m false -q false -p true
+xfreecell -a true -s 100 -r true -m false -q false -p true -l false
 --------------------------------
 
-These preferences (except '-r | --round-card') can also be set in the xref:XPref[Pref] menu.
+These preferences (except '-r | --round-card' and '-l | --load') can also be
+set in the xref:XPref[Pref] menu.
 
-These preferences are saved in the file $\{HOME\}/.xfreecell/prefs 
+These preferences (except '-l | --load') are saved in the file
+$\{HOME\}/.xfreecell/prefs
 
-For each option xfreecell defines the value according to the followinf criteria:
+For each option, xfreecell defines the value according to the following
+criteria:
 
 1. The one defined in the xref:XPref[Pref] menu, if any,
 2. Otherwise, the option of the command line, if any,
-3. Otherwise, the value retrieved from the previous execution of xfreecell, if any,
+3. Otherwise, the value retrieved from the previous execution of xfreecell,
+if any,
 4. Otherwise the default value defined above.
 
 Playing
@@ -234,6 +239,13 @@ a game
 
 These statistics are saved from one session to another in the file 
 $\{HOME\}/.xfreecell/score.
+
+Save
+~~~~
+anchor:XSave[]This button saves the current game (in a file named 
+$\{HOME\}/.xfreecell/saved). +
+The stacks of movements (for undo and redo) are not saved. +
+Any previously saved game is overwritten.
 
 Pref
 ~~~~

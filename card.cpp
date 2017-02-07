@@ -156,7 +156,10 @@ void Card::move(int dest_x, int dest_y, bool animate)
   XFlush(dpy);
   raise();
 
-  if (animate) wait_until (&stop_time);
+  if (animate && Option::animation()) {
+     wait_until (&stop_time);
+  }
+ 
 }
 
 void Card::moveToStack(Stack* s, bool autoMoving, bool pushUndo)
@@ -167,21 +170,13 @@ void Card::moveToStack(Stack* s, bool autoMoving, bool pushUndo)
     undoAddMove(_stack, s);
 
   _stack->popCard();
-  _stack = s;
 
-  Card* top = _stack->topCard();
-  if (top != 0 && top->canBeParent(this))
-    parent(_stack->topCard());
-  else
-    parent(0);
-
-  _stack->pushCard(this);
-  move(_stack->next_x(), _stack->next_y(), true);
+   moveToStackInitial(s, true);
 
   if (autoMoving && Option::autoPlay()) autoMove();
 }
 
-void Card::moveToStackInitial(Stack* s)
+void Card::moveToStackInitial(Stack* s, bool animate)
 {
   _stack = s;
 
@@ -192,7 +187,7 @@ void Card::moveToStackInitial(Stack* s)
     parent(0);
 
   _stack->pushCard(this);
-   move(_stack->next_x(), _stack->next_y(), false);
+   move(_stack->next_x(), _stack->next_y(), animate);
 }
 
 bool Card::canBeParent(Card* c) const

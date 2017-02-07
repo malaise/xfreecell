@@ -20,6 +20,8 @@ public:
   static bool animation() { return _animation; }
   static bool msSeed() { return _msSeed; }
   static bool autoPlay() { return _autoPlay; }
+  static bool load() { return _load; }
+  static std::string getDir() { return _dir; }
 
 private:
   void readPrefs();
@@ -33,6 +35,8 @@ private:
   static bool _animation;
   static bool _msSeed;
   static bool _autoPlay;
+  static bool _load;
+  static std::string _dir;
 
   bool exitPressed;
   bool okPressed;

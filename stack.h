@@ -14,6 +14,7 @@ public:
   virtual ~Stack() {}
 
   Card* topCard() const;
+  Card* nthCard(unsigned int) const;
   unsigned int size() const { return _cards.size(); }
   int next_x() const { return _next_x; }
   int next_y() const { return _next_y; }
