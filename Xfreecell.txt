@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V4.01
+V5.00
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -76,25 +76,29 @@ scores and saved game. Default directory is "./.xfreecell".
 
 The following options can be provided in the command line:
 
-  -a | --animation for animation of card movements (default is true)
+  -a | --animation for animation of card movements (default is yes)
   -s | --speed to set time for the move of each card (default is 100ms)
-  -m | --ms-seed for comptibility with microsoft seed generator (default is false)
-  -q | --query-window for a popup window for single or multiple cards move (default is false).
+  -m | --ms-seed for comptibility with microsoft seed generator (default is no)
+  -q | --query-window for a popup window for single or multiple cards move (default is no).
        See the section on shortcuts for the discution on single/multiple cards movements.
-  -p | --auto-play for automatic move of cards to the foundations (default is true)
-  -r | --round-card for sharp corner of cards, if xfreecell is compiled with -DSHAPE, (default is true)
-  -l | --load to load at start-up a game previouly saved (default is false)
+  -p | --auto-play for automatic move of cards to the foundations (default is yes)
+  -r | --round-card for sharp corner of cards, if xfreecell is compiled with -DSHAPE, (default is yes)
+  -l | --load to load at start-up a game previouly saved (default is no)
+
+Each option can be followed by "Y", "YES", "N" or "NO" in any casing,
+otherwise "yes" is assumed.
 
 --------------------------------
 Example:
-xfreecell -a true -s 100 -r true -m false -q false -p true -l false
+xfreecell -a no -s 100 -r N -m Y -q yes -p no -l
 --------------------------------
 
 These preferences (except '-r | --round-card' and '-l | --load') can also be
 set in the xref:XPref[Pref] menu.
 
-These preferences (except '-l | --load') are saved in the file
-$\{HOME\}/.xfreecell/prefs
+These preferences (except '-l | --load'), either by command line option or by
+the xref:XPref[Pref] menu, are saved in the persistent file
+$\{HOME\}/.xfreecell/prefs.
 
 For each option, xfreecell defines the value according to the following
 criteria:
