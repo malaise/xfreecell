@@ -14,7 +14,7 @@ CFLAGS = -g -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
 CXXOPTS = $(CXX11OPT) $(CFLAGS)
 
 
-LIBS = -L./widget -lwidget -L/usr/X11R6/lib -lXext -lX11 -lm
+LIBS = -L./widget -lwidget -L/usr/X11R6/lib -lXext -lXpm -lX11 -lm
 STATICDIR = xfreecell-static
 DOCS = README CHANGES mshuffle.txt xfreecell.6 Xfreecell.html
 DESTDIR ?= /usr/local

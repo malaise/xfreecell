@@ -8,6 +8,7 @@
 #include <string.h>
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
+#include <X11/xpm.h>
 
 #include "card.h"
 #include "freecell.h"
@@ -19,6 +20,8 @@
 #include "undo.h"
 #include "util.h"
 #include "ms-compatible/MSNumbers.h"
+#include "xfreecell.xpm"
+
 
 #include "widget/widget.h"
 
@@ -127,6 +130,10 @@ void trace2(const char* msg1, const unsigned int a1,
 
 int main(int argc, char* argv[])
 {
+  char **icon_def = (char**)(unsigned long)Xfc_xpm;
+  Pixmap icon_pixmap;
+  XWMHints* win_hints;
+
   traceOn = (getenv("xfreecell_TRACE") != 0);
 
   NSInitialize();
@@ -163,6 +170,13 @@ int main(int argc, char* argv[])
   sh.min_height = mainWindowHeight;
   sh.flags = PMaxSize|PMinSize;
   XSetWMNormalHints(dpy, toplevel, &sh);
+  // Set icon
+  XpmCreatePixmapFromData (dpy, toplevel, icon_def, &icon_pixmap, NULL, NULL);
+  win_hints = XAllocWMHints();
+  win_hints->flags = IconPixmapHint;
+  win_hints->icon_pixmap = icon_pixmap;
+  XSetWMHints(dpy, toplevel, win_hints);
+  XFree(win_hints);
   // XMapWindow(dpy, toplevel);
   NSRegisterExit(toplevel, exitCb);
 

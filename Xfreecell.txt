@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V5.00
+V6.00
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -17,6 +17,7 @@ In order to compile xfreecell you need:
 * the gnu C\++ compiler g++, 
 * gnu make, 
 * the X11 development package libx11-dev (or devel),
+* the XPM development package libxpm-dev (or devel),
 * the X11 extensions development package libxext-dev (or devel) for
 the round corners of cards and for the cursor shape indicating valid
 xref:XDestinations[destinations] of cards.
