@@ -40,7 +40,7 @@ xfreecell: widget/libwidget.a $(OBJECTS) freecell.o
 	@echo $(CC) -c $<
 	@$(CC) -c $(CFLAGS) $(CCOPTS) $<
 
-freecell.o: freecell.cpp $(INCLUDES) ms-compatible/MSNumbers.h
+freecell.o: freecell.cpp $(INCLUDES) ms-compatible/MSNumbers.h xfreecell.xpm
 	@echo $(CXX) -c $<
 	@$(CXX) -c $(CFLAGS) $(CXXOPTS) $<
 
