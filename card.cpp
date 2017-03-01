@@ -221,7 +221,8 @@ void Card::dispatchButtonPress(const XEvent& ev)
     // Second selection: toggle hilight
     hilighted->unhilighten();
     hilighted = 0;
-    if (ev.xbutton.time - lastPressTime < doubleClickInterval) {
+    if ( (ev.xbutton.time - lastPressTime < doubleClickInterval) 
+       && ! isSingleStack(_stack) ) {
       // Double click: Move to an empty single stack
       SingleStack* stack = emptySingleStack();
       if (stack != 0)

@@ -3,6 +3,7 @@
 
 void autoMove();
 SingleStack* emptySingleStack();
+bool isSingleStack(Stack *stack);
 bool multipleMovable(Card* from, Card* to);
 void moveMultipleCards(Card* from, Card* to);
 void moveMultipleCards(Card* from, PlayStack* to);

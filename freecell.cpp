@@ -884,12 +884,19 @@ PlayStack* emptyPlayStack(Stack *avoid)
 SingleStack* emptySingleStack()
 {
   for (unsigned int i = 0; i < numSingleStack; i++) {
-    if (singleStack[i]->size() == 0)
-      return singleStack[i];
+    if (singleStack[i]->size() == 0) return singleStack[i];
   }
-
   return 0;
 }
+
+// Is stack a single stack
+bool isSingleStack(Stack *stack) {
+  for (unsigned int i = 0; i < numSingleStack; i++) {
+    if (singleStack[i] == stack) return true;
+  }
+  return false;
+}
+
 
 inline unsigned int min(unsigned int x, unsigned int y) {
   return (x < y ? x : y);
