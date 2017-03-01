@@ -127,6 +127,7 @@ void trace2(const char* msg1, const unsigned int a1,
 }
 
 
+static void setWindowName(int, bool);
 
 int main(int argc, char* argv[])
 {
@@ -162,8 +163,7 @@ int main(int argc, char* argv[])
   toplevel = XCreateSimpleWindow(dpy, RootWindow(dpy, 0), 0, 0, mainWindowWidth,
                                  mainWindowHeight, 0, 0, bgpixel);
   XSelectInput(dpy, toplevel, StructureNotifyMask);
-  XStoreName(dpy, toplevel, "xfreecell");
-  XSetIconName(dpy, toplevel, "xfreecell");
+  setWindowName(-1, false);
   sh.max_width = mainWindowWidth;
   sh.max_height =  mainWindowHeight;
   sh.min_width = mainWindowWidth;
@@ -179,7 +179,6 @@ int main(int argc, char* argv[])
   XFree(win_hints);
   // XMapWindow(dpy, toplevel);
   NSRegisterExit(toplevel, exitCb);
-
 
   // menu
   menuContainer.add(newButton);
@@ -329,14 +328,16 @@ int appropriateGameNumber()
   return gameNumber;
 }
 
-void setWindowName(int num, bool ms)
+static void setWindowName(int num, bool ms)
 {
   char line[30];
 
-  if (ms)
-    sprintf(line, "xfreecell %d (ms seed)", num);
-  else
-    sprintf(line, "xfreecell %d", num);
+  if (num >= 0) {
+    if (ms) sprintf(line, "xfreecell %d (ms seed)", num);
+    else sprintf(line, "xfreecell %d", num);
+  } else {
+    sprintf(line, "xfreecell");
+  }
 
   XStoreName(dpy, toplevel, line);
   XSetIconName(dpy, toplevel, line);
