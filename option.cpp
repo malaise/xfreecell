@@ -21,13 +21,15 @@ bool Option::_animation = true;
 bool Option::_msSeed = false;
 bool Option::_autoPlay = true;
 bool Option::_load = false;
+int Option::_doubleClick = 500;
 std::string Option::_dir;
 
 Option::Option()
-  : mainCon(350, 200), speedCon(350, 50), speedLabel("Speed (ms)"), speedTF(80, this),
-    togglesCon(350, 50), anim("Anim"), query("Query"), ms("MS Seed"),
-    play("Auto"), replyCon(300, 100),
-    okButton("  OK  ", this), cancelButton("Cancel", this)
+  : mainCon(350, 250),
+    speedCon(350, 50), speedLabel("Speed (ms)"), speedTF(80, this),
+    togglesCon(350, 50), anim("Anim"), query("Query"), ms("MS Seed"), play("Auto"),
+    clickCon(350, 50), clickLabel("Double click (ms)"), clickTF(30, this),
+    replyCon(350, 100), okButton("  OK  ", this), cancelButton("Cancel", this)
 {
   speedCon.add(&speedLabel); speedCon.add(&speedTF);
   speedCon.reallocate();
@@ -36,10 +38,14 @@ Option::Option()
   togglesCon.add (&play);
   togglesCon.reallocate();
 
+  clickCon.add(&clickLabel); clickCon.add(&clickTF);
+  clickCon.reallocate();
+
   replyCon.add(&okButton); replyCon.add(&cancelButton);
   replyCon.reallocate();
 
-  mainCon.add(&speedCon); mainCon.add(&togglesCon); mainCon.add(&replyCon);
+  mainCon.add(&speedCon); mainCon.add(&togglesCon); mainCon.add(&clickCon);
+  mainCon.add(&replyCon);
   mainCon.reallocate();
 
   container(&mainCon);
@@ -96,12 +102,14 @@ void Option::waitForEvent()
 
   exitPressed = false;
   okPressed = false;
+
   sprintf (val, "%d", _speedup);
   speedTF.init(val);
-
   anim.toggled(_animation);
   query.toggled(_queryWindow);
   ms.toggled(_msSeed);
+  sprintf (val, "%d", _doubleClick);
+  clickTF.init(val);
   play.toggled(_autoPlay);
 
   map();
@@ -123,6 +131,10 @@ void Option::waitForEvent()
     _queryWindow = query.toggled();
     _msSeed = ms.toggled();
     _autoPlay = play.toggled();
+    val = atoi(clickTF.text());
+    if (val < 100) val = 100;
+    if (val > 900) val = 900;
+    _doubleClick = val;
   }
 
   writePrefs();
@@ -167,6 +179,13 @@ void Option::readPrefs()
   if (sscanf(line, "auto play = %d", &tmp) != 1) goto ERROR;
   _autoPlay = (tmp == 0 ? false : true);
 
+  if (fgets(line, lineLength, fp) == NULL) goto ERROR;
+  if (sscanf(line, "double click = %d", &_doubleClick) != 1) goto ERROR;
+
+  if ( (_speedup < 0) || (_doubleClick < 100) || (_doubleClick > 900) ) {
+    goto ERROR;
+  }
+
   fclose(fp);
   return;
 
@@ -190,6 +209,7 @@ void Option::writePrefs()
   fprintf(fp, "query = %d\n", _queryWindow);
   fprintf(fp, "ms seed = %d\n", _msSeed);
   fprintf(fp, "auto play = %d\n", _autoPlay);
+  fprintf(fp, "double click = %d\n", _doubleClick);
 
   fclose(fp);
   return;
@@ -244,18 +264,15 @@ void Option::parse(int argc, char* argv[])
       printf("  -a <boolean>  | --animation <boolean>\n");
       printf("  -m <boolean>  | --ms-seed <boolean>\n");
       printf("  -p <boolean>  | --auto-play <boolean>\n");
+      printf("  -d <100..900> | --double-click <100..900>\n");
       printf("<boolean> ::= y | Y | yes | YES | n | N | no | NO\n");
       exit(0);
     } else if (strcmp(arg, "-s") == 0 || strcmp(arg, "--speed") == 0) {
       numArg++;
       arg = argv[numArg];
-      if (numArg == (unsigned int)argc) goto ERRORI;
+      if (numArg == (unsigned int)argc) goto ERRORS;
       _speedup = atoi(arg);
-      if (0 > _speedup) goto ERRORI;
-      continue;
-    ERRORI:
-      fprintf(stderr, "Positive integer must follow -s\n");
-      exit (1);
+      if (0 > _speedup) goto ERRORS;
     } else if (strcmp(arg, "-q") == 0 || strcmp(arg, "--query-window") == 0) {
       _queryWindow = parseBool(argc, argv);
 #ifdef SHAPE
@@ -270,12 +287,25 @@ void Option::parse(int argc, char* argv[])
       _autoPlay = parseBool(argc, argv);
     } else if (strcmp(arg, "-l") == 0 || strcmp(arg, "--load") == 0) {
       _load = parseBool(argc, argv);
+    } else if (strcmp(arg, "-d") == 0 || strcmp(arg, "--double-click") == 0) {
+      numArg++;
+      arg = argv[numArg];
+      if (numArg == (unsigned int)argc) goto ERRORD;
+      _doubleClick = atoi(arg);
+      if  ( (_doubleClick < 100 ) || (_doubleClick > 900 ) ) goto ERRORD;
     } else {
       fprintf(stderr, "Unknown option: %s\n", arg);
       exit (1);
     }
     numArg++;
   }
+  return;
+  ERRORS:
+    fprintf(stderr, "Positive integer must follow -s\n");
+    exit (1);
+  ERRORD:
+    fprintf(stderr, "Value between 100 and 900 must follow -d\n");
+    exit (1);
 }
 
 /*

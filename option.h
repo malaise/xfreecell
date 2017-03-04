@@ -21,6 +21,7 @@ public:
   static bool msSeed() { return _msSeed; }
   static bool autoPlay() { return _autoPlay; }
   static bool load() { return _load; }
+  static int doubleClick() { return _doubleClick; }
   static std::string getDir() { return _dir; }
 
 private:
@@ -36,6 +37,7 @@ private:
   static bool _msSeed;
   static bool _autoPlay;
   static bool _load;
+  static int _doubleClick;
   static std::string _dir;
 
   bool exitPressed;
@@ -47,6 +49,9 @@ private:
   NSTextField speedTF;
   NSHContainer togglesCon;
   NSToggleButton anim, query, ms, play;
+  NSHContainer clickCon;
+  NSLabel clickLabel;
+  NSTextField clickTF;
   NSHContainer replyCon;
   NSButton okButton, cancelButton;
 };

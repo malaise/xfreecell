@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V6.02
+V7.00
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -85,8 +85,9 @@ The following options can be provided in the command line:
   -p | --auto-play for automatic move of cards to the foundations (default is yes)
   -r | --round-card for sharp corner of cards, if xfreecell is compiled with -DSHAPE, (default is yes)
   -l | --load to load at start-up a game previouly saved (default is no)
+  -d | --double-click to set delay for double click, from 100 to 900 (default is 500 ms)
 
-Each option can be followed by "Y", "YES", "N" or "NO" in any casing,
+Each boolean option can be followed by "Y", "YES", "N" or "NO" in any casing,
 otherwise "yes" is assumed.
 
 --------------------------------
@@ -104,8 +105,8 @@ $\{HOME\}/.xfreecell/prefs.
 For each option, xfreecell defines the value according to the following
 criteria:
 
-1. The one defined in the xref:XPref[Pref] menu, if any,
-2. Otherwise, the option of the command line, if any,
+1. The one modified in the xref:XPref[Pref] menu,
+2. Otherwise, the option provided in the command line, if any,
 3. Otherwise, the value retrieved from the previous execution of xfreecell,
 if any,
 4. Otherwise the default value defined above.

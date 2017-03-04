@@ -36,9 +36,6 @@ Card* hilighted = 0;
 bool cursorChanged = false;
 Cursor cursor;
 
-// Static declarations
-const Time doubleClickInterval = 250; // milisecond
-
 #ifdef SHAPE
 static bool initialized = false;
 static Pixmap boundingMask;
@@ -221,7 +218,7 @@ void Card::dispatchButtonPress(const XEvent& ev)
     // Second selection: toggle hilight
     hilighted->unhilighten();
     hilighted = 0;
-    if ( (ev.xbutton.time - lastPressTime < doubleClickInterval) 
+    if ( (ev.xbutton.time - lastPressTime < (unsigned) Option::doubleClick()) 
        && ! isSingleStack(_stack) ) {
       // Double click: Move to an empty single stack
       SingleStack* stack = emptySingleStack();
