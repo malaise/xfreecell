@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V7.01
+V7.02
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -211,9 +211,17 @@ depends on:
 * how many cards are following the xref:XStackingRule[stacking rule],
 * how many empty columns and free cells can be used for temporary storage.
 
-NOTE: The automatic move fills the free cells and columns with one card each,
-then stacks these cards in a column, and so on. This is not fully optimal when
-there are three or more free columns.
+NOTE: The automatic move fills the free cells and then the free columns with one
+card each, then stacks these cards on the last column fed, then do it again
+until all the columns are full, and then fills each free cell, which is not
+optimal. +
+For example, with 2 free columns and one free cell, the automatic move will put
+3 cards in the first column, then 2 cards in the second column, then 1 card in
+the free cell, allowing to move 7 cards altogether. +
+A better strategy would be to put 2 cards in the first column, 2 cards in the
+second column, move the 2 first cards in the second column, move 2 cards in
+the first column, then 1 card in the free cell, allowing to move 8 cards
+altogether.
 
 Undo and redo
 ~~~~~~~~~~~~~

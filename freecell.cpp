@@ -133,44 +133,12 @@ int main(int argc, char* argv[])
 {
   char **icon_def = (char**)(unsigned long)Xfc_xpm;
   Pixmap icon_pixmap;
+  XWMHints* win_hints;
 
   traceOn = (getenv("xfreecell_TRACE") != 0);
 
   NSInitialize();
   dpy = NSdisplay();
-
-  // toplevel
-  unsigned long bgpixel = getColor(dpy, DefaultBackground);
-  XSizeHints *sh;
-  XWMHints* win_hints;
-  NSStaticHContainer menuContainer;
-  NSFrame menuFrame;
-
-  // Top window
-  toplevel = XCreateSimpleWindow(dpy, RootWindow(dpy, 0), 0, 0,
-                                 mainWindowWidth, mainWindowHeight,
-                                 0, 0, bgpixel);
-  sh = XAllocSizeHints();
-  sh->flags = PMaxSize|PMinSize;
-  sh->max_width = mainWindowWidth;
-  sh->max_height =  mainWindowHeight;
-  sh->min_width = mainWindowWidth;
-  sh->min_height = mainWindowHeight;
-  XSetWMNormalHints(dpy, toplevel, sh);
-  XFree (sh);
-  // Input and window name
-  XSelectInput(dpy, toplevel, StructureNotifyMask);
-  setWindowName(-1, false);
-  // Set icon
-  XpmCreatePixmapFromData (dpy, toplevel, icon_def, &icon_pixmap, NULL, NULL);
-  win_hints = XAllocWMHints();
-  win_hints->flags = IconPixmapHint;
-  win_hints->icon_pixmap = icon_pixmap;
-  XSetWMHints(dpy, toplevel, win_hints);
-  XFree(win_hints);
-
-  XMapWindow(dpy, toplevel);
-  NSRegisterExit(toplevel, exitCb);
 
   // buttons
   newButton = new NSButton("New", 0, 0, &newCallback);
@@ -184,6 +152,33 @@ int main(int argc, char* argv[])
   prefButton = new NSButton("Pref", 0, 0, &prefCallback);
   aboutButton = new NSButton("About", 0, 0, &aboutCallback);
   exitButton = new NSButton("Exit", 0, 0, &exitCallback);
+
+  // toplevel
+  unsigned long bgpixel = getColor(dpy, DefaultBackground);
+  XSizeHints sh;
+  NSStaticHContainer menuContainer;
+  NSFrame menuFrame;
+
+  // NSWidget is too powerless to make NSFrame gameWindow.
+  toplevel = XCreateSimpleWindow(dpy, RootWindow(dpy, 0), 0, 0, mainWindowWidth,
+                                 mainWindowHeight, 0, 0, bgpixel);
+  XSelectInput(dpy, toplevel, StructureNotifyMask);
+  setWindowName(-1, false);
+  sh.max_width = mainWindowWidth;
+  sh.max_height =  mainWindowHeight;
+  sh.min_width = mainWindowWidth;
+  sh.min_height = mainWindowHeight;
+  sh.flags = PMaxSize|PMinSize;
+  XSetWMNormalHints(dpy, toplevel, &sh);
+  // Set icon
+  XpmCreatePixmapFromData (dpy, toplevel, icon_def, &icon_pixmap, NULL, NULL);
+  win_hints = XAllocWMHints();
+  win_hints->flags = IconPixmapHint;
+  win_hints->icon_pixmap = icon_pixmap;
+  XSetWMHints(dpy, toplevel, win_hints);
+  XFree(win_hints);
+  // XMapWindow(dpy, toplevel);
+  NSRegisterExit(toplevel, exitCb);
 
   // menu
   menuContainer.add(newButton);
@@ -204,7 +199,7 @@ int main(int argc, char* argv[])
 
   int menuHeight = menuFrame.height();
 
-  // NSWidget is too powerless to make NSFrame gameWindow.
+  // gameWindow
   gameWindow = XCreateSimpleWindow(dpy, toplevel, 0, menuHeight, mainWindowWidth,
                                    mainWindowHeight - menuHeight, 0, 0, bgpixel);
   XMapWindow(dpy, gameWindow);
@@ -933,7 +928,7 @@ bool multipleMovable(Card* from, Card* to)
   unsigned int numEmptySS = numEmptySingleStacks();
   unsigned int numEmptyPS = numEmptyPlayStacks();
 
-  // Algo will put a card on each Play then on each Single stack
+  // Algo will put a card on each Single then on each Play stack
   //  then stack all cards on the first P... and so on
   //  then put a card in each S
   // if T=P+S, then Movable=T*(T+1)/2 - S*(S+1)/2 + S + 1
