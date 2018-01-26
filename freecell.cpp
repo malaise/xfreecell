@@ -731,32 +731,42 @@ void moveToDoneStackIfPossible(Card* card)
   if (card == 0) return;
 
   if (card->value() == 0 || canAutoMove(card))
-    moveToAppropriateDoneStack(card);
+    (void) moveToAppropriateDoneStack(card);
 }
 
-void moveToAppropriateDoneStack(Card* card)
+bool moveToAppropriateDoneStack(Card* card)
 {
+  bool res = false;
   switch (card->suit()) {
   case Heart:
-    if (doneHeart->acceptable(card))
+    if (doneHeart->acceptable(card)) {
       card->moveToStack(doneHeart);
+      res = true;
+    }
     break;
   case Diamond:
-    if (doneDiamond->acceptable(card))
+    if (doneDiamond->acceptable(card)) {
       card->moveToStack(doneDiamond);
+      res = true;
+    }
     break;
   case Spade:
-    if (doneSpade->acceptable(card))
+    if (doneSpade->acceptable(card)) {
       card->moveToStack(doneSpade);
+      res = true;
+    }
     break;
   case Club:
-    if (doneClub->acceptable(card))
+    if (doneClub->acceptable(card)) {
       card->moveToStack(doneClub);
+      res = true;
+    }
     break;
   default:
     fprintf(stderr, "Bug moveToAppropriateDoneStack\n");
     exit(1);
   }
+  return res;
 }
 
 bool canAutoMove(Card* card)

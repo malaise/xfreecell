@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V7.02
+V7.03
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -200,7 +200,7 @@ anchor:XShortcut[]You can double left click or middle click on a non selected
 card to move it in a free cell if any is available.
 
 You can left click on a non selected card to move it to its foundation (if
-possible).
+possible), otherwise move it to a free cell (if any).
 
 Once a card of the playing area is selected you can right click on another
 column to move as many cards as possible from the selected colomn to the new

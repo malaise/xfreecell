@@ -44,6 +44,7 @@ private:
   Card* _parent;
 
   bool _removed;
+  int moveToSingleStack (void);
 };
 
 void resetHilighted();

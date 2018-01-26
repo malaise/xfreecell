@@ -210,23 +210,33 @@ void Card::dispatchEvent(const XEvent& ev)
   }
 }
 
+// Move to an empty single stack if possible
+int Card::moveToSingleStack (void) {
+   SingleStack* stack = emptySingleStack();
+   if (stack != 0) {
+      _stack->topCard()->moveToStack(stack);
+      return true;
+   } else {
+     return false;
+   }
+}
+
 void Card::dispatchButtonPress(const XEvent& ev)
 {
   static Time lastPressTime = 0;
 
-  if (hilighted == _stack->topCard()) {
-    // Second selection: toggle hilight
+  if ( (hilighted == _stack->topCard()) && (ev.xbutton.button == 1) ) {
+    // Second selection toggle hilight
     hilighted->unhilighten();
     hilighted = 0;
     if ( (ev.xbutton.time - lastPressTime < (unsigned) Option::doubleClick()) 
        && ! isSingleStack(_stack) ) {
       // Double click: Move to an empty single stack
-      SingleStack* stack = emptySingleStack();
-      if (stack != 0)
-        _stack->topCard()->moveToStack(stack);
+      (void) this->moveToSingleStack();
     }
-  } else if (hilighted != 0 && (hilighted->_stack == _stack) ) {
-    // Second selection: toggle hilight
+  } else if ( (hilighted != 0 && (hilighted->_stack == _stack) ) 
+                              && (ev.xbutton.button == 1) ) {
+    // Second selection on free cell: toggle hilight
     hilighted->unhilighten();
     hilighted = 0;
   } else if (hilighted == 0 && !_removed) {
@@ -246,11 +256,14 @@ void Card::dispatchButtonPress(const XEvent& ev)
       }
       break;
     case 3:
-      // Righ button: Move to Done stack (if no autoplay)
-      moveToAppropriateDoneStack(_stack->topCard());
+      // Righ button: Move to Done stack (if no autoplay) if possible
+      //  otherwise move to Single stack if possible
+      if (!moveToAppropriateDoneStack(_stack->topCard())) {
+        (void) this->moveToSingleStack();
+      }
       break;
     }
-  } else if (cursorChanged) {
+  } else if (cursorChanged && (ev.xbutton.button == 1) ) {
     // cursorChanged == true means moving is possible.
     if (moveMode == SingleMode) {
       // Move one card
