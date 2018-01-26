@@ -8,7 +8,7 @@ CXX11OPT := $(shell $(CXX) -dumpversion | awk -F "." ' \
 OBJECTS = card.o option.o stack.o subwindows.o undo.o util.o gnmanager.o \
           random.o timeval.o
 INCLUDES = $(wildcard *.h)
-CFLAGS = -g -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
+CFLAGS = -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
          -Wcast-qual -Wcast-align -Wwrite-strings -Wsign-compare \
          -Wmissing-noreturn -Winline -Wfloat-equal -Wundef
 CXXOPTS = $(CXX11OPT) $(CFLAGS)
@@ -25,6 +25,9 @@ xfreecell: widget/libwidget.a $(OBJECTS) freecell.o
 	@echo $(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
 	@$(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
 
+debug:
+	$(MAKE) DEBUG=-g xfreecell
+
 %.html : %.txt
 	@type asciidoc >/dev/null 2>&1;\
 	if [ $$? -eq 0 ] ; then \
@@ -33,16 +36,16 @@ xfreecell: widget/libwidget.a $(OBJECTS) freecell.o
 	fi
 
 %.o: %.cpp $(INCLUDES)
-	@echo $(CXX) -c $<
-	@$(CXX) -c $(CFLAGS) $(CXXOPTS) $<
+	@echo $(CXX) -c $(DEBUG) $<
+	@$(CXX) -c $(DEBUG) $(CFLAGS) $(CXXOPTS) $<
 
 %.o: %.c $(INCLUDES)
-	@echo $(CC) -c $<
-	@$(CC) -c $(CFLAGS) $(CCOPTS) $<
+	@echo $(CC) -c $(DEBUG) $<
+	@$(CC) -c $(DEBUG) $(CFLAGS) $(CCOPTS) $<
 
 freecell.o: freecell.cpp $(INCLUDES) ms-compatible/MSNumbers.h xfreecell.xpm
-	@echo $(CXX) -c $<
-	@$(CXX) -c $(CFLAGS) $(CXXOPTS) $<
+	@echo $(CXX) -c $(DEBUG) $<
+	@$(CXX) -c $(DEBUG) $(CFLAGS) $(CXXOPTS) $<
 
 widget/libwidget.a:
 	@echo make -C widget

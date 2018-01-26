@@ -12,8 +12,8 @@ $(LIBNAME): $(OBJECTS)
 	ranlib $(LIBNAME)
 
 %.o: %.cpp $(INCLUDES)
-	@echo $(CXX) -c $<
-	@$(CXX) $(CFLAGS) $(CXXOPTS) -c $<
+	@echo $(CXX) -c $(DEBUG) $<
+	@$(CXX) $(DEBUG) $(CFLAGS) $(CXXOPTS) -c $<
 
 clean:
 	rm -f *.o *~ a.out .nfs* dummy $(LIBNAME)

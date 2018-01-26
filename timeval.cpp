@@ -2,8 +2,6 @@
 #include <stdio.h>
 #include <limits.h>
 #include <math.h>
-extern double trunc(double x);
-extern double round(double x);
 
 #include "timeval.h"
 
@@ -271,7 +269,7 @@ int comp_time (timeout_t *p_time_1, timeout_t *p_time_2)
  *
  *******************************************************************************
 */
-boolean time_is_reached (timeout_t *p_time)
+bool time_is_reached (timeout_t *p_time)
 {
     timeout_t current_time;
 

@@ -4,7 +4,7 @@
 #include <errno.h>
 
 static const char DefaultBackground[] = "forestgreen";
-static const char VersionStr[] = "xfreecell 7.03";
+static const char VersionStr[] = "xfreecell 7.04";
 
 const int mainWindowWidth = 670, mainWindowHeight = 700;
 

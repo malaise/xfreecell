@@ -4,10 +4,6 @@
 #include "boolean.h"
 #include <sys/time.h>
 
-#if defined(__cplusplus) || defined(c_plusplus)
-extern "C" {
-#endif
-
 typedef struct timeval timeout_t;
 
 /* Normalises a time */
@@ -35,7 +31,7 @@ extern int comp_time (timeout_t *p_time_1, timeout_t *p_time_2);
 
 
 /* True is time is reached (current time >= time) */
-extern boolean time_is_reached (timeout_t *p_time);
+extern bool time_is_reached (timeout_t *p_time);
 
 /* Waits for some time */
 extern void delay (timeout_t *p_timeout);
@@ -46,10 +42,6 @@ extern void wait_until (timeout_t *p_time);
 /* Convert time to double (sec.usec) and reverse */
 extern double time_to_double (timeout_t *p_time );
 extern void double_to_time (double from, timeout_t *p_to);
-
-#if defined(__cplusplus) || defined(c_plusplus)
-}
-#endif
 
 #endif
 
