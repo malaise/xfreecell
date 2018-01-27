@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V7.04
+V7.05
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -170,44 +170,68 @@ image:Xfreecell.png["Areas",title="Areas"]
 
 Moving the cards
 ~~~~~~~~~~~~~~~~
-You move the cards one by one, from any area to any area, except that you cannot
-move a card back from the foundation area (but you can undo any move).
+The cards move one by one, from any area to any area, except that they cannot
+move back from the foundation (but you can undo any move).
 
-* Select a card to move by left clicking on it. It becomes selected (its
-background becomes grey). You can de-select it by clicking back on the card.
-* Once a card is selected, select the destination by left clicking on the
+Basics
+^^^^^^
+Select the card to move by left clicking on it. It becomes selected (its
+background becomes grey). You can de-select it by left clicking back on the
+card.
+
+Once a card is selected, select the destination by left clicking on the
 location. Valid anchor:XDestinations[] destinations are indicated by a vertical
 arrow *&#8657;* when the mouse cursor moves on it (if xfreecell has been
 compiled with option '-DSHAPE', see section on
 xref:XPrerequisits[prerequisits]).
 
+Auto-play
+^^^^^^^^^
 The cards are moved automatically to the foundation if all the following
 conditions are fulfilled:
 
-- the "auto-play" mode is activated,
+- the 'auto-play' mode is activated,
 - the movement is valid,
 - this does not generate more than one level of difference between the colors 
 in the foundations. For example, if the smalest red (Heards or Diamonds) on top
 of its foundation is the 7, then not more than the 8 of blacks (Clubs and
-Spades) will be automatically moved in the foundations.
+Spades) will be automatically moved in the foundations. +
+You can still manually move cards to the foundation in this case.
 
-NOTE: At the beginning of the game, or just after switching back to auto-play
-mode, it is necessary to do a first movement in order to trigger the automatic
-move of cards to the foundations.
+NOTE: At the beginning of the game, or just after activating the
+'auto-play' mode, it is necessary to do a first movement in order to trigger
+the automatic move of cards to the foundations.
 
 Shortcuts
-~~~~~~~~~
-anchor:XShortcut[]You can double left click or middle click on a non selected
+^^^^^^^^^
+anchor:XShortcut[]You can right click on a non selected card to move it to its
+foundation (if possible), otherwise move it to a free cell (if any).
+
+You can double left click, or middle click, on a non selected
 card to move it in a free cell if any is available.
 
-You can left click on a non selected card to move it to its foundation (if
-possible), otherwise move it to a free cell (if any).
+Once a card of the playing area is selected, you can:
 
-Once a card of the playing area is selected you can right click on another
-column to move as many cards as possible from the selected colomn to the new
- one.
-The cards move as if you moved them one by one, so the amount of cards moved
-depends on:
+ * on a foundation or empty free cell, left or right click to move the card,
+ * on another non-empty column, left or right click to move as many cards as
+possible (see xref:XMultimove[multiple] move hereafter),
+ * on an empty column,
+  - if the 'query-window' mode is active, left or right click to open a pop-up
+    window that lets you choose to move a single or xref:XMultimove[multiple]
+    cards,
+  - otherwise, left click to move a single card or right click to move
+    xref:XMultimove[multiple] cards.
+
+Practically
+^^^^^^^^^^^
+Activate the 'auto-play' mode and deactivate the 'query-window' mode. +
+Right click on a card to move it to \'top' (foundation or free cell), +
+or select it (left click) and right click on the destination.
+
+Multiple move
+^^^^^^^^^^^^^
+anchor:XMultimove[]The cards move as if you moved them one by one, so the
+amount of cards that are moved depends on:
 
 * how many cards are following the xref:XStackingRule[stacking rule],
 * how many empty columns and free cells can be used for temporary storage.
@@ -225,7 +249,7 @@ the first column, then 1 card in the free cell, allowing to move 8 cards
 altogether.
 
 Undo and redo
-~~~~~~~~~~~~~
+^^^^^^^^^^^^^
 You can undo as many movements as you want (up to the beginning of the game),
 and redo any movements undone.
 

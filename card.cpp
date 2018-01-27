@@ -212,6 +212,10 @@ void Card::dispatchEvent(const XEvent& ev)
 
 // Move to an empty single stack if possible
 int Card::moveToSingleStack (void) {
+   // No if card is already in single stack
+   if (isSingleStack(_stack)) {
+     return false;
+   }
    SingleStack* stack = emptySingleStack();
    if (stack != 0) {
       _stack->topCard()->moveToStack(stack);
@@ -263,7 +267,7 @@ void Card::dispatchButtonPress(const XEvent& ev)
       }
       break;
     }
-  } else if (cursorChanged && (ev.xbutton.button == 1) ) {
+  } else if (cursorChanged) {
     // cursorChanged == true means moving is possible.
     if (moveMode == SingleMode) {
       // Move one card
@@ -286,6 +290,8 @@ void Card::dispatchButtonPress(const XEvent& ev)
   }
 }
 
+
+// Mouse cursor is over a vard
 void Card::dispatchEnterNotify(const XEvent&)
 {
   if (hilighted == 0) return;

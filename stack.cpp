@@ -155,9 +155,9 @@ void PlayStack::dispatchButtonPress(const XEvent& ev)
       if (hilighted->parent() == 0) { //single
         hilighted->unhilighten();
         hilighted->moveToStack(this);
-        hilighted = 0;
         XUndefineCursor(dpy, window());
         cursorChanged = false;
+        hilighted = 0;
       } else {
         hilighted->unhilighten();
         moveMultipleCards(hilighted, this);
