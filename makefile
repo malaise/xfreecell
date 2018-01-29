@@ -74,7 +74,6 @@ install: all
 	install xfreecell -t $(DESTDIR)/bin
 	install xfreecell.6 -t $(DESTDIR)/man/man6
 	@if [ -f Xfreecell.html ] ; then \
-	  echo install -d $(DESTDIR)/share/xfreecell ;\
 	  install -d $(DESTDIR)/share/xfreecell; \
 	  echo install Xfreecell.html -t $(DESTDIR)/share/xfreecell ;\
 	  install Xfreecell.html -t $(DESTDIR)/share/xfreecell; \

@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V7.05
+V7.06
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -176,10 +176,11 @@ move back from the foundation (but you can undo any move).
 Basics
 ^^^^^^
 Select the card to move by left clicking on it. It becomes selected (its
-background becomes grey). You can de-select it by left clicking back on the
-card.
+background becomes grey). You can toggle the selection by left clicking again
+on the card.
 
-Once a card is selected, select the destination by left clicking on the
+Once a card is selected, select the destination (foundation, free cell, empty
+column or a card in the playing area) by left clicking on the
 location. Valid anchor:XDestinations[] destinations are indicated by a vertical
 arrow *&#8657;* when the mouse cursor moves on it (if xfreecell has been
 compiled with option '-DSHAPE', see section on
@@ -230,16 +231,18 @@ or select it (left click) and right click on the destination.
 
 Multiple move
 ^^^^^^^^^^^^^
-anchor:XMultimove[]The cards move as if you moved them one by one, so the
+anchor:XMultimove[]The multiple move allows moving several cards from a column
+to another one (empty column or top card of a column). In this operation,
+the cards move as if you moved them one by one, so the
 amount of cards that are moved depends on:
 
 * how many cards are following the xref:XStackingRule[stacking rule],
 * how many empty columns and free cells can be used for temporary storage.
 
 NOTE: The automatic move fills the free cells and then the free columns with one
-card each, then stacks these cards on the last column fed, then do it again
-until all the columns are full, and then fills each free cell, which is not
-optimal. +
+card each, then stacks these cards on the last column fed, then does it again
+until all the columns are full, and then fills each free cell. This strategy is
+not optimal. +
 For example, with 2 free columns and one free cell, the automatic move will put
 3 cards in the first column, then 2 cards in the second column, then 1 card in
 the free cell, allowing to move 7 cards altogether. +
@@ -250,10 +253,10 @@ altogether.
 
 Undo and redo
 ^^^^^^^^^^^^^
-You can undo as many movements as you want (up to the beginning of the game),
-and redo any movements undone.
+With the 'Undo' and 'Redo' buttons, you can undo as many movements as you want
+(up to the beginning of the game), and redo any movement undone.
 
-Doing a movement clears the list of movements that can be re-done.
+Moving a card clears the list of movements that can be re-done.
 
 Other buttons
 -------------
@@ -264,7 +267,7 @@ anchor:XScore[] You can see you score by clicking on the 'Score' button. This
 shows the statistics and scores since the game installation:
 
 * Wins: the total number of games won
-* Defeats: the total numbner of games lost (see note on xref:XStart[starting]
+* Defeats: the total number of games lost (see note on xref:XStart[starting]
 a game
 * Wins percentage: percentage of games won among all played
 * Defeates percentage: percentage of games lost among all played
@@ -282,7 +285,8 @@ $\{HOME\}/.xfreecell/score.
 Save
 ~~~~
 anchor:XSave[]This button saves the current game (in a file named 
-$\{HOME\}/.xfreecell/saved). +
+$\{HOME\}/.xfreecell/saved). This game can be launched with the argument
+'-l' or '--load' of xfreecell.
 The stacks of movements (for undo and redo) are not saved. +
 Any previously saved game is overwritten.
 
@@ -301,4 +305,5 @@ xref:XStart[Lost] button to start a game already lost
 * The game numbers won (Unix seed and microsoft seed), in order for the
 xref:XStart[New] button to start a game not yet played (neither won nor lost)
 * Your score and associated statistics, see section xref:XScore[Score]
+* At most one xref:XSave[saved] game.
 
