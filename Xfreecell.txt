@@ -1,7 +1,7 @@
 Xfreecell
 =========
 Pascal MALAISE <malaise@magic.fr>
-V7.06
+V7.07
 :toc:
 
 The goal of the game is to move all the cards from the bottom part of the
@@ -121,7 +121,8 @@ At any time you can:
 
 * click on the 'New' button to start a random new game (not played yet),
 * click on the 'Replay' button to restart the current game,
-* click on the 'Seed' button and enter a game number to start a given game,
+* click on the 'Seed' button and enter a game number to start a given game
+  (you can use the mouse button to paste a X11 selection of the seed number),
 * click on the 'Lost' button start a random game among thoses that have already
 been lost.
 

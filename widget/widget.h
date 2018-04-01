@@ -4,6 +4,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/keysym.h>
+#include <X11/Xatom.h>
 #include <stdio.h>
 #include <vector>
 #include <string>
@@ -42,6 +43,14 @@ void NSMainLoop();
 void NSNextEvent(XEvent*);
 void NSDispatchEvent(const XEvent&);
 Display* NSdisplay();
+
+/* Number of supported types of XA_PRIMARY clipborad exchanges */
+#define NB_SELECTION_TYPES 3
+
+/* Selection types and selection code */
+extern Atom selectionTypes[NB_SELECTION_TYPES];
+extern Atom selectCode;
+
 
 // ##### NSComponent #####
 class NSComponent {
@@ -280,6 +289,7 @@ public:
   void clear () { _str.clear(); cursorPos = 0; strStart = 0; }
   void init (const char * str);
   void dispatchEvent(const XEvent&);
+  void requestSelection(void);
 private:
   void draw();
 
@@ -298,6 +308,7 @@ private:
   unsigned int cursorPos;
   unsigned int strStart;
   bool cursorOnTF;
+  int selectIndex;
 };
 
 // ##### NSContainer #####

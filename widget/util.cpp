@@ -4,6 +4,10 @@
 Atom wm_protocols_code = None;
 Atom delete_code = None;
 
+const char *selectionTypeNames[NB_SELECTION_TYPES] =
+   {"UTF8_STRING", "STRING", "TEXT"};
+Atom selectionTypes[NB_SELECTION_TYPES];
+Atom selectCode = None;
 
 unsigned long allocColor(Display* NSdpy, unsigned short red,
                          unsigned short green, unsigned short blue)
@@ -30,12 +34,22 @@ unsigned long nameToPixel(const char* name)
 
 void NSInitialize(void)
 {
+  int i;
   if ((NSdpy = XOpenDisplay(NULL)) == NULL) {
     fprintf(stderr, "Cannot open display\n");
     exit(1);
   }
 
   font = XLoadFont(NSdpy, defaultFont);
+
+   /* Initialise Atoms of supported PRIMARY clipborad formats */
+  for (i = 0; i < NB_SELECTION_TYPES; i++) {
+    selectionTypes[i] = XInternAtom (NSdpy, selectionTypeNames[i], True);
+  }
+
+  /* Declare/store Atom for receiving selection */
+  selectCode = XInternAtom (NSdpy, "XFreecellSelection", False);
+
 }
 
 static void (*exitCb) (const XEvent &ev);
