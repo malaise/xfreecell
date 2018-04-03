@@ -13,16 +13,17 @@ CFLAGS = -DSHAPE -DBOGUSRANDOM -pedantic -Wall -W -Wpointer-arith \
          -Wmissing-noreturn -Winline -Wfloat-equal -Wundef
 CXXOPTS = $(CXX11OPT) $(CFLAGS)
 
+.SECONDARY : widget/libwidget.a
 
 LIBS = -L./widget -lwidget -L/usr/X11R6/lib -lXext -lXpm -lX11 -lm
 STATICDIR = xfreecell-static
 DOCS = README CHANGES mshuffle.txt xfreecell.6 Xfreecell.html
 DESTDIR ?= /usr/local
 
-all: xfreecell Xfreecell.html
+all: libwidget xfreecell Xfreecell.html
 
-xfreecell: widget/libwidget.a $(OBJECTS) freecell.o
-	@echo $(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
+xfreecell: freecell.o $(OBJECTS) widget/libwidget.a
+	@echo $(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS) 
 	@$(CXX) -o $@ freecell.o $(OBJECTS) $(LIBS)
 
 debug:
@@ -47,13 +48,13 @@ freecell.o: freecell.cpp $(INCLUDES) ms-compatible/MSNumbers.h xfreecell.xpm
 	@echo $(CXX) -c $(DEBUG) $<
 	@$(CXX) -c $(DEBUG) $(CFLAGS) $(CXXOPTS) $<
 
-widget/libwidget.a:
+libwidget:
 	@echo make -C widget
-	@make -C widget CFLAGS="$(CFLAGS)" "CXXOPTS=$(CXXOPTS)"
+	@$(MAKE) -C widget CFLAGS="$(CFLAGS)" "CXXOPTS=$(CXXOPTS)"
 
 ms-compatible/MSNumbers.h :
 	@echo make -C ms-compatible
-	@make -C ms-compatible CFLAGS="$(CFLAGS)" "CXXOPTS=$(CXXOPTS)"
+	@$(MAKE) -C ms-compatible CFLAGS="$(CFLAGS)" "CXXOPTS=$(CXXOPTS)"
 
 static-release: xfreecell doc
 	mkdir $(STATICDIR)
@@ -66,8 +67,8 @@ static-release: xfreecell doc
 clean:
 	rm -f *.o xfreecell Xfreecell.html
 	rm -rf $(STATICDIR)
-	make -C widget clean
-	make -C ms-compatible clean
+	$(MAKE) -C widget clean
+	$(MAKE) -C ms-compatible clean
 
 install: all
 	install -d $(DESTDIR)/bin $(DESTDIR)/man/man6

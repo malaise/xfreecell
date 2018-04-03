@@ -172,13 +172,13 @@ void NSTextField::dispatchEvent(const XEvent& ev)
       break;
     case ButtonPress:
       if (ev.xbutton.button == 1) {
-        cursorPos = ev.xbutton.x / charWidth;
-        if (_str.length() <= maxCharNum - 1 && cursorPos > _str.length()) cursorPos = _str.length();
-        draw();
-      } else if (ev.xbutton.button == 2) {
         /* Move cursor to pointer position */
-        /* Get position */
         /* Convert to char index */
+        cursorPos = ev.xbutton.x / charWidth;
+        if (_str.length() <= maxCharNum - 1 && cursorPos > _str.length()) {
+          cursorPos = _str.length();
+        }
+        draw();
         /* If above last char then last char */
       } else if (ev.xbutton.button == 2) {
         /* Request selection */
@@ -214,7 +214,7 @@ void NSTextField::dispatchEvent(const XEvent& ev)
         selectIndex = SELEC_NONE;
         /* Append selection */
         if (res != Success) return;
-        for (i = 0; i < nitemsReturn; i++) {
+        for (i = 0; i < (int) nitemsReturn; i++) {
           if (!isprint(data[i])) return;
           strTmp[0] = data[i];
           strTmp[1] = 0;
