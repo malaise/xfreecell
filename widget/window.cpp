@@ -85,7 +85,7 @@ void NSWindow::setMaxMinSize(unsigned int maxW, unsigned int maxH, unsigned int 
 
   hint.max_width = maxW; hint.max_height = maxH;
   hint.min_width = minW; hint.min_height = minH;
-  if (maxW != 0 && maxH != 0) hint.flags |= PMaxSize;
+  if (maxW != 0 && maxH != 0) hint.flags = PMaxSize;
   if (minW != 0 && minH != 0) hint.flags |= PMinSize;
   XSetWMNormalHints(NSdpy, _window, &hint);
 }
