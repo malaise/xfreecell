@@ -1,4 +1,5 @@
 #include <vector>
+#include <string.h>
 
 #include "widget.h"
 
@@ -37,7 +38,7 @@ private:
   NSVScrollbar _vscroll;
   NSHScrollbar _hscroll;
 
-  vector<char*> items;
+  std::vector<char*> items;
   unsigned int _displayableNum;
   unsigned int _selected;
   bool _hilighted;
@@ -144,9 +145,12 @@ void NSSelector::addItem(const char* str)
 
 inline void NSSelector::drawBorder()
 {
-  XPoint points[] = { {0, 0}, {NSWindow::width() - 1, 0},
-                      {NSWindow::width() - 1, NSWindow::height() - 1},
-                      {0, NSWindow::height() - 1}, {0, 0} };
+  XPoint points[] = {
+   {0, 0},
+   {(short)(NSWindow::width() - 1), 0},
+   {(short)(NSWindow::width() - 1), (short)(NSWindow::height() - 1)},
+   {0, (short)(NSWindow::height() - 1)},
+   {0, 0} };
 
   XDrawLines(NSdpy, window(), _gc, points, 5, CoordModeOrigin);
 }

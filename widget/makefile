@@ -16,8 +16,8 @@ $(LIBNAME): $(OBJECTS)
 	@$(CXX) $(DEBUG) $(CFLAGS) $(CXXOPTS) -c $<
 
 clean:
-	rm -f *.o *~ a.out .nfs* dummy $(LIBNAME)
+	rm -f *.o $(LIBNAME) test
 
 test: test.o $(OBJECTS) $(INCLUDES)
-	$(CXX) $(CFLAGS) test.o $(OBJECTS) $(LIBS)
+	$(CXX) $(CFLAGS) -o test test.o $(OBJECTS) $(LIBS)
 
