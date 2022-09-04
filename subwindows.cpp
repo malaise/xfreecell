@@ -57,7 +57,7 @@ void Query3Window::waitForEvent()
   _right = false;
 
   map();
-  XRaiseWindow(dpy, window());
+  raise();
 
   XEvent ev;
 
@@ -110,7 +110,7 @@ void QueryWindow::waitForEvent()
   _right = false;
 
   map();
-  XRaiseWindow(dpy, window());
+  raise();
 
   XEvent ev;
 
@@ -309,7 +309,7 @@ void ScoreWindow::waitForEvent()
   setLabels();
 
   map();
-  XRaiseWindow(dpy, window());
+  raise();
 
   XEvent ev;
   while (mapped() && !exitPressed) {
