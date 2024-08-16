@@ -119,7 +119,7 @@ void PlayStack::dispatchButtonPress(const XEvent& ev)
   if (hilighted == 0 || size() != 0 || !cursorChanged) return;
 
   if (Option::queryWindow()) {
-    if (hilighted->parent() == 0) { //single
+    if (hilighted->get_parent() == 0) { //single
       hilighted->unhilighten();
       hilighted->moveToStack(this);
       hilighted = 0;
@@ -152,7 +152,7 @@ void PlayStack::dispatchButtonPress(const XEvent& ev)
       hilighted = 0;
       break;
     case 3:
-      if (hilighted->parent() == 0) { //single
+      if (hilighted->get_parent() == 0) { //single
         hilighted->unhilighten();
         hilighted->moveToStack(this);
         XUndefineCursor(dpy, window());

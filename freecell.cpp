@@ -331,7 +331,7 @@ int appropriateGameNumber()
 
 static void setWindowName(int num, bool ms)
 {
-  char line[30];
+  char line[31];
 
   if (num >= 0) {
     if (ms) sprintf(line, "xfreecell %d (ms seed)", num);
@@ -926,7 +926,7 @@ bool multipleMovable(Card* from, Card* to)
 
   if (from == 0 || to == 0) return false;
 
-  for (Card* c = from; c != 0; c = c->parent(), toMoveNum++) {
+  for (Card* c = from; c != 0; c = c->get_parent(), toMoveNum++) {
     if (destStack->acceptable(c)) {
       found = true;
       break;
@@ -976,7 +976,7 @@ void moveMultipleCards(Card* from, PlayStack* toStack)
     // Potentially all from stack
     numCardsToBeMoved = 0;
     while (from != 0) {
-      from = from->parent();
+      from = from->get_parent();
       numCardsToBeMoved++;
     }
     // One less play stack to be used as tmp

@@ -8,8 +8,8 @@ NSVScrollbar::NSVScrollbar
 (unsigned int bh, unsigned int h, NSScrollbarListener* nsl, void* nslArg)
   : NSPlate(down), _bar(up), listener(nsl), listenerArg(nslArg)
 {
-  NSWindow::width(_defaultWidth);
-  height(h);
+  NSWindow::set_width(_defaultWidth);
+  set_height(h);
   selectInput(ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | StructureNotifyMask);
 
   _movement = 1;
@@ -17,7 +17,7 @@ NSVScrollbar::NSVScrollbar
   _buttonPressed = false;
 
   _bar.parent(window());
-  _bar.width(_defaultWidth - 2 * thickness());
+  _bar.set_width(_defaultWidth - 2 * thickness());
   barHeight(bh);
   _bar.move(thickness(), thickness());
 }
@@ -31,11 +31,11 @@ unsigned int NSVScrollbar::currentPos() const
 void NSVScrollbar::barHeight(unsigned int arg)
 {
   if ((unsigned int) thickness() * 2 < arg || arg <= (height() - 2 * thickness()))
-    _bar.height(arg);
+    _bar.set_height(arg);
   else  if (arg <= (unsigned int) thickness() * 2)
-    _bar.height(thickness() * 2 + 1);
+    _bar.set_height(thickness() * 2 + 1);
   else
-    _bar.height(height() - 2 * thickness());
+    _bar.set_height(height() - 2 * thickness());
 
 }
 
@@ -104,8 +104,8 @@ NSHScrollbar::NSHScrollbar
 (unsigned int bw, unsigned int w, NSScrollbarListener* nsl, void* nslArg)
   : NSPlate(down), _bar(up), listener(nsl), listenerArg(nslArg)
 {
-  NSWindow::height(_defaultHeight);
-  width(w);
+  NSWindow::set_height(_defaultHeight);
+  set_width(w);
   selectInput(ButtonPressMask | ButtonReleaseMask | ButtonMotionMask | StructureNotifyMask);
 
   _movement = 1;
@@ -113,7 +113,7 @@ NSHScrollbar::NSHScrollbar
   _buttonPressed = false;
 
   _bar.parent(window());
-  _bar.height(_defaultHeight - 2 * thickness());
+  _bar.set_height(_defaultHeight - 2 * thickness());
   barWidth(bw);
   _bar.move(thickness(), thickness());
 }
@@ -127,11 +127,11 @@ unsigned int NSHScrollbar::currentPos() const
 void NSHScrollbar::barWidth(unsigned int arg)
 {
   if ((unsigned int) thickness() * 2 < arg || arg <= width() - thickness() * 2)
-    _bar.width(arg);
+    _bar.set_width(arg);
   else if (arg <= (unsigned int) thickness() * 2)
-    _bar.width(thickness() * 2 + 1);
+    _bar.set_width(thickness() * 2 + 1);
   else
-    _bar.width(width() - thickness() * 2);
+    _bar.set_width(width() - thickness() * 2);
 }
 
 inline bool NSHScrollbar::outOfBar(int arg)

@@ -114,7 +114,7 @@ Card::Card(Suit s, unsigned int v)
   map();
 }
 
-void Card::move(int dest_x, int dest_y, bool animate)
+void Card::move_anim(int dest_x, int dest_y, bool animate)
 {
   const int steps = 100;
 
@@ -179,12 +179,12 @@ void Card::moveToStackInitial(Stack* s, bool animate)
 
   Card* top = _stack->topCard();
   if (top != 0 && top->canBeParent(this))
-    parent(_stack->topCard());
+    get_parent(_stack->topCard());
   else
-    parent(0);
+    get_parent(0);
 
   _stack->pushCard(this);
-   move(_stack->next_x(), _stack->next_y(), animate);
+   move_anim(_stack->next_x(), _stack->next_y(), animate);
 }
 
 bool Card::canBeParent(Card* c) const

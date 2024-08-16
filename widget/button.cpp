@@ -23,21 +23,21 @@ void NSButton::resize(unsigned int arg1, unsigned int arg2)
   NSPlate::redraw(up);
 }
 
-void NSButton::width(unsigned int arg)
+void NSButton::set_width(unsigned int arg)
 {
   resizable(true);
   fontWindowWidth(arg);
-  NSWindow::width(arg);
+  NSWindow::set_width(arg);
   clear();
   XDrawString(NSdpy, window(), gc, hGap(), height() - vGap(), _label.c_str(), _label.length());
   NSPlate::redraw(up);
 }
 
-void NSButton::height(unsigned int arg)
+void NSButton::set_height(unsigned int arg)
 {
   resizable(true);
   fontWindowHeight(arg);
-  NSWindow::height(arg);
+  NSWindow::set_height(arg);
   clear();
   XDrawString(NSdpy, window(), gc, hGap(), height() - vGap(), _label.c_str(), _label.length());
   NSPlate::redraw(up);
@@ -102,7 +102,7 @@ NSToggleButton::NSToggleButton(const char* str, bool t)
   }
 
   _toggled = t;
-  width(width() + hGap() + squareLength);
+  set_width(width() + hGap() + squareLength);
 }
 
 void NSToggleButton::redraw()

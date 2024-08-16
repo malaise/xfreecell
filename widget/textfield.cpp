@@ -30,8 +30,8 @@ NSTextField::NSTextField(unsigned int arg, NSTextListener* bl, void* la,
   strStart = 0;
   mode = down;
   cursorOnTF = false;
-  width(arg);
-  height(fontStruct->max_bounds.ascent + fontStruct->max_bounds.descent + gap * 2);
+  set_width(arg);
+  set_height(fontStruct->max_bounds.ascent + fontStruct->max_bounds.descent + gap * 2);
   selectInput(EnterWindowMask | LeaveWindowMask | KeyPressMask | ExposureMask | ButtonPressMask);
   //  charWidth = fontStruct->max_bounds.rbearing - fontStruct->min_bounds.lbearing;
   charWidth = fontStruct->max_bounds.width - 1; // Can't figure out why, but this works.

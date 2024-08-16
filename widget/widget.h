@@ -85,8 +85,8 @@ public:
   void x(int arg) { move(arg, _y); }
   void y(int arg) { move(_x, arg); }
   void resize(unsigned int, unsigned int);
-  void width(unsigned int arg) { resize(arg, _height); }
-  void height(unsigned int arg) { resize(_width, arg); }
+  void set_width(unsigned int arg) { resize(arg, _height); }
+  void set_height(unsigned int arg) { resize(_width, arg); }
   void borderWidth(unsigned int arg) const { XSetWindowBorderWidth(NSdpy, _window, arg); }
   void border(unsigned long arg) const { XSetWindowBorder(NSdpy, _window, arg); }
   void parent(Window arg) { XReparentWindow(NSdpy, _window, arg, _x, _y); }
@@ -228,12 +228,12 @@ class NSButton : public NSPlate, public NSString {
 public:
   NSButton(const char*, NSButtonListener* = 0, void* = 0, NSButtonCallback* = 0, void* = 0);
 
-  unsigned int width() { return NSWindow::width(); }
-  unsigned int height() { return NSWindow::height(); }
+  unsigned int set_width() { return NSWindow::width(); }
+  unsigned int set_height() { return NSWindow::height(); }
 
   void resize(unsigned int, unsigned int);
-  void width(unsigned int);
-  void height(unsigned int);
+  void set_width(unsigned int);
+  void set_height(unsigned int);
   void label(const char*);
   //  void listener(NSButtonListener* bl) { _listener = bl; }
   //  void listenerArg(void* la) { _listener = la; }
@@ -371,9 +371,9 @@ public:
 
   void add(NSComponent* arg) { NSContainer::add(arg); }
   void remove(NSComponent* arg) { NSContainer::remove(arg); }
-  void resize(unsigned int arg1, unsigned int arg2) { width(arg1); height(arg2); }
-  void width(unsigned int arg) { _width = arg; }
-  void height(unsigned int arg) { _height = arg; }
+  void resize(unsigned int arg1, unsigned int arg2) { set_width(arg1); set_height(arg2); }
+  void set_width(unsigned int arg) { _width = arg; }
+  void set_height(unsigned int arg) { _height = arg; }
   void reallocate() { NSContainer::hreallocate(); }
 };
 
@@ -385,9 +385,9 @@ public:
 
   void add(NSComponent* arg) { NSContainer::add(arg); }
   void remove(NSComponent* arg) { NSContainer::remove(arg); }
-  void resize(unsigned int arg1, unsigned int arg2) { width(arg1); height(arg2); }
-  void width(unsigned int arg) { _width = arg; }
-  void height(unsigned int arg) { _height = arg; }
+  void resize(unsigned int arg1, unsigned int arg2) { set_width(arg1); set_height(arg2); }
+  void set_width(unsigned int arg) { _width = arg; }
+  void set_height(unsigned int arg) { _height = arg; }
   void reallocate() { NSContainer::vreallocate(); }
 };
 
@@ -448,8 +448,8 @@ public:
   static unsigned int defaultWidth() { return _defaultWidth; }
 
   void width(unsigned int) {}
-  void height(unsigned int arg) { NSWindow::height(arg); }
-  void resize(unsigned int, unsigned int arg) { height(arg); }
+  void set_height(unsigned int arg) { NSWindow::set_height(arg); }
+  void resize(unsigned int, unsigned int arg) { set_height(arg); }
   void barPercent(unsigned int arg) { barHeight((height() - thickness() * 2) * arg / 100); }
   void barHeight(unsigned int arg);
   void movement(unsigned int arg) { _movement = arg; }
@@ -485,9 +485,9 @@ public:
   unsigned int barWidth() const { return _bar.width(); }
   static unsigned int defaultHeight() { return _defaultHeight; }
 
-  void width(unsigned int arg) { NSWindow::width(arg); }
-  void height(unsigned int) {}
-  void resize(unsigned int arg, unsigned int) { width(arg); }
+  void set_width(unsigned int arg) { NSWindow::set_width(arg); }
+  void set_height(unsigned int) {}
+  void resize(unsigned int arg, unsigned int) { set_width(arg); }
   void barPercent(unsigned int arg) { barWidth((width() - thickness() * 2) * arg / 100); }
   void barWidth(unsigned int);
   void movement(unsigned int arg) { _movement = arg; }

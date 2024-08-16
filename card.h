@@ -11,13 +11,13 @@ class Card : public NSWindow {
 public:
   Card(Suit, unsigned int);
 
-  void move(int x, int y, bool animate = true);
+  void move_anim(int x, int y, bool animate = true);
   void initialize() { _stack = 0; _parent = 0; _removed = false; } //move(0, 0);
   void hilighten() const { backgroundPixmap(_hilightedPixmap); clear(); }
   void unhilighten() const { backgroundPixmap(_usualPixmap); clear(); }
   void moveToStack(Stack*, bool autoMoving = true, bool pushUndo = true);
   void moveToStackInitial(Stack*, bool animate = false);
-  void parent(Card* c) { _parent = c; }
+  void get_parent(Card* c) { _parent = c; }
   void removed() { _removed = true; } // This is called only when pushed to DoneStack
   void undone() { _removed = false; } // This is called only when being undone and pushed back from DoneStack
 
@@ -28,7 +28,7 @@ public:
   Suit suit() const { return _suit; }
   unsigned int value() const { return _value; }
   Stack* stack() const { return _stack; }
-  Card* parent() const { return _parent; }
+  Card* get_parent() const { return _parent; }
 
   void dispatchEvent(const XEvent&);
   void dispatchButtonPress(const XEvent&);
