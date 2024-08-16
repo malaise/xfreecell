@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <cstdlib>
+#include <ctime>
 #include <dirent.h>
 #include <fcntl.h>
 #include <sys/stat.h>
