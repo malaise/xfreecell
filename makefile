@@ -33,7 +33,7 @@ debug:
 	@type asciidoc >/dev/null 2>&1;\
 	if [ $$? -eq 0 ] ; then \
 	  echo asciidoc --section-numbers -o $@ $< ;\
-	  asciidoc --section-numbers -o $@ $< ;\
+	  asciidoc --section-numbers -o $@ $< 2>&1 | grep -Ev "^<unknown>:1: SyntaxWarning: invalid escape sequence .*" & exit 0;\
 	fi
 
 %.o: %.cpp $(INCLUDES)
